@@ -1,0 +1,9 @@
+@mixin display-after($screen) {
+    @if $screen == xs {
+        @content;
+    } @else if $screen == sm {
+        @media screen and (min-width: $--screen-sm){
+            @content;
+        }
+    }
+}
