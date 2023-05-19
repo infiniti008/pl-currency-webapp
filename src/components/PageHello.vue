@@ -16,6 +16,7 @@
       </ul>
     </p>
     <hr />
+    <p>Screen width = {{ screenWidth }}px</p>
   </div>
 </template>
 
@@ -23,7 +24,9 @@
 export default {
   name: "PageHello",
   data: () => {
-    return {};
+    return {
+      screenWidth: window.innerWidth
+    };
   },
 };
 </script>

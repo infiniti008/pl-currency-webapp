@@ -29,7 +29,7 @@ export default {
   },
   data() {
     return {
-      tabName: 'PageLastValues',
+      tabName: 'PageHello',
       isLoading: false,
       isExpanded: window.Telegram?.WebApp?.isExpanded,
       isExpandedInterval: null
