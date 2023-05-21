@@ -29,7 +29,7 @@ export default {
   },
   data() {
     return {
-      tabName: 'PageHello',
+      tabName: 'PageLastValues',
       isLoading: false,
       isExpanded: window.Telegram?.WebApp?.isExpanded,
       isExpandedInterval: null
@@ -55,7 +55,7 @@ export default {
 
 <style lang="scss">
 .app {
-  max-width: 450px;
+  max-width: 380px;
   margin: 0 auto;
 }
 </style>
