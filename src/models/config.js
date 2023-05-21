@@ -19,5 +19,6 @@ if (IS_DEV_MODE) {
 export default {
   IS_DEV_MODE,
   SERVER_URL,
-  TELEGRAM_USER
+  TELEGRAM_USER,
+  ADMIN_USER: '208067133'
 }

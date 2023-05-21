@@ -13,6 +13,7 @@
           :bank="record.bank"
           :base-currency="record.currencyBase"
         />
+        <StarSVG class="record-item--favorite" :is-favorite="record.isFavorite" ß/>
       </div>
     </div>
   </div>
@@ -22,12 +23,14 @@
 import { getLastCurrencies } from '../services/api.js';
 
 import CurrencyConverter from './ui/CurrencyConverter.vue';
+import StarSVG from './ui/StarSVG.vue';
 
 export default {
   name: "PageLastValues",
   components: {
-    CurrencyConverter
-  },
+    CurrencyConverter,
+    StarSVG
+},
   data: () => {
     return {
       records: [],
@@ -71,7 +74,7 @@ export default {
 
     &--row {
       display: grid;
-      grid-template-columns: 1fr 3fr;
+      grid-template-columns: 1fr 3fr 24px;
       padding: 4px 0;
       align-items: center;
       border-bottom: 1px solid #27E1C1;
@@ -98,6 +101,11 @@ export default {
           font-size: 14px;
           display: flex;
           flex-direction: column;
+        }
+
+        &--favorite {
+          height: 24px;
+          width: 24px;
         }
       }
     }

@@ -1,11 +1,11 @@
 <template>
   <div class="footer">
     <Button :class="isActive(tabLastValues)" @click="handleClickButton(tabLastValues)">
-      Последние Данные
+      Current Rates
     </Button>
 
     <Button :class="isActive(tabMenu)" @click="handleClickButton(tabMenu)">
-      Меню
+      Menu
     </Button>
   </div>
 </template>

@@ -1,22 +1,21 @@
 <template>
   <div class="hello-page">
-    <h3>Спасибо что воспользовались ботом</h3>
+    <h3>Thank you for using the bot.</h3>
     <hr />
     <p>
       <ul>
         <li>
-          Чтобы увидеть активные подписки нажмите на "Список".
+          To view active subscriptions, click on "List".
         </li>
         <li>
-          Чтобы добавить новую подписку нажмите на "Изменить".
+          To add a new subscription, click on "Edit".
         </li>
         <li>
-          Чтобы удалить подписку, нажмите "Х" на подписке, которую необходимо удалить.
+          To delete a subscription, click on the "X" button next to the subscription you want to remove.
         </li>
       </ul>
     </p>
     <hr />
-    <p>Screen width = {{ screenWidth }}px</p>
   </div>
 </template>
 
@@ -24,9 +23,7 @@
 export default {
   name: "PageHello",
   data: () => {
-    return {
-      screenWidth: window.innerWidth
-    };
+    return {};
   },
 };
 </script>
@@ -34,6 +31,7 @@ export default {
 <style lang="scss">
 .hello-page {
   padding: 10px;
+  
   p {
     margin-top: 10px;
     margin-bottom: 10px;
