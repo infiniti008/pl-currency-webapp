@@ -1,30 +1,37 @@
 <template>
   <div class="currency-converter">
-    <span
-      class="currency"
-      :class="'currency--' + currency.toLowerCase()"
-    >
-      {{ currency }}
-    </span>
-    <ArrowSVG 
-      class="arrow arrow--filled"
-      :direction="!isBuyOperation ? 'left' : ''" 
-      :color="!isBuyOperation ? '#47A992' : '#A459D1'"
-      :is-filled="isBuyOperation"
-    />
-    <span v-html="getFormatedCurrency(value)" />
-    <ArrowSVG
-      class="arrow"
-      :direction="!isBuyOperation ? 'left' : ''"
-      :color="!isBuyOperation ? '#47A992' : '#A459D1'"
-      :is-filled="!isBuyOperation"
-    />
-    <span
-      class="currency" 
-      :class="'currency--' + baseCurrency.toLowerCase()"
-    >
-      {{ baseCurrency }}
-    </span>
+    <div>
+      {{ bank }}
+    </div>
+    <div class="currency-converter__rate">
+      <span
+        class="currency"
+        :class="'currency--' + currency.toLowerCase()"
+      >
+        <span v-html="flags[currency]" />
+        {{ currency }}
+      </span>
+      <ArrowSVG 
+        class="arrow"
+        :direction="leftArrowDirection" 
+        :color="leftArrowColor"
+        :is-filled="isBuyOperation || isMarketOperation"
+      />
+      <span v-html="getFormatedCurrency(value)" />
+      <ArrowSVG
+        class="arrow"
+        :direction="rightArrowDirection"
+        :color="rightArrowColor"
+        :is-filled="!isBuyOperation"
+      />
+      <span
+        class="currency" 
+        :class="'currency--' + baseCurrency.toLowerCase()"
+      >
+        <span v-html="flags[baseCurrency]" />
+        {{ baseCurrency }}
+      </span>
+    </div>
   </div>
 </template>
 
@@ -44,9 +51,34 @@ export default {
     ArrowSVG
   },
   data: () => {
-    return {};
+    return {
+      flags: {
+        USD: '&#127482;&#127480;',
+        EUR: '&#127466;&#127482;',
+        PLN: '&#127477;&#127473;'
+      },
+      colors: {
+        Buy: '#A459D1',
+        Sell: '#47A992'
+      }
+    };
   },
   computed: {
+    leftArrowDirection() {
+      if (this.isMarketOperation) {
+        return 'right';
+      }
+      return !this.isBuyOperation ? 'left' : '';
+    },
+    rightArrowDirection() {
+      return !this.isBuyOperation ? 'left' : '';
+    },
+    leftArrowColor() {
+      return this.colors[this.operation];
+    },
+    rightArrowColor() {
+      return this.colors[this.operation];
+    },
     isBuyOperation() {
       return this.operation === 'Buy';
     },
@@ -84,21 +116,20 @@ export default {
 <style  lang="scss">
 .currency-converter {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: flex-end;
-  gap: 4px;
+  justify-content: center;
 
+  &__rate {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 4px;
+  }
+  
   .currency {
     font-weight: 600;
     color: #3C486B;
-
-    // &--usd {
-    //   color: #6B8068;
-    // }
-
-    // &--eur {
-    //   color: #5D7EA7;
-    // }
   }
 
   .currency-value--main {
