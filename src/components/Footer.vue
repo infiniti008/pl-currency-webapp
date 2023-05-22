@@ -1,23 +1,44 @@
 <template>
   <div class="footer">
-    <Button :class="isActive(tabLastValues)" @click="handleClickButton(tabLastValues)">
-      Current Rates
-    </Button>
-
-    <Button :class="isActive(tabMenu)" @click="handleClickButton(tabMenu)">
-      Menu
-    </Button>
+    <div 
+      class="footer__item"
+      :class="isCancelDisabled ? 'footer__item--disabled' : ''"
+      @click="handleClickCancel"
+    >
+      <CancelSVG :disabled="isCancelDisabled" />
+    </div>
+    <div 
+      class="footer__item" 
+      :class="isConfirmDisabled ? 'footer__item--disabled' : ''"
+      @click="handleClickConfirm"
+    >
+      <ConfirmSVG :disabled="isConfirmDisabled" />
+    </div>
+    <div class="footer__item" @click="handleClickStarButton()">
+      <StarSVG :is-favorite="isStarActive"/>
+    </div>
+    <div class="footer__item" @click="handleClickButton(tabMenu)">
+      <MenuSVG />
+    </div>
   </div>
 </template>
 
 <script>
 import Button from './ui/Button.vue';
+import ConfirmSVG from './ui/svg/ConfirmSVG.vue';
+import MenuSVG from './ui/svg/MenuSVG.vue';
+import StarSVG from './ui/svg/StarSVG.vue';
+import CancelSVG from './ui/svg/CancelSVG.vue';
 
 export default {
     name: "Footer",
     components: {
-        Button,
-    },
+    Button,
+    MenuSVG,
+    StarSVG,
+    ConfirmSVG,
+    CancelSVG
+},
     props: {
       tab: {
         type: String,
@@ -28,14 +49,34 @@ export default {
         return {
           tabLastValues: 'PageLastValues',
           tabMenu: 'PageMenu',
+          isStarActive: false
         };
+    },
+    computed: {
+      isConfirmDisabled() {
+        return !this.$store.state.isConfirmAvailable;
+      },
+      isCancelDisabled() {
+        return !this.$store.state.isCancelAvailable;
+      }
     },
     methods: {
       handleClickButton(tab) {
         this.$emit('handleToggleTab', tab);
       },
-      isActive(tab) {
-        return tab === this.tab ? 'active' : '';
+      handleClickStarButton() {
+        this.isStarActive = !this.isStarActive;
+        this.$bus.$emit('showFavoriteOnly', this.isStarActive);
+      },
+      handleClickConfirm() {
+        if (!this.isConfirmDisabled) {
+          this.$bus.$emit(this.$store.state.currentConfirmOperation);
+        }
+      },
+      handleClickCancel() {
+        if (!this.isCancelDisabled) {
+          this.$bus.$emit(this.$store.state.currentCancelOperation);
+        }
       }
     }
 }
@@ -57,5 +98,13 @@ $--footer-height: 70px;
   position: absolute;
   top: calc(var(--tg-viewport-stable-height) - $--footer-height);
   transition: top ease-in-out 0.3s;
+
+  &__item {
+    width: 50px;
+
+    &--disabled {
+      opacity: 0.5;
+    }
+  }
 }
 </style>

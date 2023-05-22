@@ -1,7 +1,7 @@
 <template>
   <div class="currency-converter">
     <div>
-      {{ bank }}
+      {{ bank }} - {{ operation }}
     </div>
     <div class="currency-converter__rate">
       <span
@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import ArrowSVG from './ArrowSVG.vue';
+import ArrowSVG from './svg/ArrowSVG.vue';
 
 export default {
   props: {
@@ -55,7 +55,9 @@ export default {
       flags: {
         USD: '&#127482;&#127480;',
         EUR: '&#127466;&#127482;',
-        PLN: '&#127477;&#127473;'
+        PLN: '&#127477;&#127473;',
+        RUB: '&#127479;&#127482;',
+        BYN: '&#127463;&#127486;'
       },
       colors: {
         Buy: '#A459D1',
@@ -91,7 +93,11 @@ export default {
   },
   methods: {
     getFormatedCurrency(value) {
-      let formatedValue = value.toFixed(4);
+      let formatedValue = value;
+
+      if (typeof formatedValue === 'number') {
+        formatedValue = formatedValue.toFixed(4);
+      }
 
       formatedValue = formatedValue.split('');
       const valueWithStyles = [

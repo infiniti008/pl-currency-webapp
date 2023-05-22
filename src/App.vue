@@ -12,6 +12,7 @@
 import PageHello from './components/PageHello.vue';
 import PageMenu from './components/PageMenu.vue';
 import PageLastValues from './components/PageLastValues.vue';
+import PageSettings from './components/PageSettings.vue';
 import PageService from './components/PageService.vue';
 import Footer from './components/Footer.vue';
 import Spinner from './components/ui/Spinner.vue';
@@ -25,6 +26,7 @@ export default {
     PageLastValues,
     PageMenu,
     PageService,
+    PageSettings,
     Footer,
     Spinner,
     Modal,

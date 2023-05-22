@@ -6,7 +6,8 @@ dotenv.config({
 
 import express from 'express';
 import cors from 'cors';
-import { getLastCurrencies, initBase } from './server/base.js';
+import { getLastCurrencies, initBase, updateFavorites } from './server/base.js';
+import bodyParser from 'body-parser';
 
 const app = express();
 const port = 3000;
@@ -16,6 +17,8 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 // Serve static files from the 'public' directory
 app.use(express.static('./dist'));
@@ -26,11 +29,20 @@ app.listen(port, () => {
   initBase();
 });
 
-app.get('/api/last/:country', async (req, res) => {
+app.get('/api/last/:country/:userid', async (req, res) => {
   try {
-    console.log(req.params.country);
-    const data = await getLastCurrencies(req.params.country);
+    console.log(req.params.userid);
+    const data = await getLastCurrencies(req.params.country, req.params.userid);
     res.json({ data: data });
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+app.post('/api/favorites/:country/:userid', async (req, res) => {
+  try {
+    await updateFavorites(req.body.favorites, req.params.country, req.params.userid);
+    res.send('OK');
   } catch (err) {
     console.log(err);
   }
