@@ -61,5 +61,7 @@ export default {
 .app {
   max-width: 380px;
   margin: 0 auto;
+  height: calc(100vh - 70px);
+  margin-bottom: 70px;
 }
 </style>

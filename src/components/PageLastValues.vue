@@ -154,6 +154,9 @@ export default {
 
 <style  lang="scss">
 .last-values {
+  overflow-y: auto;
+  height: 100%;
+  
   &--empty {
     padding: 20px 0px;
     text-align: center;

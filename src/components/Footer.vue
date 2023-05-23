@@ -95,8 +95,10 @@ $--footer-height: 70px;
   justify-content: space-between;
   background-color: $--white;
   box-shadow: 0px 10px 20px $--green;
-  position: absolute;
-  top: calc(var(--tg-viewport-stable-height) - $--footer-height);
+  // position: absolute;
+  position: fixed;
+  bottom: 0px;
+  // top: calc(var(--tg-viewport-stable-height) - $--footer-height);
   transition: top ease-in-out 0.3s;
 
   &__item {
