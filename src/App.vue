@@ -1,5 +1,5 @@
 <template>
-  <div class="app">
+  <div class="app" :class="isExpanded ? 'app--expanded' : ''">
     <component :is="tabName" @handleToggleTab="handleToggleTab" />
 
     <Footer @handleToggleTab="handleToggleTab" :tab="tabName" />
@@ -35,8 +35,6 @@ export default {
     return {
       tabName: 'PageLastValues',
       isLoading: false,
-      isExpanded: window.Telegram?.WebApp?.isExpanded,
-      isExpandedInterval: null
     }
   },
   created() {
@@ -46,7 +44,11 @@ export default {
   beforeDestroy() {
     this.$bus.$off('toggleLoading');
   },
-  computed: {},
+  computed: {
+    isExpanded() {
+      return this.$store.state.isExpanded;
+    }
+  },
   methods: {
     handleToggleTab(tab) {
       this.tabName = tab;
@@ -62,7 +64,13 @@ export default {
 .app {
   max-width: 380px;
   margin: 0 auto;
-  height: calc(100vh - 70px);
-  margin-bottom: 70px;
+  height: auto;
+  margin-top: 70px;
+
+  &--expanded {
+    height: calc(100vh - 70px);
+    margin-bottom: 70px;
+    margin-top: unset;
+  }
 }
 </style>

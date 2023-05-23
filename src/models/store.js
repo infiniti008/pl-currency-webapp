@@ -11,7 +11,7 @@ export default new Vuex.Store({
     isCancelAvailable: false,
     currentConfirmOperation: '',
     currentCancelOperation: '',
-    isExpanded: window.Telegram?.WebApp?.isExpanded,
+    isExpanded: window.Telegram?.WebApp?.isExpanded || false,
   },
   mutations: {
     setCountry(state, payload) {
@@ -32,10 +32,7 @@ export default new Vuex.Store({
     startObserveExpanded(state) {
       setInterval(() => {
         state.isExpanded = window.Telegram?.WebApp?.isExpanded;
-
-        // console.log('window.Telegram?.WebApp', window.Telegram?.WebApp);
-        // console.log('state.isExpanded', state.isExpanded);
-      }, 1000);
+      }, 500);
     }
   }
 });

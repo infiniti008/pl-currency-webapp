@@ -1,5 +1,5 @@
 <template>
-  <div class="footer">
+  <div class="footer" :class="isExpanded ? 'footer--expanded' : ''">
     <div 
       class="footer__item"
       :class="isCancelDisabled ? 'footer__item--disabled' : ''"
@@ -58,6 +58,9 @@ export default {
       },
       isCancelDisabled() {
         return !this.$store.state.isCancelAvailable;
+      },
+      isExpanded() {
+        return this.$store.state.isExpanded;
       }
     },
     methods: {
@@ -94,12 +97,17 @@ $--footer-height: 70px;
   display: flex;
   justify-content: space-between;
   background-color: $--white;
-  box-shadow: 0px 10px 20px $--green;
+  box-shadow: 0px 0px 30px -10px $--green;
   // position: absolute;
   position: fixed;
-  bottom: 0px;
+  top: 0px;
   // top: calc(var(--tg-viewport-stable-height) - $--footer-height);
   transition: top ease-in-out 0.3s;
+
+  &--expanded {
+    top: unset;
+    bottom: 0px;
+  }
 
   &__item {
     width: 50px;
