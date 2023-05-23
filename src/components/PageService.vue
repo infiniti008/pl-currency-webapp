@@ -5,6 +5,7 @@
     <hr />
     <p>Screen width = {{ screenWidth }}px</p>
     <p>Screen height = {{ screenHeight }}px</p>
+    <p>Is Expanded = {{ isExpanded }}</p>
     <hr />
   </div>
 </template>
@@ -18,6 +19,11 @@ export default {
       screenHeight: window.innerHeight
     };
   },
+  computed: {
+    isExpanded() {
+      return this.$store.state.isExpanded;
+    }
+  }
 };
 </script>
 

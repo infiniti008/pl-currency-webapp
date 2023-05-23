@@ -41,6 +41,7 @@ export default {
   },
   created() {
     this.$bus.$on('toggleLoading', this.toggleLoading);
+    this.$store.commit('startObserveExpanded');
   },
   beforeDestroy() {
     this.$bus.$off('toggleLoading');
