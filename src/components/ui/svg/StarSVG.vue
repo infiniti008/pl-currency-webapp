@@ -8,18 +8,13 @@
 <script>
 export default {
   name: "StarSVG",
-  props: {
-    isFavorite: {
-      type: Boolean,
-      default: false
-    }
-  },
+  props: {},
   data: () => {
     return {};
   },
   computed: {
     color() {
-      return this.isFavorite ? '#ffba00' : '#F6F1E9';
+      return '#ffba00';
     }
   }
 };

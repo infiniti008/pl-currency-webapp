@@ -35,14 +35,18 @@ export default {
     return {
       tabName: 'PageLastValues',
       isLoading: false,
+      previosTab: ''
     }
   },
   created() {
     this.$bus.$on('toggleLoading', this.toggleLoading);
+    this.$bus.$on('handleReturnBack', this.handleReturnBack);
+
     this.$store.commit('startObserveExpanded');
   },
   beforeDestroy() {
     this.$bus.$off('toggleLoading');
+    this.$bus.$off('handleReturnBack');
   },
   computed: {
     isExpanded() {
@@ -51,11 +55,35 @@ export default {
   },
   methods: {
     handleToggleTab(tab) {
+      this.$store.commit('setFirstNavButton', {
+        component: '',
+        isDisabled: true,
+        action: ''
+      });
+
+      this.$store.commit('setSecondNavButton', {
+        component: '',
+        isDisabled: true,
+        action: ''
+      });
+
+      if (tab !== 'PageMenu' ) {
+        this.$store.commit('setThirdNavButton', {
+          component: '',
+          isDisabled: true,
+          action: ''
+        });
+      }
+
+      this.previosTab = this.tabName;
       this.tabName = tab;
     },
     toggleLoading(isLoading) {
       this.isLoading = isLoading;
     },
+    handleReturnBack() {
+      this.handleToggleTab(this.previosTab);
+    }
   }
 }
 </script>

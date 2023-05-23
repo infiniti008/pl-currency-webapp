@@ -2,20 +2,25 @@
   <div class="footer" :class="isExpanded ? 'footer--expanded' : ''">
     <div 
       class="footer__item"
-      :class="isCancelDisabled ? 'footer__item--disabled' : ''"
-      @click="handleClickCancel"
+      :class="firstNavButton.isDisabled ? 'footer__item--disabled' : ''"
+      @click="handleClickNavButton(firstNavButton)"
     >
-      <CancelSVG :disabled="isCancelDisabled" />
+      <component :is="firstNavButton.component" />
     </div>
     <div 
       class="footer__item" 
-      :class="isConfirmDisabled ? 'footer__item--disabled' : ''"
-      @click="handleClickConfirm"
+      :class="secondNavButton.isDisabled ? 'footer__item--disabled' : ''"
+      @click="handleClickNavButton(secondNavButton)"
     >
-      <ConfirmSVG :disabled="isConfirmDisabled" />
+      <component :is="secondNavButton.component" />
     </div>
-    <div class="footer__item" @click="handleClickStarButton()">
-      <StarSVG :is-favorite="isStarActive"/>
+
+    <div 
+      class="footer__item" 
+      :class="thirdNavButton.isDisabled ? 'footer__item--disabled' : ''"
+      @click="handleClickNavButton(thirdNavButton)"
+    >
+      <component :is="thirdNavButton.component" />
     </div>
     <div class="footer__item" @click="handleClickButton(tabMenu)">
       <MenuSVG />
@@ -29,6 +34,7 @@ import ConfirmSVG from './ui/svg/ConfirmSVG.vue';
 import MenuSVG from './ui/svg/MenuSVG.vue';
 import StarSVG from './ui/svg/StarSVG.vue';
 import CancelSVG from './ui/svg/CancelSVG.vue';
+import BackSVG from './ui/svg/BackSVG.vue';
 
 export default {
     name: "Footer",
@@ -37,7 +43,8 @@ export default {
     MenuSVG,
     StarSVG,
     ConfirmSVG,
-    CancelSVG
+    CancelSVG,
+    BackSVG
 },
     props: {
       tab: {
@@ -49,38 +56,32 @@ export default {
         return {
           tabLastValues: 'PageLastValues',
           tabMenu: 'PageMenu',
-          isStarActive: false // TODO - reset after save 
+          // isStarActive: false // TODO - reset after save 
         };
     },
     computed: {
-      isConfirmDisabled() {
-        return !this.$store.state.isConfirmAvailable;
-      },
-      isCancelDisabled() {
-        return !this.$store.state.isCancelAvailable;
-      },
       isExpanded() {
         return this.$store.state.isExpanded;
+      },
+
+      firstNavButton() {
+        return this.$store.state.firstNavButton;
+      },
+      secondNavButton() {
+        return this.$store.state.secondNavButton;
+      },
+      thirdNavButton() {
+        return this.$store.state.thirdNavButton;
       }
     },
     methods: {
       handleClickButton(tab) {
         this.$emit('handleToggleTab', tab);
       },
-      handleClickStarButton() {
-        this.isStarActive = !this.isStarActive;
-        this.$bus.$emit('showFavoriteOnly', this.isStarActive);
+
+      handleClickNavButton(button) {
+        this.$bus.$emit(button.action);
       },
-      handleClickConfirm() {
-        if (!this.isConfirmDisabled) {
-          this.$bus.$emit(this.$store.state.currentConfirmOperation);
-        }
-      },
-      handleClickCancel() {
-        if (!this.isCancelDisabled) {
-          this.$bus.$emit(this.$store.state.currentCancelOperation);
-        }
-      }
     }
 }
 </script>
@@ -98,11 +99,10 @@ $--footer-height: 70px;
   justify-content: space-between;
   background-color: $--white;
   box-shadow: 0px 0px 30px -10px $--green;
-  // position: absolute;
   position: fixed;
   top: 0px;
-  // top: calc(var(--tg-viewport-stable-height) - $--footer-height);
-  transition: top ease-in-out 0.3s;
+  transition: top ease-in-out 0.5s;
+  transition: bottom ease-in-out 0.5s;
 
   &--expanded {
     top: unset;
@@ -113,7 +113,7 @@ $--footer-height: 70px;
     width: 50px;
 
     &--disabled {
-      opacity: 0.5;
+      opacity: 0.2;
     }
   }
 }

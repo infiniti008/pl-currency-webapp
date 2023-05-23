@@ -17,9 +17,9 @@
     <p class="menu__item" @click="$emit('handleToggleTab', 'PageLastValues')">
       Current Rates
     </p>
-    <p class="menu__item" @click="$emit('handleToggleTab', 'PageHello')">
+    <!-- <p class="menu__item" @click="$emit('handleToggleTab', 'PageHello')">
       Manage Subscriptions
-    </p>
+    </p> -->
     <p class="menu__item" @click="$emit('handleToggleTab', 'PageHello')">
       Home Page
     </p>
@@ -47,6 +47,12 @@ export default {
   },
   created() {
     this.selectedCountry = this.$store.state.country;
+
+    this.$store.commit('setThirdNavButton', {
+      component: 'BackSVG',
+      isDisabled: false,
+      action: 'handleReturnBack'
+    });
   }
 }
 </script>
@@ -63,6 +69,7 @@ export default {
   align-items: flex-end;
 
   &__item {
+    cursor: pointer;
     text-align: center;
     padding: 10px 0;
     border-bottom: 1px solid;

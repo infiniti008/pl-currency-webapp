@@ -7,32 +7,40 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     country: config.DEFAULT_COUNTRY,
-    isConfirmAvailable: false,
-    isCancelAvailable: false,
-    currentConfirmOperation: '',
-    currentCancelOperation: '',
     isExpanded: window.Telegram?.WebApp?.isExpanded || false,
+    firstNavButton: {
+      component: '',
+      isDisabled: false,
+      action: ''
+    },
+    secondNavButton: {
+      component: '',
+      isDisabled: false,
+      action: ''
+    },
+    thirdNavButton: {
+      component: '',
+      isDisabled: false,
+      action: ''
+    }
   },
   mutations: {
     setCountry(state, payload) {
       state.country = payload;
     },
-    toggleConfirmButtonAvailability(state, payload) {
-      state.isConfirmAvailable = payload;
-    },
-    toggleCancelButtonAvailability(state, payload) {
-      state.isCancelAvailable = payload;
-    },
-    setCurrentConfirmOperation(state, payload) {
-      state.currentConfirmOperation = payload;
-    },
-    setCurrentCancelOperation(state, payload) {
-      state.currentCancelOperation = payload;
-    },
     startObserveExpanded(state) {
       setInterval(() => {
         state.isExpanded = window.Telegram?.WebApp?.isExpanded;
       }, 500);
+    },
+    setFirstNavButton(state, payload) {
+      state.firstNavButton = payload;
+    },
+    setSecondNavButton(state, payload) {
+      state.secondNavButton = payload;
+    },
+    setThirdNavButton(state, payload) {
+      state.thirdNavButton = payload;
     }
   }
 });

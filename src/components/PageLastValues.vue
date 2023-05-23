@@ -13,7 +13,7 @@
           :bank="record.bank"
           :base-currency="record.currencyBase"
         />
-        <StarSVG class="record-item--favorite" :is-favorite="isFavorite(record)" />
+        <StarSVG class="record-item__favorite" :class="!isFavorite(record) ? 'record-item__favorite--disabled' : ''" />
       </div>
     </div>
     <div v-else-if="filteredRecords.length == 0" class="last-values--empty">
@@ -47,24 +47,55 @@ export default {
     this.getActiveSubscriptions();
   },
   created() {
-    this.$bus.$on('showFavoriteOnly', this.showFavoriteOnly);
+    this.$bus.$on('toggleShowFavoriteOnly', this.toggleShowFavoriteOnly);
 
     this.$bus.$on('saveFavorites', this.saveFavorites);
     this.$bus.$on('resetFavorites', this.resetFavorites);
 
-    this.$store.commit('setCurrentConfirmOperation', 'saveFavorites');
-    this.$store.commit('setCurrentCancelOperation', 'resetFavorites');
+    this.$store.commit('setFirstNavButton', {
+      component: 'CancelSVG',
+      isDisabled: true,
+      action: 'resetFavorites'
+    });
+
+    this.$store.commit('setSecondNavButton', {
+      component: 'ConfirmSVG',
+      isDisabled: true,
+      action: 'saveFavorites'
+    });
+
+    this.$store.commit('setThirdNavButton', {
+      component: 'StarSVG',
+      isDisabled: true,
+      action: 'toggleShowFavoriteOnly'
+    });
   },
   beforeDestroy() {
-    this.$bus.$off('showFavoriteOnly');
+    this.$bus.$off('toggleShowFavoriteOnly');
 
     this.$bus.$off('saveFavorites');
     this.$bus.$off('resetFavorites');
   },
   watch: {
     hasFavoriteChanges(newValue) {
-      this.$store.commit('toggleConfirmButtonAvailability', newValue);
-      this.$store.commit('toggleCancelButtonAvailability', newValue);
+      this.$store.commit('setFirstNavButton', {
+        component: 'CancelSVG',
+        isDisabled: !newValue,
+        action: 'resetFavorites'
+      });
+
+      this.$store.commit('setSecondNavButton', {
+        component: 'ConfirmSVG',
+        isDisabled: !newValue,
+        action: 'saveFavorites'
+      });
+    },
+    isFavoriteOnly(newValue) {
+      this.$store.commit('setThirdNavButton', {
+        component: 'StarSVG',
+        isDisabled: !newValue,
+        action: 'toggleShowFavoriteOnly'
+      });
     }
   },
   computed: {
@@ -108,8 +139,8 @@ export default {
         this.isLoading = false;
       }
     },
-    showFavoriteOnly(isFavoriteOnly) {
-      this.isFavoriteOnly = isFavoriteOnly;
+    toggleShowFavoriteOnly() {
+      this.isFavoriteOnly = !this.isFavoriteOnly;
     },
     handleToggleFavorite(record) {
       record.isFavorite = !record.isFavorite;
@@ -118,19 +149,24 @@ export default {
       return record.isFavorite;
     },
     resetFavorites() {
-      this.records = JSON.parse(JSON.stringify(this.cachedRecords));
+      if (this.hasFavoriteChanges) {
+        this.records = JSON.parse(JSON.stringify(this.cachedRecords));
+      }
     },
     async saveFavorites() {
-      try {
-        this.isLoading = true;
-        this.$bus.$emit('toggleLoading', true);
+      if (this.hasFavoriteChanges) {
+        try {
+          this.isLoading = true;
+          this.$bus.$emit('toggleLoading', true);
 
-        const response = await saveFavorites(this.favoriteIds, this.$store.state.country);
-      } catch (err) {
-        console.log(err);
-      } finally {
-        this.$bus.$emit('toggleLoading', false);
-        this.isLoading = false;
+          const response = await saveFavorites(this.favoriteIds, this.$store.state.country);
+          this.cachedRecords = JSON.parse(JSON.stringify(this.records));
+        } catch (err) {
+          console.log(err);
+        } finally {
+          this.$bus.$emit('toggleLoading', false);
+          this.isLoading = false;
+        }
       }
     },
     toFloat(value) {
@@ -209,9 +245,13 @@ export default {
           }
         }
 
-        &--favorite {
+        &__favorite {
           height: 24px;
           width: 24px;
+
+          &--disabled {
+            opacity: 0.15;
+          }
         }
       }
     }
