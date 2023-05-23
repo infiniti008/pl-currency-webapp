@@ -1,5 +1,9 @@
 <template>
   <div class="app" :class="isExpanded ? 'app--expanded' : ''">
+    <div v-if="!isExpanded" class="swipe-message">
+      Please swipe up to see menu
+      <hr>
+    </div>
     <component :is="tabName" @handleToggleTab="handleToggleTab" />
 
     <Footer @handleToggleTab="handleToggleTab" :tab="tabName" />
@@ -92,13 +96,16 @@ export default {
 .app {
   max-width: 380px;
   margin: 0 auto;
-  height: auto;
-  margin-top: 70px;
+  height: calc(100vh - 90px);
+  margin-bottom: 70px;
 
   &--expanded {
     height: calc(100vh - 70px);
-    margin-bottom: 70px;
-    margin-top: unset;
+  }
+
+  .swipe-message {
+    text-align: center;
+    height: 20px;
   }
 }
 </style>

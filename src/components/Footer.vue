@@ -1,5 +1,5 @@
 <template>
-  <div class="footer" :class="isExpanded ? 'footer--expanded' : ''">
+  <div class="footer">
     <div 
       class="footer__item"
       :class="firstNavButton.isDisabled ? 'footer__item--disabled' : ''"
@@ -56,14 +56,9 @@ export default {
         return {
           tabLastValues: 'PageLastValues',
           tabMenu: 'PageMenu',
-          // isStarActive: false // TODO - reset after save 
         };
     },
     computed: {
-      isExpanded() {
-        return this.$store.state.isExpanded;
-      },
-
       firstNavButton() {
         return this.$store.state.firstNavButton;
       },
@@ -100,14 +95,8 @@ $--footer-height: 70px;
   background-color: $--white;
   box-shadow: 0px 0px 30px -10px $--green;
   position: fixed;
-  top: 0px;
-  transition: top ease-in-out 0.5s;
+  bottom: 0px;
   transition: bottom ease-in-out 0.5s;
-
-  &--expanded {
-    top: unset;
-    bottom: 0px;
-  }
 
   &__item {
     width: 50px;
