@@ -4,6 +4,7 @@
     <h3>Service Page</h3>
     <hr />
     <p>Screen width = {{ screenWidth }}px</p>
+    <p>Screen height = {{ screenHeight }}px</p>
     <hr />
   </div>
 </template>
@@ -13,7 +14,8 @@ export default {
   name: "PageService",
   data: () => {
     return {
-      screenWidth: window.innerWidth
+      screenWidth: window.innerWidth,
+      screenHeight: window.innerHeight
     };
   },
 };

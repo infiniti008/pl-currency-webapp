@@ -24,6 +24,7 @@
 
 <script>
 import { getLastCurrencies, saveFavorites } from '../services/api.js';
+import config from '../models/config.js';
 
 import CurrencyConverter from './ui/CurrencyConverter.vue';
 import StarSVG from './ui/svg/StarSVG.vue';
@@ -139,11 +140,10 @@ export default {
       const now = new Date().valueOf();
       const diff = now - timestamp;
       
-      // TODO - To config
-      if (diff < 150 * 1000) {
+      if (diff < config.TIME_LIMIT_GREEN * 1000) {
         return 'record-item__time--green';
       } 
-      else if (diff < 650 * 1000) {
+      else if (diff < config.TIME_LIMIT_YELLOW * 1000) {
         return 'record-item__time--yellow'
       }
       return 'record-item__time--red';

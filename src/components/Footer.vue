@@ -49,7 +49,7 @@ export default {
         return {
           tabLastValues: 'PageLastValues',
           tabMenu: 'PageMenu',
-          isStarActive: false
+          isStarActive: false // TODO - reset after save 
         };
     },
     computed: {

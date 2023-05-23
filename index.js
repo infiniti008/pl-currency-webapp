@@ -31,7 +31,6 @@ app.listen(port, () => {
 
 app.get('/api/last/:country/:userid', async (req, res) => {
   try {
-    console.log(req.params.userid);
     const data = await getLastCurrencies(req.params.country, req.params.userid);
     res.json({ data: data });
   } catch (err) {

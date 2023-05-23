@@ -47,8 +47,19 @@ export async function getLastValue(baseName, keyObject) {
 
 export async function getUserInfo(userId) {
   try {
-    const collection = await client.db('users').collection('u_' + userId);
-    const val = await collection.find().toArray();
+    let user = await client.db('users').collection('u_' + userId);
+
+    if (!user) {
+      user = await createUser(userId, country);
+    }
+
+    let val = await user.find().toArray();
+
+    if (val.length === 0) {
+      user = await createUser(userId);
+
+      val = await user.find().toArray();
+    }
 
     return val[0];
   } catch(err) {
@@ -71,6 +82,7 @@ export async function getLastCurrencies(country, userId) {
 
     const lastValues = await Promise.all(requestsArray);
     const user = await getUserInfo(userId);
+
     const lastWithFavorites = lastValues.map(value => {
       if (user['favorites_' + country]?.some(item => value._id.equals(item))) {
         value.isFavorite = true;
@@ -91,6 +103,17 @@ export async function updateFavorites (favorites, country, userId) {
     const user = await client.db('users').collection('u_' + userId);
     user.updateOne({}, {$set: { ['favorites_' + country]: favorites}});
   } catch (err) {
+    console.log(err);
+  }
+}
+
+export async function createUser(userId) {
+  try {
+    const newUser = await client.db('users').createCollection('u_' + userId);
+    await newUser.insertOne({ userId });
+
+    return newUser;
+  } catch(err) {
     console.log(err);
   }
 }
