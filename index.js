@@ -6,7 +6,7 @@ dotenv.config({
 
 import express from 'express';
 import cors from 'cors';
-import { getLastCurrencies, initBase, updateFavorites } from './server/base.js';
+import { getLastCurrencies, initBase, updateFavorites, getSettings, updateSettings } from './server/base.js';
 import bodyParser from 'body-parser';
 
 const app = express();
@@ -31,7 +31,16 @@ app.listen(port, () => {
 
 app.get('/api/last/:country/:userid', async (req, res) => {
   try {
-    const data = await getLastCurrencies(req.params.country, req.params.userid);
+    const { data, settings } = await getLastCurrencies(req.params.country, req.params.userid);
+    res.json({ data, settings });
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+app.get('/api/settings/:userid', async (req, res) => {
+  try {
+    const data = await getSettings(req.params.userid);
     res.json({ data: data });
   } catch (err) {
     console.log(err);
@@ -41,6 +50,15 @@ app.get('/api/last/:country/:userid', async (req, res) => {
 app.post('/api/favorites/:country/:userid', async (req, res) => {
   try {
     await updateFavorites(req.body.favorites, req.params.country, req.params.userid);
+    res.send('OK');
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+app.post('/api/settings/:userid', async (req, res) => {
+  try {
+    await updateSettings(req.body.settings, req.params.userid);
     res.send('OK');
   } catch (err) {
     console.log(err);

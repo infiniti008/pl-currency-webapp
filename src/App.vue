@@ -37,7 +37,7 @@ export default {
   },
   data() {
     return {
-      tabName: 'PageLastValues',
+      tabName: 'PageHello',
       isLoading: false,
       previosTab: ''
     }
@@ -79,7 +79,10 @@ export default {
         });
       }
 
-      this.previosTab = this.tabName;
+      if (this.tabName !== 'PageMenu') {
+        this.previosTab = this.tabName;
+      }
+
       this.tabName = tab;
     },
     toggleLoading(isLoading) {

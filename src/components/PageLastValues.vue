@@ -44,7 +44,7 @@ export default {
     };
   },
   mounted() {
-    this.getActiveSubscriptions();
+    this.getLastCurrencies();
   },
   created() {
     this.$bus.$on('toggleShowFavoriteOnly', this.toggleShowFavoriteOnly);
@@ -126,12 +126,14 @@ export default {
     }
   },
   methods: {
-    async getActiveSubscriptions() {
+    async getLastCurrencies() {
       this.isLoading = true;
       this.$bus.$emit('toggleLoading', true);
       try {
-        this.records = await getLastCurrencies(this.$store.state.country);
+        const { lastCurrencies, settings } = await getLastCurrencies(this.$store.state.country);
+        this.records = lastCurrencies;
         this.cachedRecords = JSON.parse(JSON.stringify(this.records));
+        this.isFavoriteOnly = settings.isStartWithFavorite || false;
       } catch(error) {
         console.error(error);
       } finally {

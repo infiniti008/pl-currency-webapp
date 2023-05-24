@@ -3,15 +3,121 @@
   <div class="settings-page">
     <h3>Settings</h3>
     <hr />
+    <p class="settings__item">
+      <label for="isStartWithFavorite" class="settings__item-label">
+        <span class="text">
+          Start With Favorite
+        </span>
+        <input class="checkbox" type="checkbox" id="isStartWithFavorite" v-model="settings.isStartWithFavorite">
+      </label>
+    </p>
   </div>
 </template>
 
 <script>
+import { getUserSettings, saveSettings } from '../services/api.js';
+
 export default {
   name: "PageSettings",
   data: () => {
-    return {};
+    return {
+      settings: {
+        isStartWithFavorite: false,
+      },
+      cachedSettings: null
+    };
   },
+  mounted() {
+    this.getSettings();
+  },
+  created() {
+    this.$bus.$on('saveSettingsChanges', this.saveSettingsChanges);
+    this.$bus.$on('clearSettingsChanges', this.clearSettingsChanges);
+
+    this.$store.commit('setFirstNavButton', {
+      component: 'CancelSVG',
+      isDisabled: true,
+      action: 'clearSettingsChanges'
+    });
+
+    // TODO - Move to service
+    this.$store.commit('setSecondNavButton', {
+      component: 'ConfirmSVG',
+      isDisabled: true,
+      action: 'clearSettingsChanges'
+    });
+
+    this.$store.commit('setThirdNavButton', {
+      component: 'BackSVG',
+      isDisabled: false,
+      action: 'handleReturnBack'
+    });
+  },
+  beforeDestroy() {
+    this.$bus.$off('saveSettingsChanges');
+    this.$bus.$off('clearSettingsChanges');
+  },
+  watch: {
+    hasSettintsChanges(newValue) {
+      this.$store.commit('setFirstNavButton', {
+        component: 'CancelSVG',
+        isDisabled: !newValue,
+        action: 'clearSettingsChanges'
+      });
+
+      this.$store.commit('setSecondNavButton', {
+        component: 'ConfirmSVG',
+        isDisabled: !newValue,
+        action: 'saveSettingsChanges'
+      });
+    }
+  },
+  computed: {
+    hasSettintsChanges() {
+      return JSON.stringify(this.settings) !== JSON.stringify(this.cachedSettings);
+    }
+  },
+  methods: {
+    async saveSettingsChanges() {
+      console.log('saveSettingsChanges');
+      if (this.hasSettintsChanges) {
+        try {
+          this.isLoading = true;
+          this.$bus.$emit('toggleLoading', true);
+
+          const response = await saveSettings(this.settings);
+          this.cachedSettings = JSON.parse(JSON.stringify(this.settings));
+        } catch (err) {
+          console.log(err);
+        } finally {
+          this.$bus.$emit('toggleLoading', false);
+          this.isLoading = false;
+        }
+      }
+    },
+    clearSettingsChanges() {
+      if (this.hasSettintsChanges) {
+        this.settings = JSON.parse(JSON.stringify(this.cachedSettings));
+      }
+    },
+    async getSettings() {
+      try {
+        this.isLoading = true;
+        this.$bus.$emit('toggleLoading', true);
+
+        const response = await getUserSettings();
+
+        this.settings = Object.assign(this.settings, response);
+
+        this.cachedSettings = JSON.parse(JSON.stringify(this.settings));
+      } catch (err) {
+        console.log(err);
+      } finally {
+        this.$bus.$emit('toggleLoading', false);
+        this.isLoading = false;
+      }
+    }
+  }
 };
 </script>
 
@@ -19,5 +125,24 @@ export default {
 .settings-page {
   padding: 10px;
   text-align: center;
+
+  .settings__item {
+    padding: 10px;
+
+    &-label {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+    }
+
+    .checkbox {
+      width: 20px;
+      height: 20px;
+    }
+
+    .text {
+      margin-right: 10px;
+    }
+  }
 }
 </style>

@@ -92,7 +92,12 @@ export async function getLastCurrencies(country, userId) {
       return value;
     });
 
-    return lastWithFavorites;
+    return { 
+      data: lastWithFavorites,
+      settings: {
+        isStartWithFavorite: user.settings.isStartWithFavorite
+      }
+    };
   } catch (err) {
     console.log(err);
   }
@@ -114,6 +119,24 @@ export async function createUser(userId) {
 
     return newUser;
   } catch(err) {
+    console.log(err);
+  }
+}
+
+export async function getSettings(userId) {
+  try {
+    const user = await getUserInfo(userId);
+    return user.settings || {};
+  } catch(err) {
+    console.log(err);
+  }
+}
+
+export async function updateSettings (settings, userId) {
+  try {
+    const user = await client.db('users').collection('u_' + userId);
+    user.updateOne({}, {$set: { settings }});
+  } catch (err) {
     console.log(err);
   }
 }
