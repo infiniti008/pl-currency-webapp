@@ -4,7 +4,9 @@
       Service Page
     </p>
 
-
+    <p class="menu__item" @click="$emit('handleToggleTab', 'PageContact')">
+      Contact Us
+    </p>
     <p class="menu__item" @click="$emit('handleToggleTab', 'PageSettings')">
       Settings
     </p>
@@ -15,11 +17,8 @@
       </select>
     </p>
     <p class="menu__item" @click="$emit('handleToggleTab', 'PageLastValues')">
-      Current Rates
+      Current Exchange Rates
     </p>
-    <!-- <p class="menu__item" @click="$emit('handleToggleTab', 'PageHello')">
-      Manage Subscriptions
-    </p> -->
     <p class="menu__item" @click="$emit('handleToggleTab', 'PageHello')">
       Home Page
     </p>
@@ -28,12 +27,12 @@
 
 <script>
 import config from '../models/config.js';
+import buttontsService from '../services/buttons.js';
+
+const { initButtons } = buttontsService;
 
 export default {
   name: 'PageMenu',
-  components: {
-    // Button
-  },
   watch: {
     selectedCountry(newValue) {
       this.$store.commit('setCountry', newValue);
@@ -48,11 +47,7 @@ export default {
   created() {
     this.selectedCountry = this.$store.state.country;
 
-    this.$store.commit('setThirdNavButton', {
-      component: 'BackSVG',
-      isDisabled: false,
-      action: 'handleReturnBack'
-    });
+    initButtons('PageMenu', this.$store);
   }
 }
 </script>

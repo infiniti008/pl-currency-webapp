@@ -3,17 +3,30 @@
     <h3>Thank you for using the bot.</h3>
     <hr />
     <p>
-      <ul>
+      <ul class="hello-page__tips">
         <li>
-          To view active subscriptions, click on "List".
+          Use the menu to show current exchange rates
         </li>
         <li>
-          To add a new subscription, click on "Edit".
+          Use the menu to select a country to display exchange rates
         </li>
         <li>
-          To delete a subscription, click on the "X" button next to the subscription you want to remove.
+          Visit the settings page to customize your preferences
+        </li>
+        <li>
+          Visit the contact page to leave a message to the team
         </li>
       </ul>
+    </p>
+    <hr />
+    <p>
+      Please support the team in developing new features and maintaining the infrastructure!
+    </p>
+    <hr />
+    <p>
+      Dear User, your contribution will directly support the ongoing operation and improvement of our service.
+      Donate now and make a difference. Thank you for your support!
+      ChatGPT &#169;
     </p>
     <hr />
   </div>
@@ -37,5 +50,11 @@ export default {
     margin-bottom: 10px;
     padding-left: 20px;
   }
+
+  &__tips {
+    li {
+      padding: 6px 0;
+    }
+  } 
 }
 </style>

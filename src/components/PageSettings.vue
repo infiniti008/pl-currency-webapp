@@ -6,7 +6,7 @@
     <p class="settings__item">
       <label for="isStartWithFavorite" class="settings__item-label">
         <span class="text">
-          Start With Favorite
+          Start With Favorites Only
         </span>
         <input class="checkbox" type="checkbox" id="isStartWithFavorite" v-model="settings.isStartWithFavorite">
       </label>
@@ -16,6 +16,9 @@
 
 <script>
 import { getUserSettings, saveSettings } from '../services/api.js';
+import buttontsService from '../services/buttons.js';
+
+const { initButtons, updateButtonsByKey } = buttontsService;
 
 export default {
   name: "PageSettings",
@@ -34,24 +37,7 @@ export default {
     this.$bus.$on('saveSettingsChanges', this.saveSettingsChanges);
     this.$bus.$on('clearSettingsChanges', this.clearSettingsChanges);
 
-    this.$store.commit('setFirstNavButton', {
-      component: 'CancelSVG',
-      isDisabled: true,
-      action: 'clearSettingsChanges'
-    });
-
-    // TODO - Move to service
-    this.$store.commit('setSecondNavButton', {
-      component: 'ConfirmSVG',
-      isDisabled: true,
-      action: 'clearSettingsChanges'
-    });
-
-    this.$store.commit('setThirdNavButton', {
-      component: 'BackSVG',
-      isDisabled: false,
-      action: 'handleReturnBack'
-    });
+    initButtons('PageSettings', this.$store);
   },
   beforeDestroy() {
     this.$bus.$off('saveSettingsChanges');
@@ -59,17 +45,7 @@ export default {
   },
   watch: {
     hasSettintsChanges(newValue) {
-      this.$store.commit('setFirstNavButton', {
-        component: 'CancelSVG',
-        isDisabled: !newValue,
-        action: 'clearSettingsChanges'
-      });
-
-      this.$store.commit('setSecondNavButton', {
-        component: 'ConfirmSVG',
-        isDisabled: !newValue,
-        action: 'saveSettingsChanges'
-      });
+      updateButtonsByKey('PageSettings', this.$store, 'hasSettintsChanges', !newValue);
     }
   },
   computed: {
@@ -79,7 +55,6 @@ export default {
   },
   methods: {
     async saveSettingsChanges() {
-      console.log('saveSettingsChanges');
       if (this.hasSettintsChanges) {
         try {
           this.isLoading = true;
