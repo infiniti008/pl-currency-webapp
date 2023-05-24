@@ -41,6 +41,40 @@ const buttons = {
         action: 'handleReturnBack'
       });
     }
+  },
+  PageContact: {
+    init(store) {
+      store.commit('setFirstNavButton', {
+        component: 'CancelSVG',
+        isDisabled: true,
+        action: 'clearMessageChanges'
+      });
+  
+      store.commit('setSecondNavButton', {
+        component: 'ConfirmSVG',
+        isDisabled: true,
+        action: 'saveMessageChanges'
+      });
+  
+      store.commit('setThirdNavButton', {
+        component: 'BackSVG',
+        isDisabled: false,
+        action: 'handleReturnBack'
+      });
+    },
+    message(store, value) {
+      store.commit('setFirstNavButton', {
+        component: 'CancelSVG',
+        isDisabled: value,
+        action: 'clearMessageChanges'
+      });
+
+      store.commit('setSecondNavButton', {
+        component: 'ConfirmSVG',
+        isDisabled: value,
+        action: 'saveMessageChanges'
+      });
+    }
   }
 };
 

@@ -132,10 +132,30 @@ export async function getSettings(userId) {
   }
 }
 
-export async function updateSettings (settings, userId) {
+export async function updateSettings(settings, userId) {
   try {
     const user = await client.db('users').collection('u_' + userId);
     user.updateOne({}, {$set: { settings }});
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+export async function saveMessage(message, userId) {
+  try {
+    const user = await client.db('users').collection('u_' + userId);
+    const lastMessageTime = user.settings?.lastMessageTime || new Date().valueOf();
+    const now = new Date().valueOf();
+    // TODO - From config
+    const timeLimit = 1000 * 60 * 20;
+
+    if (lastMessageTime - now < timeLimit ) {
+      const nextAttemptTime = lastMessageTime + (1000 * 60 * 60 * 24) + 1000 * 100;
+      return { message: `Next attempt not earlier than: |${nextAttemptTime}`, status: false };
+    } else {
+      return { message: 'Your message has been saved!', status: true };
+    }
+    // user.updateOne({}, {$set: { settings }});
   } catch (err) {
     console.log(err);
   }

@@ -6,7 +6,7 @@ dotenv.config({
 
 import express from 'express';
 import cors from 'cors';
-import { getLastCurrencies, initBase, updateFavorites, getSettings, updateSettings } from './server/base.js';
+import { getLastCurrencies, initBase, updateFavorites, getSettings, updateSettings, saveMessage } from './server/base.js';
 import bodyParser from 'body-parser';
 
 const app = express();
@@ -60,6 +60,15 @@ app.post('/api/settings/:userid', async (req, res) => {
   try {
     await updateSettings(req.body.settings, req.params.userid);
     res.send('OK');
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+app.post('/api/message/:userid', async (req, res) => {
+  try {
+    const response = await saveMessage(req.body.message, req.params.userid);
+    res.json(response);
   } catch (err) {
     console.log(err);
   }

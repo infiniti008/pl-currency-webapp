@@ -91,7 +91,9 @@ export default {
       this.isLoading = isLoading;
     },
     handleReturnBack() {
-      this.handleToggleTab(this.previosTab);
+      if (this.previosTab) {
+        this.handleToggleTab(this.previosTab);
+      }
     }
   }
 }

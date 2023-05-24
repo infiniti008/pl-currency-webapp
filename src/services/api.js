@@ -80,3 +80,15 @@ export async function saveSettings(settings) {
     console.log(err);
   }
 }
+
+export async function sendMessage(message) {
+  try {
+    const response = await axios.post(`${SERVER_URL}/api/message/${TELEGRAM_USER}`, {
+      message
+    });
+    
+    return response.data;
+  } catch (err) {
+    console.log(err);
+  }
+}
