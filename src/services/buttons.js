@@ -75,6 +75,15 @@ const buttons = {
         action: 'saveMessageChanges'
       });
     }
+  },
+  PageHello: {
+    init(store) {
+      store.commit('setThirdNavButton', {
+        component: 'CurrencySVG',
+        isDisabled: false,
+        action: 'handleOpenCurrencyPage'
+      });
+    }
   }
 };
 

@@ -143,20 +143,49 @@ export async function updateSettings(settings, userId) {
 
 export async function saveMessage(message, userId) {
   try {
-    const user = await client.db('users').collection('u_' + userId);
-    const lastMessageTime = user.settings?.lastMessageTime || new Date().valueOf();
-    const now = new Date().valueOf();
-    // TODO - From config
-    const timeLimit = 1000 * 60 * 20;
+    const messages = await client.db('currency_app').collection('messages');
 
-    if (lastMessageTime - now < timeLimit ) {
-      const nextAttemptTime = lastMessageTime + (1000 * 60 * 60 * 24) + 1000 * 100;
+    const query = { userId };
+    const options = {
+      // sort matched documents in descending order by rating
+      sort: { time: -1 },
+      // Include only the `title` and `imdb` fields in the returned document
+      projection: { time: 1 },
+    };
+    const unAnsweredMessagesByUser = await messages.find({userId, isAnswered: false}, {}).toArray();
+    const userUnAnsweredMessagesQty = unAnsweredMessagesByUser.length;
+    const lastMessageByUser = await messages.findOne(query, options);
+    const messagesPeriodLimitInHours = process.env.messagesPeriodLimitInHours;
+    const maxUnAnsweredMessages = process.env.maxUnAnsweredMessages;
+
+    const lastMessageTime = lastMessageByUser?.time || 0 ;
+    const now = new Date().valueOf();
+    const timeLimit = (1000 * 60 * 60 * messagesPeriodLimitInHours) + (1000 * 100);
+
+    if (userUnAnsweredMessagesQty >= maxUnAnsweredMessages) {
+      return { message: `You got limit of ${maxUnAnsweredMessages} unanswered messages!`, status: false };
+    } else if (now - lastMessageTime < timeLimit) {
+      const nextAttemptTime = lastMessageTime + timeLimit;
       return { message: `Next attempt not earlier than: |${nextAttemptTime}`, status: false };
     } else {
-      return { message: 'Your message has been saved!', status: true };
+      const result = await messages.insertOne({
+        message,
+        time: now,
+        timeString: new Date(now).toLocaleString(),
+        userId,
+        answer: '',
+        answerTime: null,
+        isAnswered: false
+      });
+
+      if (result.insertedId) {
+        return { message: 'Your message has been saved!', status: true };
+      } else {
+        return { message: `Please try again later`, status: false };
+      }
     }
-    // user.updateOne({}, {$set: { settings }});
   } catch (err) {
     console.log(err);
+    return { message: `Please try again later`, status: false };
   }
 }

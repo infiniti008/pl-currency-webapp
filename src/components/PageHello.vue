@@ -33,11 +33,28 @@
 </template>
 
 <script>
+import buttontsService from '../services/buttons.js';
+
+const { initButtons } = buttontsService;
+
 export default {
   name: "PageHello",
   data: () => {
     return {};
   },
+  created() {
+    this.$bus.$on('handleOpenCurrencyPage', this.handleOpenCurrencyPage);
+
+    initButtons('PageHello', this.$store);
+  },
+  beforeDestroy() {
+    this.$bus.$off('handleOpenCurrencyPage');
+  },
+  methods: {
+    handleOpenCurrencyPage() {
+      this.$emit('handleToggleTab', 'PageLastValues');
+    }
+  }
 };
 </script>
 
