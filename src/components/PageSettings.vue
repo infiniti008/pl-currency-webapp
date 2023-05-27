@@ -89,7 +89,6 @@ export default {
 
       localStorage?.setItem('settings', settingsStrinfigied);
       this.cachedSettings = JSON.parse(settingsStrinfigied);
-      this.$store.commit('setCountry', this.settings.defaultCountry);
     },
     clearSettingsChanges() {
       if (this.hasSettintsChanges) {

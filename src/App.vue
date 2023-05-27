@@ -1,6 +1,6 @@
 <template>
   <div class="app" :class="isExpanded ? 'app--expanded' : ''">
-    <div class="swipe-message" :class="isExpanded ? 'swipe-message--expanded' : ''">
+    <div class="swipe-message" :class="!isExpanded ? 'swipe-message--expanded' : ''">
       <span class="swipe-message__arrow">
         &#9650;
       </span>
