@@ -116,7 +116,7 @@ export default {
       return this.records.filter(record => record.isFavorite).map(record => record._id);
     },
     favoriteIdsFromCache() {
-      return this.cachedRecords.filter(record => record.isFavorite).map(record => record._id);
+      return this.cachedRecords?.filter(record => record.isFavorite).map(record => record._id);
     },
     hasFavoriteChanges() {
       const cache = this.favoriteIdsFromCache.sort().toString();
@@ -127,10 +127,29 @@ export default {
   },
   methods: {
     async getLastCurrencies() {
+      const countries = config.COUNTRIES;
       this.isLoading = true;
       this.$bus.$emit('toggleLoading', true);
       try {
-        const { lastCurrencies, settings } = await getLastCurrencies(this.$store.state.country);
+        let response = {};
+        let { lastCurrencies, settings } = {};
+        if (this.$store.state.country === 'all') {
+          const requestsArray = [];
+          countries.forEach(country => requestsArray.push(getLastCurrencies(country)));
+
+          response = await Promise.all(requestsArray);
+
+          response = response.reduce((acc, responseItem) => {
+            acc.lastCurrencies = [ ...acc.lastCurrencies, ...responseItem.lastCurrencies ];
+            acc.settings = responseItem.settings;
+            return acc;
+          }, { lastCurrencies: [] });
+          
+        } else {
+          response = await getLastCurrencies(this.$store.state.country);
+        }
+
+        ({ lastCurrencies, settings } = response);
         this.records = lastCurrencies;
         this.cachedRecords = JSON.parse(JSON.stringify(this.records));
         this.isFavoriteOnly = settings.isStartWithFavorite || false;

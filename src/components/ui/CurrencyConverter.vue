@@ -1,7 +1,7 @@
 <template>
   <div class="currency-converter">
     <div>
-      {{ bank }} - {{ operation }}
+      {{ bank }}{{ operation === 'Market' ? '' : ' - ' + operation }}
     </div>
     <div class="currency-converter__rate">
       <span
