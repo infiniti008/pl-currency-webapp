@@ -1,7 +1,13 @@
 <template>
   <div class="app" :class="isExpanded ? 'app--expanded' : ''">
-    <div v-if="!isExpanded" class="swipe-message">
-      Please swipe up to see menu
+    <div class="swipe-message" :class="isExpanded ? 'swipe-message--expanded' : ''">
+      <span class="swipe-message__arrow">
+        &#9650;
+      </span>
+      <span>Please swipe UP to see navigation menu</span>
+      <span>
+        &#9650;
+      </span>
       <hr>
     </div>
     <component :is="tabName" @handleToggleTab="handleToggleTab" />
@@ -105,14 +111,24 @@ export default {
   margin: 0 auto;
   height: calc(100vh - 90px);
   margin-bottom: 70px;
+  transition: height ease-out 0.3s;
 
   &--expanded {
     height: calc(100vh - 70px);
   }
 
   .swipe-message {
+    transition: height ease-out 0.3s;
     text-align: center;
-    height: 20px;
+    height: 0px;
+    opacity: 0;
+    color: #F79327;
+    font-weight: 600;
+
+    &--expanded {
+      height: 20px;
+      opacity: 1;
+    }
   }
 }
 </style>
