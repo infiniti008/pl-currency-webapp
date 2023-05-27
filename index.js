@@ -8,6 +8,7 @@ import express from 'express';
 import cors from 'cors';
 import { getLastCurrencies, initBase, updateFavorites, getSettings, updateSettings, saveMessage } from './server/base.js';
 import bodyParser from 'body-parser';
+// import cookieParser from'cookie-parser';
 
 const app = express();
 const port = 3000;
@@ -15,10 +16,18 @@ const allowedDomain = 'https://localhost:3301';
 const corsOptions = {
   origin: allowedDomain,
 };
+// app.use(cookieParser());
 
 app.use(cors(corsOptions));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
+// app.use((req, res, next) => {
+//   if (req.path === '/') {
+//     res.cookie('defaultCountry', 'pl', {expire: 360000 + Date.now()});
+//   }
+//   next();
+// });
 
 // Serve static files from the 'public' directory
 app.use(express.static('./dist'));

@@ -11,6 +11,18 @@
         <input class="checkbox" type="checkbox" id="isStartWithFavorite" v-model="settings.isStartWithFavorite">
       </label>
     </p>
+    <p class="settings__item">
+      <label for="defaultCountry" class="settings__item-label">
+        <span class="text">
+          Default Country
+        </span>
+        <select v-model="settings.defaultCountry" id="defaultCountry" class="settings__item-select">
+          <option value="all">ALL</option>
+          <option value="by">BY &#127463;&#127486;</option>
+          <option value="pl">PL &#127477;&#127473;</option>
+        </select>
+      </label>
+    </p>
   </div>
 </template>
 
@@ -26,6 +38,7 @@ export default {
     return {
       settings: {
         isStartWithFavorite: false,
+        defaultCountry: ''
       },
       cachedSettings: null
     };
@@ -61,7 +74,8 @@ export default {
           this.$bus.$emit('toggleLoading', true);
 
           const response = await saveSettings(this.settings);
-          this.cachedSettings = JSON.parse(JSON.stringify(this.settings));
+
+          this.updateSettings();
         } catch (err) {
           console.log(err);
         } finally {
@@ -69,6 +83,13 @@ export default {
           this.isLoading = false;
         }
       }
+    },
+    updateSettings() {
+      const settingsStrinfigied = JSON.stringify(this.settings);
+
+      localStorage?.setItem('settings', settingsStrinfigied);
+      this.cachedSettings = JSON.parse(settingsStrinfigied);
+      this.$store.commit('setCountry', this.settings.defaultCountry);
     },
     clearSettingsChanges() {
       if (this.hasSettintsChanges) {
@@ -108,6 +129,10 @@ export default {
       display: flex;
       align-items: center;
       justify-content: flex-end;
+    }
+
+    &-select {
+      padding: 4px;
     }
 
     .checkbox {

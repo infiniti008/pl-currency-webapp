@@ -10,17 +10,18 @@
     <p class="menu__item" @click="$emit('handleToggleTab', 'PageSettings')">
       Settings
     </p>
-    <p class="menu__item">
-      <select v-model="selectedCountry" name="countrySelector" id="countrySelector" class="country-selector"> 
-        <option value="by">&#127463;&#127486; BY</option>
-        <option value="pl">&#127477;&#127473; PL</option>
-      </select>
-    </p>
     <p class="menu__item" @click="$emit('handleToggleTab', 'PageLastValues')">
       Current Exchange Rates
     </p>
     <p class="menu__item" @click="$emit('handleToggleTab', 'PageHello')">
       Home Page
+    </p>
+    <p class="menu__item">
+      <select v-model="selectedCountry" name="countrySelector" id="countrySelector" class="country-selector">
+        <option value="all">ALL</option>
+        <option value="by">&#127463;&#127486; BY</option>
+        <option value="pl">&#127477;&#127473; PL</option>
+      </select>
     </p>
   </div>
 </template>
