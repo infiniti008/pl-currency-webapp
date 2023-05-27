@@ -5,7 +5,7 @@
         &#9650;
       </span>
       <span>Please swipe UP to see navigation menu</span>
-      <span>
+      <span class="swipe-message__arrow">
         &#9650;
       </span>
       <hr>
@@ -129,6 +129,19 @@ export default {
       height: 20px;
       opacity: 1;
     }
+
+    &__arrow {
+      transition: opacity linear 0.6s;
+      animation: arrorAnimation 5s infinite;
+    }
+  }
+
+  @keyframes arrorAnimation {
+    0%   {color:#F79327; opacity: 1;}
+    25%  {color:#068DA9; opacity: 0;}
+    50%  {color:#068DA9; opacity: 1;}
+    75%  {color:#F79327; opacity: 0;}
+    100% {color:#F79327; opacity: 1;}
   }
 }
 </style>
