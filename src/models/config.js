@@ -26,5 +26,6 @@ export default {
   ADMIN_USER: '208067133',
   DEFAULT_COUNTRY: settings.defaultCountry || 'pl',
   TIME_LIMIT_GREEN: 150,
-  TIME_LIMIT_YELLOW: 650
+  TIME_LIMIT_YELLOW: 650,
+  COUNTRIES: ['pl', 'by']
 }
