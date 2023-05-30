@@ -70,9 +70,7 @@ export default {
   },
   watch: {
     hasSelectedItem(newValue) {
-      if (newValue) {
-        updateButtonsByKey('PageSubscriptions', this.$store, 'hasSelectedItem', !newValue);
-      }
+      updateButtonsByKey('PageSubscriptions', this.$store, 'hasSelectedItem', !newValue);
     }
   },
   computed: {
@@ -110,6 +108,7 @@ export default {
 
           if (response.status) {
             this.subscriptions = this.subscriptions.filter(subscription => subscription._id !== this.selectedSubscription);
+            this.selectedSubscription = null;
           }
 
         } catch(err) {

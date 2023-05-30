@@ -84,11 +84,13 @@ export default {
         action: 'resetFavorites'
       });
 
-      this.$store.commit('setSecondNavButton', {
-        component: 'ConfirmSVG',
-        isDisabled: !newValue,
-        action: 'saveFavorites'
-      });
+      if (this.$store.state.country !== 'all') {
+        this.$store.commit('setSecondNavButton', {
+          component: 'ConfirmSVG',
+          isDisabled: !newValue,
+          action: 'saveFavorites'
+        });
+      }
     },
     isFavoriteOnly(newValue) {
       this.$store.commit('setThirdNavButton', {
