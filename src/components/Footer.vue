@@ -36,6 +36,9 @@ import StarSVG from './ui/svg/StarSVG.vue';
 import CancelSVG from './ui/svg/CancelSVG.vue';
 import BackSVG from './ui/svg/BackSVG.vue';
 import CurrencySVG from './ui/svg/CurrencySVG.vue';
+import AddSVG from './ui/svg/AddSVG.vue';
+import DeleteSVG from './ui/svg/DeleteSVG.vue';
+import UpdateSVG from './ui/svg/UpdateSVG.vue';
 
 export default {
     name: "Footer",
@@ -46,7 +49,10 @@ export default {
     ConfirmSVG,
     CancelSVG,
     BackSVG,
-    CurrencySVG
+    CurrencySVG,
+    AddSVG,
+    DeleteSVG,
+    UpdateSVG
 },
     props: {
       tab: {

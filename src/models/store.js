@@ -22,7 +22,8 @@ export default new Vuex.Store({
       component: '',
       isDisabled: false,
       action: ''
-    }
+    },
+    curentSubscriptionToManage: null
   },
   mutations: {
     setCountry(state, payload) {
@@ -41,6 +42,9 @@ export default new Vuex.Store({
     },
     setThirdNavButton(state, payload) {
       state.thirdNavButton = payload;
+    },
+    setCurentSubscriptionToManage(state, payload) {
+      state.curentSubscriptionToManage = payload;
     }
   }
 });

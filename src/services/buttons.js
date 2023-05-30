@@ -10,7 +10,7 @@ const buttons = {
       store.commit('setSecondNavButton', {
         component: 'ConfirmSVG',
         isDisabled: true,
-        action: 'clearSettingsChanges'
+        action: 'saveSettingsChanges'
       });
   
       store.commit('setThirdNavButton', {
@@ -82,6 +82,62 @@ const buttons = {
         component: 'CurrencySVG',
         isDisabled: false,
         action: 'handleOpenCurrencyPage'
+      });
+    }
+  },
+  PageSubscriptions: {
+    init(store) {
+      store.commit('setThirdNavButton', {
+        component: 'AddSVG',
+        isDisabled: false,
+        action: 'addSubscription'
+      });
+    },
+    hasSelectedItem(store, value) {
+      store.commit('setFirstNavButton', {
+        component: 'DeleteSVG',
+        isDisabled: value,
+        action: 'deleteSubscription'
+      });
+
+      store.commit('setSecondNavButton', {
+        component: 'UpdateSVG',
+        isDisabled: value,
+        action: 'manageSubscription'
+      });
+    }
+  },
+  PageManageSubscription: {
+    init(store) {
+      store.commit('setFirstNavButton', {
+        component: 'CancelSVG',
+        isDisabled: true,
+        action: 'clearSubscriptionChanges'
+      });
+  
+      store.commit('setSecondNavButton', {
+        component: 'ConfirmSVG',
+        isDisabled: true,
+        action: 'saveSubscriptionChanges'
+      });
+
+      store.commit('setThirdNavButton', {
+        component: 'BackSVG',
+        isDisabled: false,
+        action: 'handleReturnBack'
+      });
+    },
+    hasChangesToSave(store, value) {
+      store.commit('setFirstNavButton', {
+        component: 'CancelSVG',
+        isDisabled: value,
+        action: 'clearSubscriptionChanges'
+      });
+
+      store.commit('setSecondNavButton', {
+        component: 'ConfirmSVG',
+        isDisabled: value,
+        action: 'saveSubscriptionChanges'
       });
     }
   }

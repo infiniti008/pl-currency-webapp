@@ -61,7 +61,6 @@ export async function getUserSettings() {
   try {
     const response = await axios.get(`${SERVER_URL}/api/settings/${TELEGRAM_USER}`);
     
-    // return {isStartWithFavorite: true};
     return response?.data?.data || {};
 
   } catch (err) {
@@ -89,6 +88,60 @@ export async function sendMessage(message) {
     
     return response.data;
   } catch (err) {
+    console.log(err);
+  }
+}
+
+export async function getSubscriptionSettings() {
+  try {
+    const response = await axios.get(`${SERVER_URL}/api/subscription/settings`);
+    
+    return response?.data?.data || {};
+  } catch(err) {
+    console.log(err);
+  }
+}
+
+export async function setSubscription(subscription) {
+  try {
+    const response = await axios.post(`${SERVER_URL}/api/subscription/${TELEGRAM_USER}`, {
+      subscription
+    });
+    
+    return response?.data || {};
+  } catch(err) {
+    console.log(err);
+  }
+}
+
+export async function putSubscription(subscription, subscriptionId) {
+  try {
+    const response = await axios.put(`${SERVER_URL}/api/subscription/${TELEGRAM_USER}/${subscriptionId}`, {
+      subscription
+    });
+    
+    return response?.data || {};
+  } catch(err) {
+    console.log(err);
+  }
+}
+
+export async function getSubscriptions () {
+  try {
+    const response = await axios.get(`${SERVER_URL}/api/subscription/${TELEGRAM_USER}`);
+    
+    return response?.data?.data || {};
+  } catch(err) {
+    console.log(err);
+  }
+}
+
+export async function deleteSubscription(subscriptionId) {
+  try {
+    const response = await axios.delete(`${SERVER_URL}/api/subscription/${TELEGRAM_USER}/${subscriptionId}`);
+    
+    return response?.data?.data || {};
+  } catch(err) {
     console.log(err);
   }
 }

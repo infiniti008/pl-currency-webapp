@@ -6,9 +6,20 @@ dotenv.config({
 
 import express from 'express';
 import cors from 'cors';
-import { getLastCurrencies, initBase, updateFavorites, getSettings, updateSettings, saveMessage } from './server/base.js';
+import { 
+  getLastCurrencies,
+  initBase,
+  updateFavorites,
+  getSettings,
+  updateSettings,
+  saveMessage,
+  getSubscriptionSettings,
+  saveSubscription,
+  getSubscriptions,
+  deleteSubscriptions,
+  updateSubscription
+} from './server/base.js';
 import bodyParser from 'body-parser';
-// import cookieParser from'cookie-parser';
 
 const app = express();
 const port = 3000;
@@ -16,18 +27,10 @@ const allowedDomain = 'https://localhost:3301';
 const corsOptions = {
   origin: allowedDomain,
 };
-// app.use(cookieParser());
 
 app.use(cors(corsOptions));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-
-// app.use((req, res, next) => {
-//   if (req.path === '/') {
-//     res.cookie('defaultCountry', 'pl', {expire: 360000 + Date.now()});
-//   }
-//   next();
-// });
 
 // Serve static files from the 'public' directory
 app.use(express.static('./dist'));
@@ -74,10 +77,57 @@ app.post('/api/settings/:userid', async (req, res) => {
   }
 });
 
-app.post('/api/message/:userid', async (req, res) => {
+app.post('/api/message/:userId', async (req, res) => {
   try {
-    const response = await saveMessage(req.body.message, req.params.userid);
+    const response = await saveMessage(req.body.message, req.params.userId);
     res.json(response);
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+app.get('/api/subscription/settings', async (req, res) => {
+  try {
+    const data = await getSubscriptionSettings();
+    res.json({ data: data });
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+app.post('/api/subscription/:userId', async (req, res) => {
+  try {
+    const  response = await saveSubscription(req.body.subscription);
+    
+    res.json(response);
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+app.put('/api/subscription/:userId/:subscriptionId', async (req, res) => {
+  try {
+    const response = await updateSubscription(req.body.subscription, req.params.subscriptionId, req.params.userId);
+
+    res.json(response);
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+app.get('/api/subscription/:userId', async (req, res) => {
+  try {
+    const data = await getSubscriptions(req.params.userId);
+    res.json({ data: data });
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+app.delete('/api/subscription/:userId/:subscriptionId', async (req, res) => {
+  try {
+    const data = await deleteSubscriptions(req.params.userId, req.params.subscriptionId);
+    res.json({ data: data });
   } catch (err) {
     console.log(err);
   }

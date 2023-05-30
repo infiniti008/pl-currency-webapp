@@ -7,6 +7,9 @@
     <p class="menu__item" @click="$emit('handleToggleTab', 'PageContact')">
       Contact Us
     </p>
+    <p class="menu__item" @click="$emit('handleToggleTab', 'PageSubscriptions')">
+      Manage Subscriptions
+    </p>
     <p class="menu__item" @click="$emit('handleToggleTab', 'PageSettings')">
       Settings
     </p>

@@ -5,7 +5,7 @@
     </div>
     
     <br>
-    <h3>You can only send 1 message within 24 hours</h3>
+    <h3>You can only send 1 message within 24 hours and only have 2 messages without answer!</h3>
     <br>
     <p>
       Message (English and Russian are acceptable):

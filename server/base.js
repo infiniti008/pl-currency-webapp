@@ -21,10 +21,28 @@ export async function initBase() {
   await connect();
 }
 
-export async function getKeys(configBaseName) {
-  const keysCollection = await client.db(configBaseName).collection('keys');
-  const keys = await keysCollection.find({}).toArray();
-  return keys;
+export async function getKeys(country) {
+  try {
+    const configBaseName = process.env['configBaseName'];
+    const keysCollection = await client.db(configBaseName).collection('keys_' + country);
+    const keys = await keysCollection.find({}).toArray();
+    return keys;
+  } catch(err) {
+    console.log(err);
+    return [];
+  }
+}
+
+export async function getSubscriptionsSettings() {
+  try {
+    const configBaseName = process.env['configBaseName'];
+    let subscriptionSettings = await client.db(configBaseName).collection('subscription-settings');
+    subscriptionSettings = await subscriptionSettings.find({}).toArray();
+    return subscriptionSettings?.[0];
+  } catch(err) {
+    console.log(err);
+    return {};
+  }
 }
 
 export async function getLastValue(baseName, keyObject) {
@@ -70,9 +88,7 @@ export async function getUserInfo(userId) {
 export async function getLastCurrencies(country, userId) {
   try {
     const currencyBaseName = process.env[country + '_currencyBaseName'];
-    const configBaseName = process.env[country + '_configBaseName'];
-
-    const keyObjects = await getKeys(configBaseName);
+    const keyObjects = await getKeys(country);
 
     const requestsArray = [];
 
@@ -114,10 +130,14 @@ export async function updateFavorites (favorites, country, userId) {
 
 export async function createUser(userId) {
   try {
-    const newUser = await client.db('users').createCollection('u_' + userId);
-    await newUser.insertOne({ userId });
+    if (userId) {
+      const newUser = await client.db('users').createCollection('u_' + userId);
+      await newUser.insertOne({ userId, isPremium: false });
 
-    return newUser;
+      return newUser;
+    }
+
+    return {};
   } catch(err) {
     console.log(err);
   }
@@ -187,5 +207,124 @@ export async function saveMessage(message, userId) {
   } catch (err) {
     console.log(err);
     return { message: `Please try again later`, status: false };
+  }
+}
+
+export async function getSubscriptionSettings() {
+  try {
+    const subscriptionsSettings = await getSubscriptionsSettings();
+
+    const getCountriesArr = [];
+    subscriptionsSettings.countries.forEach(country => getCountriesArr.push(getKeys(country)));
+
+    const allKeys = (await Promise.all(getCountriesArr)).reduce((acc, keysRespons) => {
+      return [...acc, ...keysRespons];
+    }, []);
+
+    return {
+      ...subscriptionsSettings,
+      keys: allKeys
+    };
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+export async function saveSubscription(subscription) {
+  try {
+    const subscriptions = await client.db('currency_app').collection('subscriptions-users');
+    const subscriptionSettings = await getSubscriptionsSettings();
+    const userInfo = await getUserInfo(subscription.userId);
+
+    const isFreeUser = !userInfo.isPremium ?? true;
+    const isInervalPremium = !subscriptionSettings.freeIntervals.includes(subscription.interval);
+    const isTimesLimitGot = subscription.times.length > 6;
+
+    if (isFreeUser && isInervalPremium || isTimesLimitGot) {
+      return { message: 'Please try again later', status: false };
+    }
+
+    const query = { userId: subscription.userId };
+    const options = {
+      // sort matched documents in descending order by rating
+      sort: { time: -1 },
+      // Include only the `title` and `imdb` fields in the returned document
+      projection: { time: 1 },
+    };
+    const subscriotionsByUser = await subscriptions.count(query, options);
+    const maxFreeSubscriptions = process.env.maxFreeSubscriptions;
+    const isLimitSubscriptionsGot = subscriotionsByUser >= maxFreeSubscriptions;
+    
+    if (isFreeUser && isLimitSubscriptionsGot) {
+      return { message: 'You have reached your subscription limit', status: false };
+    }
+
+    const result = await subscriptions.insertOne(subscription);
+
+    if (result.acknowledged) {
+      return { message: 'Your subscription has been saved!', status: true };
+    } else {
+      return { message: 'Please try again later', status: false };
+    }
+  } catch(err) {
+    console.log(err);
+    return { message: 'Please try again later', status: false };
+  }
+}
+
+export async function getSubscriptions(userId) {
+  try {
+    const subscriptions = await client.db('currency_app').collection('subscriptions-users');
+    const subscriptionsByUser = await subscriptions.find({ userId }, {}).toArray();
+    const subscriptionSettings = await getSubscriptionSettings();
+    return {
+      subscriptions: subscriptionsByUser,
+      settings: subscriptionSettings
+    };
+  } catch(err) {
+    console.log(err);
+    return { subscriptions: [] };
+  }
+}
+
+export async function deleteSubscriptions(userId, subscriptionId) {
+  try {
+    const subscriptions = await client.db('currency_app').collection('subscriptions-users');
+    const thisSubscription = await subscriptions.findOne({ _id: new ObjectId(subscriptionId) });
+    let result = {};
+
+    if (thisSubscription && thisSubscription.userId === userId) {
+      result = await subscriptions.deleteOne({ _id: new ObjectId(subscriptionId) });
+    }
+
+    if (result.acknowledged) {
+      return { message: 'Subscription has been successfully deleted', status: true };
+    }
+
+    return { message: 'Please try again later', status: false };
+  } catch(err) {
+    console.log(err);
+    return { message: 'Please try again later', status: false };
+  }
+}
+
+export async function updateSubscription(subscription, subscriptionId, userId) {
+  try {
+    const subscriptions = await client.db('currency_app').collection('subscriptions-users');
+    const thisSubscription = await subscriptions.findOne({ _id: new ObjectId(subscriptionId) });
+    let result = {};
+
+    if (thisSubscription && thisSubscription.userId === userId) {
+      result = await subscriptions.replaceOne({ _id: new ObjectId(subscriptionId) }, subscription);
+    }
+
+    if (result.acknowledged) {
+      return { message: 'Subscription has been successfully updated', status: true };
+    }
+
+    return { message: 'Please try again later', status: false };
+  } catch(err) {
+    console.log(err);
+    return { message: 'Please try again later', status: false };
   }
 }

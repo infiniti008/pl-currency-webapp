@@ -27,5 +27,6 @@ export default {
   DEFAULT_COUNTRY: settings.defaultCountry || 'pl',
   TIME_LIMIT_GREEN: 150,
   TIME_LIMIT_YELLOW: 650,
-  COUNTRIES: ['pl', 'by']
+  COUNTRIES: ['pl', 'by'],
+  FREE_KEYS_PER_SUBSCRIPTION_LIMIT: 4
 }
