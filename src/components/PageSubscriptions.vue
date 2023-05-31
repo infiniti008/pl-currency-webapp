@@ -193,6 +193,7 @@ export default {
       right: 0px;
       top: 50%;
       transform: translateY(-25%);
+      padding: 4px;
 
       input {
         width: 30px;
