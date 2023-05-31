@@ -50,7 +50,7 @@ export default {
     };
   },
   created() {
-    this.selectedCountry = this.$store.state.country;
+    this.selectedCountry = this.$store.state.config.defaultCountry;
 
     initButtons('PageMenu', this.$store);
   }

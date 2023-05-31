@@ -143,9 +143,12 @@ export async function createUser(userId) {
   }
 }
 
-export async function getSettings(userId) {
+export async function getSettings(userId, isExtended) {
   try {
     const user = await getUserInfo(userId);
+    if (isExtended && user.settings) {
+      user.settings.isPremium = user.isPremium;
+    }
     return user.settings || {};
   } catch(err) {
     console.log(err);

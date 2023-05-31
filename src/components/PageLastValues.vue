@@ -84,7 +84,7 @@ export default {
         action: 'resetFavorites'
       });
 
-      if (this.$store.state.country !== 'all') {
+      if (this.$store.state.config.defaultCountry !== 'all') {
         this.$store.commit('setSecondNavButton', {
           component: 'ConfirmSVG',
           isDisabled: !newValue,
@@ -135,7 +135,7 @@ export default {
       try {
         let response = {};
         let { lastCurrencies, settings } = {};
-        if (this.$store.state.country === 'all') {
+        if (this.$store.state.config.defaultCountry === 'all') {
           const requestsArray = [];
           countries.forEach(country => requestsArray.push(getLastCurrencies(country)));
 
@@ -148,7 +148,7 @@ export default {
           }, { lastCurrencies: [] });
           
         } else {
-          response = await getLastCurrencies(this.$store.state.country);
+          response = await getLastCurrencies(this.$store.state.config.defaultCountry);
         }
 
         ({ lastCurrencies, settings } = response);
@@ -182,7 +182,7 @@ export default {
           this.isLoading = true;
           this.$bus.$emit('toggleLoading', true);
 
-          const response = await saveFavorites(this.favoriteIds, this.$store.state.country);
+          const response = await saveFavorites(this.favoriteIds, this.$store.state.config.defaultCountry);
           this.cachedRecords = JSON.parse(JSON.stringify(this.records));
         } catch (err) {
           console.log(err);

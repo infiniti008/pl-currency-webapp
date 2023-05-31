@@ -87,7 +87,6 @@ export default {
     updateSettings() {
       const settingsStrinfigied = JSON.stringify(this.settings);
 
-      localStorage?.setItem('settings', settingsStrinfigied);
       this.cachedSettings = JSON.parse(settingsStrinfigied);
     },
     clearSettingsChanges() {

@@ -6,7 +6,9 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    country: config.DEFAULT_COUNTRY,
+    config: {
+      defaultCountry: config.DEFAULT_COUNTRY,
+    },
     isExpanded: window.Telegram?.WebApp?.isExpanded || false,
     firstNavButton: {
       component: '',
@@ -27,7 +29,7 @@ export default new Vuex.Store({
   },
   mutations: {
     setCountry(state, payload) {
-      state.country = payload;
+      state.config.defaultCountry = payload;
     },
     startObserveExpanded(state) {
       setInterval(() => {
@@ -45,6 +47,9 @@ export default new Vuex.Store({
     },
     setCurentSubscriptionToManage(state, payload) {
       state.curentSubscriptionToManage = payload;
-    }
+    },
+    setConfig(state, payload) {
+      state.config = payload;
+    },
   }
 });

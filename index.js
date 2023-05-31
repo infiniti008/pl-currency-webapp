@@ -41,36 +41,50 @@ app.listen(port, () => {
   initBase();
 });
 
-app.get('/api/last/:country/:userid', async (req, res) => {
+app.get('/api/config/:userId', async (req, res) => {
   try {
-    const { data, settings } = await getLastCurrencies(req.params.country, req.params.userid);
+    const data = await getSettings(req.params.userId, true);
+    const config = {
+      userId: req.params.userId,
+      ...data
+    }
+
+    res.json(config);
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+app.get('/api/last/:country/:userId', async (req, res) => {
+  try {
+    const { data, settings } = await getLastCurrencies(req.params.country, req.params.userId);
     res.json({ data, settings });
   } catch (err) {
     console.log(err);
   }
 });
 
-app.get('/api/settings/:userid', async (req, res) => {
+app.get('/api/settings/:userId', async (req, res) => {
   try {
-    const data = await getSettings(req.params.userid);
+    const data = await getSettings(req.params.userId);
     res.json({ data: data });
   } catch (err) {
     console.log(err);
   }
 });
 
-app.post('/api/favorites/:country/:userid', async (req, res) => {
+app.post('/api/favorites/:country/:userId', async (req, res) => {
   try {
-    await updateFavorites(req.body.favorites, req.params.country, req.params.userid);
+    await updateFavorites(req.body.favorites, req.params.country, req.params.userId);
     res.send('OK');
   } catch (err) {
     console.log(err);
   }
 });
 
-app.post('/api/settings/:userid', async (req, res) => {
+app.post('/api/settings/:userId', async (req, res) => {
   try {
-    await updateSettings(req.body.settings, req.params.userid);
+    await updateSettings(req.body.settings, req.params.userId);
     res.send('OK');
   } catch (err) {
     console.log(err);

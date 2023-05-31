@@ -19,6 +19,8 @@
 </template>
 
 <script>
+import { getConfig } from './services/api.js';
+
 import PageHello from './components/PageHello.vue';
 import PageMenu from './components/PageMenu.vue';
 import PageLastValues from './components/PageLastValues.vue';
@@ -59,6 +61,8 @@ export default {
     this.$bus.$on('handleReturnBack', this.handleReturnBack);
 
     this.$store.commit('startObserveExpanded');
+
+    this.getConfig();
   },
   beforeDestroy() {
     this.$bus.$off('toggleLoading');
@@ -103,6 +107,19 @@ export default {
     handleReturnBack() {
       if (this.previosTab) {
         this.handleToggleTab(this.previosTab);
+      }
+    },
+    getConfig() {
+      try {
+        getConfig()
+          .then(loadedConfig => {
+            this.$store.commit('setConfig', loadedConfig);
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      } catch(err) {
+        console.log(err);
       }
     }
   }
