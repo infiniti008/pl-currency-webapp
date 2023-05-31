@@ -7,7 +7,8 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     config: {
-      defaultCountry: config.DEFAULT_COUNTRY,
+      defaultCountry: config.defaultCountry,
+      isStartWithFavorite: config.isStartWithFavorite
     },
     isExpanded: window.Telegram?.WebApp?.isExpanded || false,
     firstNavButton: {

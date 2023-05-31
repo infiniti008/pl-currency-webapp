@@ -21,9 +21,10 @@ export default {
   SERVER_URL,
   TELEGRAM_USER,
   ADMIN_USER: '208067133',
-  DEFAULT_COUNTRY: 'pl',
   TIME_LIMIT_GREEN: 150,
   TIME_LIMIT_YELLOW: 650,
   COUNTRIES: ['pl', 'by'],
-  FREE_KEYS_PER_SUBSCRIPTION_LIMIT: 4
+  FREE_KEYS_PER_SUBSCRIPTION_LIMIT: 4,
+  isStartWithFavorite: false,
+  defaultCountry: 'pl'
 }

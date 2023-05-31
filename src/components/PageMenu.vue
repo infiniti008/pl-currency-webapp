@@ -46,7 +46,7 @@ export default {
   data: () => {
     return {
       isAdmin: config.ADMIN_USER === config.TELEGRAM_USER,
-      selectedCountry: config.DEFAULT_COUNTRY
+      selectedCountry: config.defaultCountry
     };
   },
   created() {

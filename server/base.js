@@ -109,10 +109,7 @@ export async function getLastCurrencies(country, userId) {
     });
 
     return { 
-      data: lastWithFavorites,
-      settings: {
-        isStartWithFavorite: user.settings.isStartWithFavorite
-      }
+      data: lastWithFavorites
     };
   } catch (err) {
     console.log(err);

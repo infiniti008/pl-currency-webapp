@@ -44,6 +44,7 @@ export default {
     };
   },
   mounted() {
+    this.isFavoriteOnly = this.$store.state.config.isStartWithFavorite;
     this.getLastCurrencies();
   },
   created() {
@@ -143,7 +144,6 @@ export default {
 
           response = response.reduce((acc, responseItem) => {
             acc.lastCurrencies = [ ...acc.lastCurrencies, ...responseItem.lastCurrencies ];
-            acc.settings = responseItem.settings;
             return acc;
           }, { lastCurrencies: [] });
           
@@ -154,7 +154,6 @@ export default {
         ({ lastCurrencies, settings } = response);
         this.records = lastCurrencies;
         this.cachedRecords = JSON.parse(JSON.stringify(this.records));
-        this.isFavoriteOnly = settings.isStartWithFavorite || false;
       } catch(error) {
         console.error(error);
       } finally {
