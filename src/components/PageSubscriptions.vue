@@ -14,7 +14,7 @@
           <div class="item__title">
             Keys:
           </div>
-          <div class="item__list" v-for="key in item.keys" :key="key">
+          <div class="item__list" :class="isKeyDeprecated(key) ? 'item__list--deprecated' : ''" v-for="key in item.keys" :key="key">
             {{ getKeyName(key) }}
           </div>
           <div class="item__checkbox">
@@ -132,6 +132,9 @@ export default {
     getKeyName(keyToDefine) {
       return this.settings.keys.find(key => key.key === keyToDefine)?.name || keyToDefine;
     },
+    isKeyDeprecated(keyToDefine) {
+      return !this.settings.keys.find(key => key.key === keyToDefine);
+    },
     getIntervalName(intervalToDefine) {
       return this.settings.intervals.find(interval => interval.key === intervalToDefine)?.name || intervalToDefine;
     }
@@ -185,6 +188,10 @@ export default {
       &--row {
         flex-direction: row;
         justify-content: space-between;
+      }
+
+      &--deprecated {
+        text-decoration: line-through;
       }
     }
 

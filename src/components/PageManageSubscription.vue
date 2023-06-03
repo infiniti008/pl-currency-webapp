@@ -27,7 +27,7 @@
         </label>
         <div class="item__list">
           <div class="list__item" v-for="addedKey in addedKeys" :key="addedKey">
-            <span class="list__item--key">
+            <span class="list__item--key" :class="isKeyDeprecated(addedKey) ? 'list__item--deprecated' : ''">
               {{ getKeyName(addedKey) }}
             </span>
             <span class="list__item--icon" @click="handleRemoveKey(addedKey)">
@@ -273,7 +273,10 @@ export default {
       }
     },
     getKeyName(addedKey) {
-      return this.keys.find(key => key.key === addedKey)?.name || '';
+      return this.keys.find(key => key.key === addedKey)?.name || addedKey;
+    },
+    isKeyDeprecated(addedKey) {
+      return !this.keys.find(key => key.key === addedKey);
     },
     handleRemoveKey(keyToRemove) {
       this.addedKeys = this.addedKeys.filter(key => key !== keyToRemove);
@@ -354,6 +357,10 @@ export default {
 
         &--icon {
           width: 24px;
+        }
+
+        &--deprecated {
+          text-decoration: line-through;
         }
       }
     }
