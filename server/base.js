@@ -328,3 +328,20 @@ export async function updateSubscription(subscription, subscriptionId, userId) {
     return { message: 'Please try again later', status: false };
   }
 }
+
+export async function getStatistic() {
+  try {
+    const users = await client.db('users');
+    const usersStats = await users.stats();
+    const usersCount = usersStats.collections
+
+    const subscriptionsCount = await client.db('currency_app').collection('subscriptions-users').count();
+
+    return {
+      usersCount,
+      subscriptionsCount
+    };
+  } catch (err) {
+    console.log(err);
+  }
+}

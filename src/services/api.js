@@ -125,3 +125,13 @@ export async function deleteSubscription(subscriptionId) {
     console.log(err);
   }
 }
+
+export async function getStatistic() {
+  try {
+    const response = await axios.get(`${SERVER_URL}/api/statistic`);
+    
+    return response?.data || {};
+  } catch(err) {
+    console.log(err);
+  }
+}

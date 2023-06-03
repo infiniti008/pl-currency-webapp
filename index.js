@@ -17,7 +17,8 @@ import {
   saveSubscription,
   getSubscriptions,
   deleteSubscriptions,
-  updateSubscription
+  updateSubscription,
+  getStatistic
 } from './server/base.js';
 import bodyParser from 'body-parser';
 
@@ -142,6 +143,16 @@ app.delete('/api/subscription/:userId/:subscriptionId', async (req, res) => {
   try {
     const data = await deleteSubscriptions(req.params.userId, req.params.subscriptionId);
     res.json({ data: data });
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+app.get('/api/statistic', async (req, res) => {
+  try {
+    const data = await getStatistic();
+    
+    res.json(data);
   } catch (err) {
     console.log(err);
   }
