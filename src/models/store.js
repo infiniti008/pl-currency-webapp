@@ -8,7 +8,12 @@ export default new Vuex.Store({
   state: {
     config: {
       defaultCountry: config.defaultCountry,
-      isStartWithFavorite: config.isStartWithFavorite
+      isStartWithFavorite: config.isStartWithFavorite,
+      isPremium: false,
+      limitFreeKeysInOneSubscription: config.limitFreeKeysInOneSubscription,
+      intervals: [],
+      countries: config.countries,
+      countryFlags: []
     },
     isExpanded: window.Telegram?.WebApp?.isExpanded || false,
     firstNavButton: {

@@ -44,7 +44,7 @@ export default {
     };
   },
   mounted() {
-    this.getSettings();
+    this.getUserSettings();
   },
   created() {
     this.$bus.$on('saveSettingsChanges', this.saveSettingsChanges);
@@ -94,7 +94,7 @@ export default {
         this.settings = JSON.parse(JSON.stringify(this.cachedSettings));
       }
     },
-    async getSettings() {
+    async getUserSettings() {
       try {
         this.isLoading = true;
         this.$bus.$emit('toggleLoading', true);

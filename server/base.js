@@ -33,12 +33,12 @@ export async function getKeys(country) {
   }
 }
 
-export async function getSubscriptionsSettings() {
+export async function getAppSettings() {
   try {
     const configBaseName = process.env['configBaseName'];
-    let subscriptionSettings = await client.db(configBaseName).collection('subscription-settings');
-    subscriptionSettings = await subscriptionSettings.find({}).toArray();
-    return subscriptionSettings?.[0];
+    let appSettings = await client.db(configBaseName).collection('settings');
+    appSettings = await appSettings.find({}).toArray();
+    return appSettings?.[0];
   } catch(err) {
     console.log(err);
     return {};
@@ -140,7 +140,7 @@ export async function createUser(userId) {
   }
 }
 
-export async function getSettings(userId, isExtended) {
+export async function getUserSettings(userId, isExtended) {
   try {
     const user = await getUserInfo(userId);
     if (isExtended && user.settings) {
@@ -164,6 +164,7 @@ export async function updateSettings(settings, userId) {
 export async function saveMessage(message, userId) {
   try {
     const messages = await client.db('currency_app').collection('messages');
+    const appSettings = await getAppSettings();
 
     const query = { userId };
     const options = {
@@ -175,8 +176,8 @@ export async function saveMessage(message, userId) {
     const unAnsweredMessagesByUser = await messages.find({userId, isAnswered: false}, {}).toArray();
     const userUnAnsweredMessagesQty = unAnsweredMessagesByUser.length;
     const lastMessageByUser = await messages.findOne(query, options);
-    const messagesPeriodLimitInHours = process.env.messagesPeriodLimitInHours;
-    const maxUnAnsweredMessages = process.env.maxUnAnsweredMessages;
+    const messagesPeriodLimitInHours = appSettings.messagesPeriodLimitInHours;
+    const maxUnAnsweredMessages = appSettings.maxUnAnsweredMessages;
 
     const lastMessageTime = lastMessageByUser?.time || 0 ;
     const now = new Date().valueOf();
@@ -212,17 +213,16 @@ export async function saveMessage(message, userId) {
 
 export async function getSubscriptionSettings() {
   try {
-    const subscriptionsSettings = await getSubscriptionsSettings();
+    const appSettings = await getAppSettings();
 
-    const getCountriesArr = [];
-    subscriptionsSettings.countries.forEach(country => getCountriesArr.push(getKeys(country)));
+    const getKeysArr = [];
+    appSettings.countries.forEach(country => getKeysArr.push(getKeys(country)));
 
-    const allKeys = (await Promise.all(getCountriesArr)).reduce((acc, keysRespons) => {
+    const allKeys = (await Promise.all(getKeysArr)).reduce((acc, keysRespons) => {
       return [...acc, ...keysRespons];
     }, []);
 
     return {
-      ...subscriptionsSettings,
       keys: allKeys
     };
   } catch (err) {
@@ -233,11 +233,11 @@ export async function getSubscriptionSettings() {
 export async function saveSubscription(subscription) {
   try {
     const subscriptions = await client.db('currency_app').collection('subscriptions-users');
-    const subscriptionSettings = await getSubscriptionsSettings();
+    const appSettings = await getAppSettings();
     const userInfo = await getUserInfo(subscription.userId);
 
     const isFreeUser = !userInfo.isPremium ?? true;
-    const isInervalPremium = !subscriptionSettings.freeIntervals.includes(subscription.interval);
+    const isInervalPremium = !appSettings.freeIntervals.includes(subscription.interval);
     const isTimesLimitGot = subscription.times.length > 6;
 
     if (isFreeUser && isInervalPremium || isTimesLimitGot) {
@@ -252,11 +252,18 @@ export async function saveSubscription(subscription) {
       projection: { time: 1 },
     };
     const subscriotionsByUser = await subscriptions.count(query, options);
-    const maxFreeSubscriptions = process.env.maxFreeSubscriptions;
+    const maxFreeSubscriptions = appSettings.maxFreeSubscriptions;
     const isLimitSubscriptionsGot = subscriotionsByUser >= maxFreeSubscriptions;
     
     if (isFreeUser && isLimitSubscriptionsGot) {
       return { message: 'You have reached your subscription limit', status: false };
+    }
+
+    const limitFreeKeysInOneSubscription = appSettings.limitFreeKeysInOneSubscription;
+    const isLimitfreeKeysGot = subscription.keys.length > limitFreeKeysInOneSubscription;
+
+    if (isFreeUser && isLimitfreeKeysGot) {
+      return { message: 'You have reached your keys per one subscription limit', status: false };
     }
 
     const result = await subscriptions.insertOne(subscription);

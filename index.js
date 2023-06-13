@@ -10,7 +10,8 @@ import {
   getLastCurrencies,
   initBase,
   updateFavorites,
-  getSettings,
+  getUserSettings,
+  getAppSettings, 
   updateSettings,
   saveMessage,
   getSubscriptionSettings,
@@ -44,10 +45,12 @@ app.listen(port, () => {
 
 app.get('/api/config/:userId', async (req, res) => {
   try {
-    const data = await getSettings(req.params.userId, true);
+    const userSettings = await getUserSettings(req.params.userId, true);
+    const appSettings = await getAppSettings();
     const config = {
       userId: req.params.userId,
-      ...data
+      ...userSettings,
+      ...appSettings
     }
 
     res.json(config);
@@ -67,7 +70,7 @@ app.get('/api/last/:country/:userId', async (req, res) => {
 
 app.get('/api/settings/:userId', async (req, res) => {
   try {
-    const data = await getSettings(req.params.userId);
+    const data = await getUserSettings(req.params.userId);
     res.json({ data: data });
   } catch (err) {
     console.log(err);

@@ -23,8 +23,8 @@ export default {
   ADMIN_USER: '208067133',
   TIME_LIMIT_GREEN: 150,
   TIME_LIMIT_YELLOW: 650,
-  COUNTRIES: ['pl', 'by'],
-  FREE_KEYS_PER_SUBSCRIPTION_LIMIT: 4,
+  countries: ['pl', 'by'],
+  limitFreeKeysInOneSubscription: 4,
   isStartWithFavorite: false,
   defaultCountry: 'pl'
 }

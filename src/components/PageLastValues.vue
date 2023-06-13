@@ -126,11 +126,14 @@ export default {
       const current = this.favoriteIds.sort().toString();
 
       return cache !== current;
+    },
+    countries() {
+      return this.$store.state.config.countries;
     }
   },
   methods: {
     async getLastCurrencies() {
-      const countries = config.COUNTRIES;
+      const countries = this.countries;
       this.isLoading = true;
       this.$bus.$emit('toggleLoading', true);
       try {

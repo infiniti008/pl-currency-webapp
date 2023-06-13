@@ -49,7 +49,9 @@ export default {
   data: () => {
     return {
       subscriptions: [],
-      settings: {},
+      settings: {
+        keys: [],
+      },
       selectedSubscription: null
     };
   },
@@ -76,6 +78,9 @@ export default {
   computed: {
     hasSelectedItem() {
       return !!this.selectedSubscription;
+    },
+    intervals() {
+      return this.$store.state.config.intervals;
     }
   },
   methods: {
@@ -87,7 +92,7 @@ export default {
         const response = await getSubscriptions();
 
         this.subscriptions = response.subscriptions;
-        this.settings = response.settings;
+        this.settings.keys = response.settings.keys;
       } catch(err) {
         console.log(err);
       } finally {
@@ -136,7 +141,7 @@ export default {
       return !this.settings.keys.find(key => key.key === keyToDefine);
     },
     getIntervalName(intervalToDefine) {
-      return this.settings.intervals.find(interval => interval.key === intervalToDefine)?.name || intervalToDefine;
+      return this.intervals.find(interval => interval.key === intervalToDefine)?.name || intervalToDefine;
     }
   }
 };

@@ -30,7 +30,6 @@
 </template>
 
 <script>
-// TODO - Add all countries
 import config from '../models/config.js';
 import buttontsService from '../services/buttons.js';
 

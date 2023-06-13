@@ -96,10 +96,7 @@ export default {
         pl: 'PLN',
         by: 'BYN'
       },
-      countryFlags: {},
-      countries: [],
       keys: [],
-      intervals: [],
       selectedCountry: null,
       selectedKey: null,
       selectedInterval: null,
@@ -144,7 +141,7 @@ export default {
       return this.keys.filter(key => key.currencyBase === countryCurrency);
     },
     keysFilteredBySelectedItems() {
-      if (this.addedKeys.length >= config.FREE_KEYS_PER_SUBSCRIPTION_LIMIT) {
+      if (!this.$store.state.config.isPremium && this.addedKeys.length >= this.$store.state.config.limitFreeKeysInOneSubscription) {
         return [];
       }
       return this.keysFiltredByCountry.filter(item => !this.addedKeys.includes(item.key));
@@ -189,6 +186,15 @@ export default {
     },
     selectedSubscriptionToManage() {
       return this.$store.state.curentSubscriptionToManage;
+    },
+    countries() {
+      return this.$store.state.config.countries;
+    },
+    countryFlags() {
+      return this.$store.state.config.countryFlags;
+    },
+    intervals() {
+      return this.$store.state.config.intervals;
     }
   },
   methods: {
@@ -261,10 +267,7 @@ export default {
 
         const response = await getSubscriptionSettings();
 
-        this.countries = response.countries;
         this.keys = response.keys;
-        this.intervals = response.intervals;
-        this.countryFlags = response.countryFlags;
       } catch(err) {
         console.log(err);
       } finally {
