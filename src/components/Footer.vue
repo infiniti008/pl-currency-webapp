@@ -23,6 +23,7 @@
       <component :is="thirdNavButton.component" />
     </div>
     <div class="footer__item" @click="handleClickButton(tabMenu)">
+      <span class="footer__item-marker" v-html="isPremium ? '&#128303;' : '&#9989;'" />
       <MenuSVG />
     </div>
   </div>
@@ -75,6 +76,9 @@ export default {
       },
       thirdNavButton() {
         return this.$store.state.thirdNavButton;
+      },
+      isPremium() {
+        return this.$store.state.config.isPremium;
       }
     },
     methods: {
@@ -108,10 +112,17 @@ $--footer-height: 70px;
 
   &__item {
     width: 50px;
+    position: relative;
 
     &--disabled {
       opacity: 0.2;
     }
+  }
+
+  &__item-marker {
+    position: absolute;
+    top: 11px;
+    left: -18px;
   }
 }
 </style>
