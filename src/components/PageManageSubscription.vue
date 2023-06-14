@@ -238,11 +238,23 @@ export default {
 
           if (response.status) {
             this.$emit('handleToggleTab', 'PageSubscriptions');
+            this.$toast.success(response.message, {
+              duration: 5000,
+              position: 'bottom'
+            });
           } else {
-            console.log('ERROR')
+            console.log('ERROR');
+            this.$toast.error(response.message, {
+              duration: 5000,
+              position: 'bottom'
+            });
           }
         } catch(err) {
           console.log(err);
+          this.$toast.error(err.message, {
+            duration: 5000,
+            position: 'bottom'
+          });
         } finally {
           this.$bus.$emit('toggleLoading', false);
           this.isLoading = false;
