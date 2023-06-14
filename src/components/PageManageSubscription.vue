@@ -50,6 +50,12 @@
       </select>
     </div>
     <div class="item">
+      <label for="subscriptionName">
+        Subscription Name (30 symbols max):
+      </label>
+      <input v-model="selectedName" class="item__input" type="text" id="subscriptionName" :disabled="isTimeDisabled" maxlength="30">
+    </div>  
+    <div class="item">
       <label>
         Start Time:
       </label>
@@ -102,6 +108,7 @@ export default {
       selectedInterval: null,
       selectedHour: null,
       selectedMinute: null,
+      selectedName: '',
       addedKeys: []
     };
   },
@@ -133,6 +140,13 @@ export default {
     },
     hasChangesToSave(newValue) {
       updateButtonsByKey('PageManageSubscription', this.$store, 'hasChangesToSave', !newValue);
+    },
+    selectedInterval(newValue) {
+      if (newValue === '0') {
+        this.selectedName = '';
+        return;
+      }
+      this.selectedName = this.selectedSubscriptionToManage?.name ? this.selectedSubscriptionToManage?.name : this.intervals.find(interval => interval.key === newValue)?.name || newValue;
     }
   },
   computed: {
@@ -206,7 +220,8 @@ export default {
           interval: this.selectedInterval,
           time: this.selectedTime,
           userId: config.TELEGRAM_USER,
-          times: this.getCalculatedTimes()
+          times: this.getCalculatedTimes(),
+          name: this.selectedName
         };
 
         try {
@@ -248,6 +263,7 @@ export default {
           this.selectedHour = this.selectedSubscriptionToManage.time?.split(':')?.[0],
           this.selectedMinute = this.selectedSubscriptionToManage.time?.split(':')?.[1],
           this.addedKeys = this.selectedSubscriptionToManage.keys;
+          this.selectedName = this.selectedSubscriptionToManage.name;
         });
         
         return;
@@ -259,6 +275,7 @@ export default {
       this.selectedHour = '08',
       this.selectedMinute = '00',
       this.addedKeys = [];
+      this.selectedName = '';
     },
     async getSubscriptionSettings() {
       try {
@@ -297,33 +314,26 @@ export default {
         case 'every-1-hours':
           interval = 1;
           start = hour % interval;
-          
           break;
-
         case 'every-2-hours':
           interval = 2;
           start = hour % interval;
-          
           break;
         case 'every-3-hours':
           interval = 3;
           start = hour % interval;
-          
           break;
         case 'every-4-hours':
           interval = 4;
           start = hour % interval;
-          
           break;
         case 'every-6-hours':
           interval = 6;
           start = hour % interval;
-          
           break;
         case 'every-12-hours':
           interval = 12;
           start = hour % interval;
-          
           break;
         case 'every-24-hours':
           interval = 24;
@@ -384,13 +394,14 @@ export default {
     &__list {
       width: 100%;
       color: #22A699;
+      font-size: 12px;
 
       .list__item {
         display: flex;
         justify-content: space-between;
         width: 100%;
         align-items: center;
-        padding: 4px 0px;
+        padding: 1px 0px;
 
         &--icon {
           width: 24px;
@@ -400,6 +411,12 @@ export default {
           text-decoration: line-through;
         }
       }
+    }
+
+    &__input {
+      width: 100%;
+      padding: 6px 6px;
+      font-size: 16px;
     }
 
     .time {

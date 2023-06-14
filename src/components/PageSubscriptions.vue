@@ -3,6 +3,19 @@
     <div class="item" v-for="item in subscriptions" :key="item._id">
       <label :for="item._id">
         <div class="item__group item__group--row">
+          <div class="item__checkbox">
+            <input :id="item._id" type="radio" name="subscription" v-model="selectedSubscription" :value="item._id">
+          </div>
+        </div>
+        <div class="item__group item__group--row">
+          <div class="item__title">
+            Name:
+          </div>
+          <div class="item__text">
+            {{ item.name }}
+          </div>
+        </div>
+        <div class="item__group item__group--row">
           <div class="item__title">
             Interval:
           </div>
@@ -14,11 +27,8 @@
           <div class="item__title">
             Keys:
           </div>
-          <div class="item__list" :class="isKeyDeprecated(key) ? 'item__list--deprecated' : ''" v-for="key in item.keys" :key="key">
+          <div class="item__list item__list--thin" :class="isKeyDeprecated(key) ? 'item__list--deprecated' : ''" v-for="key in item.keys" :key="key">
             {{ getKeyName(key) }}
-          </div>
-          <div class="item__checkbox">
-            <input :id="item._id" type="radio" name="subscription" v-model="selectedSubscription" :value="item._id">
           </div>
         </div>
         <div class="item__group">
@@ -202,13 +212,16 @@ export default {
       &--deprecated {
         text-decoration: line-through;
       }
+
+      &--thin {
+        font-size: 12px;
+      }
     }
 
     &__checkbox {
       position: absolute;
-      right: 0px;
-      top: 50%;
-      transform: translateY(-25%);
+      left: 70px;
+      top: 7px;
       padding: 4px;
 
       input {
