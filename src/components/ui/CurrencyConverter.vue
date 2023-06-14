@@ -1,7 +1,7 @@
 <template>
   <div class="currency-converter">
-    <div>
-      {{ bank }}{{ operation === 'Market' ? '' : ' - ' + operation }}
+    <div class="currency-converter__name">
+      {{ name }}
     </div>
     <div class="currency-converter__rate">
       <span
@@ -44,7 +44,8 @@ export default {
     value: Number,
     baseCurrency: String,
     operation: String,
-    bank: String
+    bank: String,
+    name: String
   },
   name: "CurrencyConverter",
   components: {
@@ -131,6 +132,11 @@ export default {
     align-items: center;
     justify-content: flex-end;
     gap: 4px;
+  }
+
+  &__name {
+    width: 100%;
+    margin-left: 42px;
   }
   
   .currency {

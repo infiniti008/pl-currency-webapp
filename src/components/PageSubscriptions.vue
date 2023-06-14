@@ -135,7 +135,11 @@ export default {
       }
     },
     getKeyName(keyToDefine) {
-      return this.settings.keys.find(key => key.key === keyToDefine)?.name || keyToDefine;
+      const key = this.settings.keys.find(key => key.key === keyToDefine);
+      if (key) {
+        return `${key.currency} | ${key.name}`;
+      }
+      return keyToDefine;
     },
     isKeyDeprecated(keyToDefine) {
       return !this.settings.keys.find(key => key.key === keyToDefine);

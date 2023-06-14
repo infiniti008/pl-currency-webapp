@@ -12,6 +12,7 @@
           :operation="record.operation"
           :bank="record.bank"
           :base-currency="record.currencyBase"
+          :name="record.name"
         />
         <StarSVG class="record-item__favorite" :class="!isFavorite(record) ? 'record-item__favorite--disabled' : ''" />
       </div>

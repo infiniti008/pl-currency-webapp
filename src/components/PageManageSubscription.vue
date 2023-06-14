@@ -15,7 +15,7 @@
       </label>
       <select class="item__select" id="keySelect" v-model="selectedKey" :disabled="isKeysDisabled">
         <option disabled value="0">Select Item to Add</option>
-        <option v-for="key in keysFilteredBySelectedItems" :key="key.key" :value="key.key">{{ key.name }}</option>
+        <option v-for="key in keysFilteredBySelectedItems" :key="key.key" :value="key.key">{{ getKeyName(key.key) }}</option>
       </select>
       <template v-if="addedKeys.length > 0">
         <label class="keys__lable">Keys to Subscribe:
@@ -43,7 +43,7 @@
       </label>
       <select class="item__select" id="intervalSelect" v-model="selectedInterval" :disabled="!isKeysSelected">
         <option disabled value="0">Select</option>
-        <option v-for="interval in intervals" :value="interval.key" :disabled="interval.isPremium">
+        <option v-for="interval in intervals" :value="interval.key" :disabled="isIntervalDisabled(interval.isPremium)">
           <span v-html="interval.isPremium ? '&#128303;' : '&#9989;'" />
           {{ interval.name }}
         </option>
@@ -276,7 +276,11 @@ export default {
       }
     },
     getKeyName(addedKey) {
-      return this.keys.find(key => key.key === addedKey)?.name || addedKey;
+      const key = this.keys.find(key => key.key === addedKey);
+      if (key) {
+        return `${key.currency} | ${key.name}`;
+      }
+      return addedKey;
     },
     isKeyDeprecated(addedKey) {
       return !this.keys.find(key => key.key === addedKey);
@@ -290,8 +294,34 @@ export default {
       let start = 0;
       let interval = 4;
       switch (this.selectedInterval) {
+        case 'every-1-hours':
+          interval = 1;
+          start = hour % interval;
+          
+          break;
+
+        case 'every-2-hours':
+          interval = 2;
+          start = hour % interval;
+          
+          break;
+        case 'every-3-hours':
+          interval = 3;
+          start = hour % interval;
+          
+          break;
         case 'every-4-hours':
           interval = 4;
+          start = hour % interval;
+          
+          break;
+        case 'every-6-hours':
+          interval = 6;
+          start = hour % interval;
+          
+          break;
+        case 'every-12-hours':
+          interval = 12;
           start = hour % interval;
           
           break;
@@ -306,6 +336,9 @@ export default {
         times.push(cHour + ':' + this.selectedMinute);
       }
       return times;
+    },
+    isIntervalDisabled(isPremiumInterval) {
+      return isPremiumInterval && !this.$store.state.config.isPremium;
     }
   }
 };
@@ -324,10 +357,11 @@ export default {
     gap: 10px;
     padding: 8px 0;
     border-bottom: 1px solid black;
+    flex-wrap: wrap;
 
     & label {
       font-weight: 600;
-      color: #47A992;
+      color: #FF8551;
 
       &.keys__lable {
         width: 100%;
@@ -349,7 +383,7 @@ export default {
 
     &__list {
       width: 100%;
-      color: #F79327;
+      color: #22A699;
 
       .list__item {
         display: flex;
@@ -369,7 +403,7 @@ export default {
     }
 
     .time {
-      color: #F79327;
+      color: #22A699;
     } 
 
     &--column {
