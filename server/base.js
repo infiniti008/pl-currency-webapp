@@ -232,6 +232,9 @@ export async function getSubscriptionSettings() {
 
 export async function saveSubscription(subscription) {
   try {
+    if (subscription.userId.includes('@')) {
+      return { message: 'Wrong Chat ID. Please try again later', status: false };
+    }
     const subscriptions = await client.db('currency_app').collection('subscriptions-users');
     const appSettings = await getAppSettings();
     const userInfo = await getUserInfo(subscription.userId);
@@ -239,10 +242,6 @@ export async function saveSubscription(subscription) {
     const isFreeUser = !userInfo.isPremium ?? true;
     const isInervalPremium = !appSettings.freeIntervals.includes(subscription.interval);
     const isTimesLimitGot = subscription.times.length > 6;
-
-    if (subscription.userId.includes('@')) {
-      return { message: 'Wrong Chat ID. Please try again later', status: false };
-    }
 
     if (isFreeUser && isInervalPremium) {
       return { message: 'Wrong intervals. Please try again later', status: false };
