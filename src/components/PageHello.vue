@@ -19,16 +19,24 @@
       </ul>
     </p>
     <hr />
-    <p>
-      Please support the team in developing new features and maintaining the infrastructure!
-    </p>
-    <hr />
-    <p>
-      Dear User, your contribution will directly support the ongoing operation and improvement of our service.
-      Donate now and make a difference. Thank you for your support!
-      ChatGPT &#169;
-    </p>
-    <hr />
+    <template v-if="!isPremium">
+      <p>
+        Please support the team in developing new features and maintaining the infrastructure!
+      </p>
+      <hr />
+      <p>
+        Dear User, your contribution will directly support the ongoing operation and improvement of our service.
+        Donate now and make a difference. Thank you for your support!
+        ChatGPT &#169;
+      </p>
+      <hr />
+    </template>
+    <template v-else>
+      <p>
+        Thank You For Your Support!
+      </p>
+      <hr />
+    </template>
   </div>
 </template>
 
@@ -49,6 +57,11 @@ export default {
   },
   beforeDestroy() {
     this.$bus.$off('handleOpenCurrencyPage');
+  },
+  computed: {
+    isPremium() {
+      return this.$store.state.config.isPremium;
+    }
   },
   methods: {
     handleOpenCurrencyPage() {
