@@ -207,6 +207,7 @@ export default {
       &--row {
         flex-direction: row;
         justify-content: space-between;
+        flex-wrap: wrap;
       }
 
       &--deprecated {

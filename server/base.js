@@ -240,8 +240,12 @@ export async function saveSubscription(subscription) {
     const isInervalPremium = !appSettings.freeIntervals.includes(subscription.interval);
     const isTimesLimitGot = subscription.times.length > 6;
 
-    if (isFreeUser && isInervalPremium || isTimesLimitGot) {
-      return { message: 'Please try again later', status: false };
+    if (isFreeUser && isInervalPremium) {
+      return { message: 'Wrong intervals. Please try again later', status: false };
+    }
+
+    if (isFreeUser && isTimesLimitGot) {
+      return { message: 'Wrong times. Please try again later', status: false };
     }
 
     const query = { userId: subscription.userId };
@@ -271,11 +275,11 @@ export async function saveSubscription(subscription) {
     if (result.acknowledged) {
       return { message: 'Your subscription has been saved!', status: true };
     } else {
-      return { message: 'Please try again later', status: false };
+      return { message: 'Fault to save subscription. Please try again later', status: false };
     }
   } catch(err) {
     console.log(err);
-    return { message: 'Please try again later', status: false };
+    return { message: 'Server Error. Please try again later', status: false };
   }
 }
 
