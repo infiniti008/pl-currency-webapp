@@ -54,7 +54,14 @@
         Subscription Name (30 symbols max):
       </label>
       <input v-model="selectedName" class="item__input" type="text" id="subscriptionName" :disabled="isTimeDisabled" maxlength="30">
-    </div>  
+    </div>
+    <div class="item" v-if="isPremium">
+      <label for="selectedTimeToGetDiff">
+        Time to get Diff:
+      </label>
+      <span class="time">{{ selectedTimeToGetDiff }}</span>
+      <input v-model="selectedTimeToGetDiff" type="time" id="selectedTimeToGetDiff">
+    </div>
     <div class="item">
       <label>
         Start Time:
@@ -76,6 +83,30 @@
     <div class="item" v-if="hasChangesToSave">
       <span class="time" v-for="time in getCalculatedTimes()" :key="time">{{ time }}</span>
     </div>
+    <div class="item" v-if="isPremium">
+      <label for="color">
+        Color:
+      </label>
+      <input v-model="selectedColor" class="item__input" type="text" id="color" maxlength="10">
+    </div> 
+    <div v-if="isAdmin" class="item item--column">
+      <label for="platform">
+        Platform:
+      </label>
+      <select id="platform" class="item__select" v-model="selectedPlatform" :disabled="isTimeDisabled">
+        <option disabled value="0">Select Platform</option>
+        <option v-for="platform in platforms" :value="platform">{{ platform }}</option>
+      </select>
+    </div>
+    <div v-if="isAdmin" class="item item--column">
+      <label for="chanel">
+        Chanel:
+      </label>
+      <select id="chanel" class="item__select" v-model="selectedChanel" :disabled="isChanedDisabled">
+        <option disabled value="0">Select Chanel</option>
+        <option v-for="chanel in chanelsByPlatform" :value="chanel">{{ chanel }}</option>
+      </select>
+    </div> 
   </div>
 </template>
 
@@ -96,6 +127,7 @@ export default {
 },
   data: () => {
     return {
+      isAdmin: config.ADMIN_USER === config.TELEGRAM_USER,
       countryCurrencies: {
         BYN: 'by',
         PLN: 'pl',
@@ -109,7 +141,21 @@ export default {
       selectedHour: null,
       selectedMinute: null,
       selectedName: '',
-      addedKeys: []
+      selectedPlatform: 'subscriptions-users',
+      selectedChanel: null,
+      selectedColor: null,
+      selectedTimeToGetDiff: null,
+      addedKeys: [],
+      platforms: [
+        'subscriptions-users',
+        'subscriptions-telegram'
+      ],
+      chanels: {
+        'subscriptions-telegram': [
+          '@by_currency_notifications',
+          '@pl_currency_notifications'
+        ]
+      }
     };
   },
   created() {
@@ -209,6 +255,19 @@ export default {
     },
     intervals() {
       return this.$store.state.config.intervals;
+    },
+    isChanedDisabled() {
+      return !this.selectedPlatform || this.selectedPlatform === '0' || this.selectedPlatform === 'subscriptions-users';
+    },
+    chanelsByPlatform() {
+      if (this.selectedPlatform) {
+        return this.chanels[this.selectedPlatform];
+      }
+
+      return [];
+    },
+    isPremium() {
+      return this.$store.state.config.isPremium;
     }
   },
   methods: {
@@ -221,8 +280,18 @@ export default {
           time: this.selectedTime,
           userId: config.TELEGRAM_USER,
           times: this.getCalculatedTimes(),
-          name: this.selectedName
+          name: this.selectedName,
+          platform: this.selectedPlatform
         };
+
+        if (this.isAdmin) {
+          request.color = this.selectedColor;
+          request.chanel = this.selectedChanel;
+          request.timeToGetDiff = this.selectedTimeToGetDiff;
+        }
+
+        // console.log('request', request);
+        // return;
 
         try {
           this.isLoading = true;
@@ -268,7 +337,7 @@ export default {
     },
     resetChanges() {
       if (this.selectedSubscriptionToManage) {
-        this.selectedCountry = this.selectedSubscriptionToManage.country, 
+        this.selectedCountry = this.selectedSubscriptionToManage.country,
         this.selectedKey = '0',
         this.$nextTick(() => {
           this.selectedInterval = this.selectedSubscriptionToManage.interval,
@@ -288,6 +357,10 @@ export default {
       this.selectedMinute = '00',
       this.addedKeys = [];
       this.selectedName = '';
+      this.selectedPlatform = 'subscriptions-users';
+      this.selectedChanel = '0';
+      this.selectedColor = '';
+      this.selectedTimeToGetDiff = null;
     },
     async getSubscriptionSettings() {
       try {
