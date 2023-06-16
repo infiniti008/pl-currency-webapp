@@ -358,7 +358,7 @@ export default {
       this.addedKeys = [];
       this.selectedName = '';
       this.selectedPlatform = 'subscriptions-users';
-      this.selectedChanel = '0';
+      this.selectedChanel = null;
       this.selectedColor = '';
       this.selectedTimeToGetDiff = null;
     },
