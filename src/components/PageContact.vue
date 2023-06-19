@@ -94,7 +94,6 @@ export default {
   height: calc(100vh - 70px);
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
 
   hr {
     width: 100%;
