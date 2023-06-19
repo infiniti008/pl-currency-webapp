@@ -359,3 +359,13 @@ export async function getStatistic() {
     console.log(err);
   }
 }
+
+export async function addKofiResponse(kofiData) {
+  try {
+    const dataCollection = await client.db('currency_app').collection('kofi-donations');
+    const result = await dataCollection.insertOne(kofiData);
+
+  } catch(err) {
+    console.log(err);
+  }
+}

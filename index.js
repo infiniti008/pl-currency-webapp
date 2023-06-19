@@ -19,7 +19,8 @@ import {
   getSubscriptions,
   deleteSubscriptions,
   updateSubscription,
-  getStatistic
+  getStatistic,
+  addKofiResponse
 } from './server/base.js';
 import bodyParser from 'body-parser';
 
@@ -156,6 +157,16 @@ app.get('/api/statistic', async (req, res) => {
     const data = await getStatistic();
     
     res.json(data);
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+app.post('/api/integrations/kofi', async (req, res) => {
+  try {
+    console.log(req.body);
+    addKofiResponse(req.body);
+    res.send('OK');
   } catch (err) {
     console.log(err);
   }

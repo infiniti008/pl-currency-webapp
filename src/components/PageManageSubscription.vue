@@ -148,12 +148,16 @@ export default {
       addedKeys: [],
       platforms: [
         'subscriptions-users',
-        'subscriptions-telegram'
+        'subscriptions-telegram',
+        'subscriptions-video'
       ],
       chanels: {
         'subscriptions-telegram': [
           '@by_currency_notifications',
           '@pl_currency_notifications'
+        ],
+        'subscriptions-video': [
+          'all'
         ]
       }
     };

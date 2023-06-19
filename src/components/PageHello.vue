@@ -37,16 +37,22 @@
       </p>
       <hr />
     </template>
+    <ButtonDonate />
   </div>
 </template>
 
 <script>
 import buttontsService from '../services/buttons.js';
 
+import ButtonDonate from './ui/ButtonDonate.vue';
+
 const { initButtons } = buttontsService;
 
 export default {
   name: "PageHello",
+  components: {
+    ButtonDonate
+  },
   data: () => {
     return {};
   },
