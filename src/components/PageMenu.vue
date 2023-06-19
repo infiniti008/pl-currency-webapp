@@ -26,6 +26,9 @@
         <option value="pl">&#127477;&#127473; PL</option>
       </select>
     </p>
+    <div class="menu__item">
+      <ButtonDonate />
+    </div>
   </div>
 </template>
 
@@ -33,10 +36,15 @@
 import config from '../models/config.js';
 import buttontsService from '../services/buttons.js';
 
+import ButtonDonate from './ui/ButtonDonate.vue';
+
 const { initButtons } = buttontsService;
 
 export default {
   name: 'PageMenu',
+  components: {
+    ButtonDonate
+  },
   watch: {
     selectedCountry(newValue) {
       this.$store.commit('setCountry', newValue);

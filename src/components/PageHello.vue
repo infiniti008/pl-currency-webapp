@@ -37,7 +37,9 @@
       </p>
       <hr />
     </template>
-    <ButtonDonate />
+    <div class="donate-button">
+      <ButtonDonate />
+    </div>
   </div>
 </template>
 
@@ -91,6 +93,12 @@ export default {
     li {
       padding: 6px 0;
     }
-  } 
+  }
+
+  .donate-button {
+    position: absolute;
+    bottom: 90px;
+    left: 25%;
+  }
 }
 </style>

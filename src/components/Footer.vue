@@ -25,12 +25,16 @@
     <div class="footer__item" @click="handleClickButton(tabMenu)">
       <span class="footer__item-marker" v-html="isPremium ? '&#128303;' : '&#9989;'" />
       <MenuSVG />
+      <div v-if="isSmartDonateButtonVisible" class="footer__item-donate">
+        <ButtonDonateSmart />
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import Button from './ui/Button.vue';
+import ButtonDonateSmart from './ui/ButtonDonateSmart.vue';
 import ConfirmSVG from './ui/svg/ConfirmSVG.vue';
 import MenuSVG from './ui/svg/MenuSVG.vue';
 import StarSVG from './ui/svg/StarSVG.vue';
@@ -45,6 +49,7 @@ export default {
     name: "Footer",
     components: {
     Button,
+    ButtonDonateSmart,
     MenuSVG,
     StarSVG,
     ConfirmSVG,
@@ -79,6 +84,9 @@ export default {
       },
       isPremium() {
         return this.$store.state.config.isPremium;
+      },
+      isSmartDonateButtonVisible() {
+        return this.tab !== 'PageHello' && this.tab !== 'PageMenu';
       }
     },
     methods: {
@@ -123,6 +131,12 @@ $--footer-height: 70px;
     position: absolute;
     top: 11px;
     left: -18px;
+  }
+  &__item-donate {
+    position: absolute;
+    top: 17px;
+    left: 15px;
+    z-index: -1;
   }
 }
 </style>

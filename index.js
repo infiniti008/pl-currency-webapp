@@ -164,7 +164,6 @@ app.get('/api/statistic', async (req, res) => {
 
 app.post('/api/integrations/kofi', async (req, res) => {
   try {
-    console.log(req.body);
     addKofiResponse(JSON.parse(req.body.data));
     res.send('OK');
   } catch (err) {
