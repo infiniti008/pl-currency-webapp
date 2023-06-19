@@ -55,7 +55,11 @@ export default new Vuex.Store({
       state.curentSubscriptionToManage = payload;
     },
     setConfig(state, payload) {
-      state.config = payload;
+      for (const p in payload) {
+        if (payload[p]) {
+          state.config[p] = payload[p];
+        }
+      }
     },
   }
 });
