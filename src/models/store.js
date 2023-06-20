@@ -56,7 +56,7 @@ export default new Vuex.Store({
     },
     setConfig(state, payload) {
       for (const p in payload) {
-        if (payload[p]) {
+        if (Object.hasOwnProperty.call(payload, p)) {
           state.config[p] = payload[p];
         }
       }
