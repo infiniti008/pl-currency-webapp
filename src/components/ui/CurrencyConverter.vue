@@ -17,7 +17,7 @@
         :color="leftArrowColor"
         :is-filled="isBuyOperation || isMarketOperation"
       />
-      <span v-html="getFormatedCurrency(value)" />
+      <span class="currency__value" v-html="getFormatedCurrency(value)" />
       <ArrowSVG
         class="arrow"
         :direction="rightArrowDirection"
@@ -100,17 +100,17 @@ export default {
         formatedValue = formatedValue.toFixed(4);
       }
 
-      formatedValue = formatedValue.split('');
+      formatedValue = formatedValue.split('.');
       const valueWithStyles = [
         '<span class="currency-value--main">',
         formatedValue[0],
-        formatedValue[1],
-        formatedValue[2],
-        formatedValue[3],
+        '.',
+        formatedValue[1][0],
+        formatedValue[1][1],
         '</span>',
         '<span class="currency-value--second">',
-        formatedValue[4],
-        formatedValue[5],
+        formatedValue[1][2],
+        formatedValue[1][3],
         '</span>',
       ];
 
@@ -124,7 +124,7 @@ export default {
 .currency-converter {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
 
   &__rate {
@@ -135,13 +135,19 @@ export default {
   }
 
   &__name {
-    width: 100%;
-    margin-left: 42px;
+    // width: 100%;
+    // margin-left: 42px;
   }
   
   .currency {
     font-weight: 600;
     color: #3C486B;
+
+    &__value {
+      display: inline-block;
+      min-width: 70px;
+      text-align: center;
+    }
   }
 
   .currency-value--main {
