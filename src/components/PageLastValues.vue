@@ -114,7 +114,7 @@ export default {
         return this.records.filter(record => record.isFavorite);
       }
 
-      return this.records;
+      return this.records.filter(record => record.value);
     },
     favoriteIds() {
       return this.records.filter(record => record.isFavorite).map(record => record._id);

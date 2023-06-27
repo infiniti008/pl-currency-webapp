@@ -23,7 +23,6 @@
       <component :is="thirdNavButton.component" />
     </div>
     <div class="footer__item" @click="handleClickButton(tabMenu)">
-      <span class="footer__item-marker" v-html="isPremium ? '&#128303;' : '&#9989;'" />
       <MenuSVG />
       <div v-if="isSmartDonateButtonVisible" class="footer__item-donate">
         <ButtonDonateSmart />
@@ -127,11 +126,6 @@ $--footer-height: 70px;
     }
   }
 
-  &__item-marker {
-    position: absolute;
-    top: 11px;
-    left: -18px;
-  }
   &__item-donate {
     position: absolute;
     top: 17px;
