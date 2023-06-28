@@ -116,15 +116,15 @@ export default {
 
       return this.records.filter(record => record.value);
     },
-    favoriteIds() {
-      return this.records.filter(record => record.isFavorite).map(record => record._id);
+    favoriteKeys() {
+      return this.records.filter(record => record.isFavorite).map(record => record.key);
     },
-    favoriteIdsFromCache() {
-      return this.cachedRecords?.filter(record => record.isFavorite).map(record => record._id);
+    favoriteKeysFromCache() {
+      return this.cachedRecords?.filter(record => record.isFavorite).map(record => record.key);
     },
     hasFavoriteChanges() {
-      const cache = this.favoriteIdsFromCache.sort().toString();
-      const current = this.favoriteIds.sort().toString();
+      const cache = this.favoriteKeysFromCache.sort().toString();
+      const current = this.favoriteKeys.sort().toString();
 
       return cache !== current;
     },
@@ -185,7 +185,7 @@ export default {
           this.isLoading = true;
           this.$bus.$emit('toggleLoading', true);
 
-          const response = await saveFavorites(this.favoriteIds, this.$store.state.config.defaultCountry);
+          const response = await saveFavorites(this.favoriteKeys, this.$store.state.config.defaultCountry);
           this.cachedRecords = JSON.parse(JSON.stringify(this.records));
         } catch (err) {
           console.log(err);

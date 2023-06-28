@@ -100,7 +100,7 @@ export async function getLastCurrencies(country, userId) {
     const user = await getUserInfo(userId);
 
     const lastWithFavorites = lastValues.map(value => {
-      if (user['favorites_' + country]?.some(item => value._id.equals(item))) {
+      if (user['favorites_' + country]?.includes(value.key)) {
         value.isFavorite = true;
       } else {
         value.isFavorite = false;
