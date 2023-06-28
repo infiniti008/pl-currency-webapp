@@ -131,8 +131,9 @@ export default {
       countryCurrencies: {
         BYN: 'by',
         PLN: 'pl',
-        pl: 'PLN',
-        by: 'BYN'
+        RUB: 'by',
+        pl: ['PLN'],
+        by: ['BYN', 'RUB']
       },
       keys: [],
       selectedCountry: null,
@@ -201,8 +202,8 @@ export default {
   },
   computed: {
     keysFiltredByCountry() {
-      const countryCurrency = this.countryCurrencies[this.selectedCountry];
-      return this.keys.filter(key => key.currencyBase === countryCurrency);
+      const currenciesFromCountry = this.countryCurrencies[this.selectedCountry];
+      return this.keys.filter(key => currenciesFromCountry?.includes(key.currencyBase));
     },
     keysFilteredBySelectedItems() {
       if (!this.$store.state.config.isPremium && this.addedKeys.length >= this.$store.state.config.limitFreeKeysInOneSubscription) {
