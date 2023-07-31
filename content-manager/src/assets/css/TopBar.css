@@ -1,0 +1,9 @@
+.top-bar {
+  border-bottom: 1px solid gainsboro;
+  padding: 6px 0;
+  display: flex;
+  justify-content: space-around;
+  position: sticky;
+  top: 0;
+  background-color: #f2f2f2;
+}

@@ -1,0 +1,20 @@
+.time-row {
+  border-bottom: 1px solid gainsboro;
+  display: grid;
+  grid-template-columns: 60px 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+}
+
+.time {
+  text-align: center;
+  border-right: 1px solid gainsboro;
+  padding: 2px 0;
+}
+
+.day {
+  border-right: 1px solid gainsboro;
+  text-align: center;
+}
+
+.day:last-child {
+  border: none;
+}

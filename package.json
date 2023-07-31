@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "manager-build": "cd content-manager && npm run build",
+    "build-all": "npm run build && npm run manager-build",
     "preview": "vite preview",
     "deploy": "npm run build & firebase deploy"
   },

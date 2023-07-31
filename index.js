@@ -37,6 +37,7 @@ app.use(bodyParser.json());
 
 // Serve static files from the 'public' directory
 app.use(express.static('./dist'));
+app.use('/manager', express.static('./content-manager/dist'));
 
 // Start the server
 app.listen(port, () => {

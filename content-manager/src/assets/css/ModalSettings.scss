@@ -1,0 +1,48 @@
+.modal {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  bottom: 0px;
+  right: 0px;
+
+  &-overlay {
+    background-color: rgba($color: #000000, $alpha: 0.5);
+    width: 100%;
+    height: 100%;
+  }
+
+  &-container {
+    position: absolute;
+    top: 50vh;
+    left: 50vw;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 8px 12px;
+    border-radius: 6px;
+    min-height: 300px;
+    min-width: 300px;
+    display: flex;
+    flex-direction: column;
+    
+  }
+
+  &-header {
+    font-size: 24px;
+    text-align: center;
+    border-bottom: 1px solid gainsboro;
+    padding-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &-close {
+    color: #a16666;
+    background-color: white;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-color: #a16666;
+  }
+}
