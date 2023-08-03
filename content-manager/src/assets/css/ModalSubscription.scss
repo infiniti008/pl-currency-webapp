@@ -1,0 +1,11 @@
+.modal-subscription {
+  & .modal-container {
+    width: 50%;
+    height: 70%;
+  }
+
+  &__text {
+    width: 90%;
+    height: 500px;
+  }
+}

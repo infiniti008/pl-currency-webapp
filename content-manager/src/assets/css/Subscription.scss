@@ -1,0 +1,15 @@
+.subscription {
+  width: 100%;
+  height: 38px;
+  font-size: 16px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+
+  &__info {
+
+    &:hover {
+      box-shadow: 0px 0px 6px gainsboro;
+    }
+  }
+}

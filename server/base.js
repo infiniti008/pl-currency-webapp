@@ -369,3 +369,21 @@ export async function addKofiResponse(kofiData) {
     console.log(err);
   }
 }
+
+export async function getAllSubscriptions(mode) {
+  const baseName = mode === 'dev' ? 'currency_app_test' : 'currency_app'
+  try {
+    const subscriptionsStoriesCollection = await client.db(baseName).collection('subscriptions-stories');
+    const subscriptionsStories = await subscriptionsStoriesCollection.find({}).toArray();
+
+    const subscriptionsVideoCollection = await client.db(baseName).collection('subscriptions-video');
+    const subscriptionsVideo = await subscriptionsVideoCollection.find({}).toArray();
+
+    return {
+      subscriptionsStories,
+      subscriptionsVideo
+    };
+  } catch(err) {
+    console.log(err);
+  }
+}

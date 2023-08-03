@@ -1,3 +1,8 @@
+import axios from 'axios';
+import CONFIG from '../models/config.js';
+
+const { SERVER_URL, IS_DEV_MODE } = CONFIG;
+
 export function getRows() {
   const rows = []
   const startTime = 480
@@ -16,36 +21,60 @@ export function getRows() {
       days: [
         {
           index: 'row-' + timeString + '-' + '00',
-          dayName: 'mon'
+          dayName: 'mon',
+          dayIndex: 0,
+          subscriptions: []
         },
         {
           index: 'row-' + timeString + '-' + '01',
-          dayName: 'tue'
+          dayName: 'tue',
+          dayIndex: 1,
+          subscriptions: []
         },
         {
           index: 'row-' + timeString + '-' + '02',
-          dayName: 'wen'
+          dayName: 'wen',
+          dayIndex: 2,
+          subscriptions: []
         },
         {
           index: 'row-' + timeString + '-' + '03',
-          dayName: 'thu'
+          dayName: 'thu',
+          dayIndex: 3,
+          subscriptions: []
         },
         {
           index: 'row-' + timeString + '-' + '04',
-          dayName: 'fri'
+          dayName: 'fri',
+          dayIndex: 4,
+          subscriptions: []
         },
         {
           index: 'row-' + timeString + '-' + '05',
-          dayName: 'sut'
+          dayName: 'sut',
+          dayIndex: 5,
+          subscriptions: []
         },
         {
           index: 'row-' + timeString + '-' + '06',
-          dayName: 'sun'
+          dayName: 'sun',
+          dayIndex: 6,
+          subscriptions: []
         }
       ]
     });
   }
   return rows;
+}
+
+export async function getSubscriptions() {
+  try {
+    const mode = IS_DEV_MODE ? 'dev' : 'prod'
+    const response = await axios.get(`${SERVER_URL}/api/subscriptions-all/${mode}`);
+    return prepareSubscriptionsResponse(response.data.data)
+  } catch (err) {
+    console.log(err)
+  }
 }
 
 function addZero(number) {
@@ -54,4 +83,34 @@ function addZero(number) {
   }
 
   return number.toString();
+}
+
+function prepareSubscriptionsResponse(data) {
+  console.log(data)
+  const rows = getRows();
+
+  rows.forEach(row => {
+    const rowTime = row.time
+
+    row.days.forEach(day => {
+      const stories = data.subscriptionsStories.filter(subscription => {
+        const fitByTime = subscription.times.includes(rowTime)
+
+        let fitByDay = false
+        if (fitByTime) {
+          fitByDay = subscription.weekAvailability[day.dayIndex] === '*'
+        }
+        
+        return fitByTime && fitByDay
+      })
+
+      if (stories.length > 0) {
+        stories.forEach(story => {
+          day.subscriptions.push(story);
+        })
+      }
+    })
+  })
+
+  return rows;
 }

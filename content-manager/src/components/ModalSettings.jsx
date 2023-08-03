@@ -1,9 +1,24 @@
-import { useState } from 'react'
-import '../assets/css/ModalSettings.scss'
+import { useContext, useEffect } from 'react';
+import CurrentStoreContext from '../store';
 
-function ModalSettings({store, updateStore}) {
+import '../assets/css/Modal.scss'
+// import '../assets/css/ModalSettings.scss'
+
+function ModalSettings() {
+  const {
+    currentStore,
+    setCurrentStore
+  } = useContext(CurrentStoreContext);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0 });
+    document.body.style.overflow = 'hidden'
+  }, [])
+
   function onClickClose() {
-    updateStore(['isSettingsOpen', !store.isSettingsOpen])
+    const clonedStore = {...currentStore}
+    clonedStore.isSettingsOpen = !currentStore?.isSettingsOpen
+    setCurrentStore(clonedStore)
     document.body.style.overflow = ''
   }
 
@@ -16,10 +31,9 @@ function ModalSettings({store, updateStore}) {
           <button onClick={onClickClose} className='modal-close'>X</button>
         </div>
         <div className="modal-body">
-          <label htmlFor="">
+          {/* <label htmlFor="">
             <input type="checkbox" name="skip" id="" />
-
-          </label>
+          </label> */}
         </div>
       </div>
     </div>

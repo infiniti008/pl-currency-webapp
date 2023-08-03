@@ -1,28 +1,32 @@
-import { useState } from 'react'
-import './assets/css/App.css'
+import { useState } from 'react';
+import './assets/css/App.scss'
 import Sheet from './components/Sheet.jsx';
 import TopBar from './components/TopBar.jsx';
 import ModalSettings from './components/ModalSettings'
+import ModalSubscription from './components/ModalSubscription'
+import CurrentStoreContext from './store';
 
 function App() {
   const initialStore = {
-    isSettingsOpen: false
+    isSettingsOpen: false,
+    isModalSubscriptionOpen: false,
+    subscriptionToOpenInModal: null,
+    country: 'all'
   }
-  const [store, setStore] = useState(initialStore)
-
-  function updateStore([key, value]) {
-    const clonedStore = {...store};
-    clonedStore[key] = value;
-
-    setStore(clonedStore);
-  }
+  const [currentStore, setCurrentStore] = useState(initialStore)
 
   return (
-    <>
-      <TopBar store={store} updateStore={updateStore} />
+    <CurrentStoreContext.Provider
+      value={{
+        currentStore,
+        setCurrentStore
+      }}
+    >
+      <TopBar />
       <Sheet />
-      {store.isSettingsOpen && <ModalSettings store={store} updateStore={updateStore} />}
-    </>
+      {currentStore.isSettingsOpen && <ModalSettings />}
+      {currentStore.isModalSubscriptionOpen && <ModalSubscription />}
+    </CurrentStoreContext.Provider>
   )
 }
 

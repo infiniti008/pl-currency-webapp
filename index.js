@@ -17,6 +17,7 @@ import {
   getSubscriptionSettings,
   saveSubscription,
   getSubscriptions,
+  getAllSubscriptions,
   deleteSubscriptions,
   updateSubscription,
   getStatistic,
@@ -26,10 +27,18 @@ import bodyParser from 'body-parser';
 
 const app = express();
 const port = 3000;
-const allowedDomain = 'https://localhost:3301';
+const allowedOrigins = ['https://localhost:3301', 'http://localhost:5173'];
+
 const corsOptions = {
-  origin: allowedDomain,
-};
+  origin: function (origin, callback) {
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS'))
+    }
+  },
+  optionsSuccessStatus: 200
+}
 
 app.use(cors(corsOptions));
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -140,6 +149,16 @@ app.get('/api/subscription/:userId', async (req, res) => {
     const data = await getSubscriptions(req.params.userId);
     res.json({ data: data });
   } catch (err) {
+    console.log(err);
+  }
+});
+
+app.get('/api/subscriptions-all/:mode', async (req, res) => {
+  try {
+    const data = await getAllSubscriptions(req.params.mode);
+    res.json({ data: data, status: true });
+  } catch (err) {
+    res.json({ status: false });
     console.log(err);
   }
 });

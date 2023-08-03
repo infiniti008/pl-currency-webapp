@@ -1,0 +1,10 @@
+.day {
+  border-right: 1px solid gainsboro;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.day:last-child {
+  border: none;
+}
