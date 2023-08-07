@@ -32,21 +32,21 @@ import {
 
 const app = express();
 const port = 3000;
-const allowedOrigins = ['https://localhost:3301', 'http://localhost:5173'];
+// const allowedOrigins = ['https://localhost:3301', 'http://localhost:5173'];
 
-const corsOptions = {
-  origin: function (origin, callback) {
-    console.log('origin', origin)
-    if (allowedOrigins.indexOf(origin) !== -1) {
-      callback(null, true)
-    } else {
-      callback(new Error('Not allowed by CORS'))
-    }
-  },
-  optionsSuccessStatus: 200
-}
+// const corsOptions = {
+//   origin: function (origin, callback) {
+//     console.log('origin', origin)
+//     if (allowedOrigins.indexOf(origin) !== -1) {
+//       callback(null, true)
+//     } else {
+//       callback(new Error('Not allowed by CORS'))
+//     }
+//   },
+//   optionsSuccessStatus: 200
+// }
 
-app.use(cors(corsOptions));
+// app.use(cors(corsOptions));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
