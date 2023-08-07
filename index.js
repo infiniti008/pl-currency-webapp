@@ -239,3 +239,11 @@ app.post('/api/integrations/kofi', async (req, res) => {
     console.log(err);
   }
 });
+
+app.get('/api/tiktok-verify', async (req, res) => {
+  try {
+    res.sendFile(mediaFolderPath + '/static/tiktok-veryfi.txt');
+  } catch (err) {
+    console.log(err);
+  }
+});
