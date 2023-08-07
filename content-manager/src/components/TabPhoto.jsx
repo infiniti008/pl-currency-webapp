@@ -80,14 +80,12 @@ function getLastPublishedDay(subscription) {
     dayOfWeek = 6;
   }
 
-  dayOfWeek = 4
-
   availability = availability.slice(0, dayOfWeek);
   availability = availability.join('')
   availability = initialAvailability + availability
   availability = availability.split('')
   const lastDayIndex = availability.lastIndexOf('*')
-  const diff = (availability.length - lastDayIndex) + 1
+  const diff = (availability.length - lastDayIndex)
   const date = new Date(now.setDate(now.getDate() - diff))
 
   lastPublishedDay = date.toISOString().split('T')[0]

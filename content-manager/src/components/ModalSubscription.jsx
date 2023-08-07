@@ -20,6 +20,7 @@ function ModalSubscription() {
   function onClickClose() {
     const clonedStore = {...currentStore}
     clonedStore.isModalSubscriptionOpen = !currentStore?.isModalSubscriptionOpen
+    clonedStore.generatedPhotoName = null
     clonedStore.subscriptionToOpenInModal = null
     setCurrentStore(clonedStore)
     document.body.style.overflow = ''
