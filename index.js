@@ -36,6 +36,7 @@ const allowedOrigins = ['https://localhost:3301', 'http://localhost:5173'];
 
 const corsOptions = {
   origin: function (origin, callback) {
+    console.log('origin', origin)
     if (allowedOrigins.indexOf(origin) !== -1) {
       callback(null, true)
     } else {
