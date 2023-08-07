@@ -242,7 +242,8 @@ app.post('/api/integrations/kofi', async (req, res) => {
 
 app.get('/api/tiktok-verify', async (req, res) => {
   try {
-    res.sendFile(mediaFolderPath + '/static/tiktok-veryfi.txt');
+    const text = fs.readFileSync(mediaFolderPath + '/static/tiktok-verify.txt').toString();
+    res.send(text);
   } catch (err) {
     console.log(err);
   }
