@@ -30,6 +30,10 @@ function TabJson() {
     try {
       const parsedSubscription = JSON.parse(subscription)
       console.log(parsedSubscription)
+
+      const clonedStore = {...currentStore}
+      clonedStore.subscriptionToOpenInModal = parsedSubscription
+      setCurrentStore(clonedStore)
     } catch(err) {
       console.log(err.message)
     }
@@ -38,8 +42,6 @@ function TabJson() {
   function handleChange(event) {
     setSubscription(event.target.value)
     verify()
-
-    console.log(hasError)
   }
 
   return (

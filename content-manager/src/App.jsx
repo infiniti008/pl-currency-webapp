@@ -11,7 +11,8 @@ function App() {
     isSettingsOpen: false,
     isModalSubscriptionOpen: false,
     subscriptionToOpenInModal: null,
-    country: 'all'
+    country: 'all',
+    generatedPhotoName: null
   }
   const [currentStore, setCurrentStore] = useState(initialStore)
 

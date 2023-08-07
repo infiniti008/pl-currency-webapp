@@ -12,7 +12,7 @@ function SubscriptionTabs() {
     setCurrentStore
   } = useContext(CurrentStoreContext)
 
-  const [currentTab, setCurrentTab] = useState('JSON')
+  const [currentTab, setCurrentTab] = useState('PHOTO')
 
   return (
     <div className='tabs'>

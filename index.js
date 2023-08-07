@@ -1,11 +1,16 @@
 import * as dotenv from 'dotenv';
 dotenv.config({
-  debug: true,
   path: './.env'
 });
 
+const env = process.env.environment || 'prod';
+const mediaFolderPath = process.env['mediaFolderPath_' + env];
+
 import express from 'express';
 import cors from 'cors';
+import fs from 'fs';
+import bodyParser from 'body-parser';
+
 import { 
   getLastCurrencies,
   initBase,
@@ -21,9 +26,9 @@ import {
   deleteSubscriptions,
   updateSubscription,
   getStatistic,
-  addKofiResponse
+  addKofiResponse,
+  addToContentManager
 } from './server/base.js';
-import bodyParser from 'body-parser';
 
 const app = express();
 const port = 3000;
@@ -47,6 +52,7 @@ app.use(bodyParser.json());
 // Serve static files from the 'public' directory
 app.use(express.static('./dist'));
 app.use('/manager', express.static('./content-manager/dist'));
+app.use('/files', express.static(mediaFolderPath));
 
 // Start the server
 app.listen(port, () => {
@@ -157,6 +163,43 @@ app.get('/api/subscriptions-all/:mode', async (req, res) => {
   try {
     const data = await getAllSubscriptions(req.params.mode);
     res.json({ data: data, status: true });
+  } catch (err) {
+    res.json({ status: false });
+    console.log(err);
+  }
+});
+
+app.post('/api/subscription-generate-image/:mode', async (req, res) => {
+  try {
+    const mode = req.params.mode;
+    const addedToManagerRequests = await addToContentManager(mode, req.body);
+
+    if (!addedToManagerRequests) {
+      res.json({ status: false });
+      return;
+    } 
+
+    const fileName = '/images/' + req.body.MANAGER_FILE_NAME + '.png';
+    const filePath = mediaFolderPath + fileName;
+    console.log('filePath', filePath)
+    
+    let count = 0;
+    const countLimit = 60;
+    const interval = setInterval(() => {
+      try {
+        fs.statSync(filePath);
+        console.log('File exists');
+        clearInterval(interval);
+        res.json({ fileName, status: true });
+      } catch {
+        console.log('File does not exist');
+        count += 1;
+        if (count >= countLimit) {
+          clearInterval(interval);
+          res.json({ status: false });
+        }
+      }
+    }, 1000);
   } catch (err) {
     res.json({ status: false });
     console.log(err);

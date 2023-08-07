@@ -77,6 +77,27 @@ export async function getSubscriptions() {
   }
 }
 
+export async function getGenerateImage({ subscription, time, selectedDate }) {
+  try {
+    const mode = IS_DEV_MODE ? 'dev' : 'prod'
+    const date = getDateToGenerateImage(time, selectedDate, subscription.country);
+
+    const clonedSubscription = JSON.parse(JSON.stringify(subscription));
+    delete clonedSubscription._id;
+    clonedSubscription.DATE_TO_GET_NOW = date;
+    clonedSubscription.MANAGER_FILE_NAME = new Date().toLocaleString('ru-RU').replace(', ', '-') + '-content-manager'
+
+    const response = await axios.post(`${SERVER_URL}/api/subscription-generate-image/${mode}`, clonedSubscription);
+    let filePath = '/files' + response.data.fileName
+    if (IS_DEV_MODE) {
+      filePath = 'http://localhost:3000' + filePath
+    }
+    return filePath;
+  } catch (err) {
+    console.log(err)
+  }
+}
+
 function addZero(number) {
   if (number < 10) {
     return '0' + number; 
@@ -113,4 +134,22 @@ function prepareSubscriptionsResponse(data) {
   })
 
   return rows;
+}
+
+function getDateToGenerateImage(time, selectedDate, country) {
+  let timeZone = '+02:00'
+  if (country === 'by') {
+    timeZone = '+03:00';
+  }
+
+  let date = new Date()
+  
+  date = new Date(date.setSeconds('00'));
+  date = new Date(date.setMilliseconds('00'));
+  date = new Date(date.setDate(date.getDate() - 1));
+  date = date.toISOString();
+  date = date.replace(/T...../, 'T' + time);
+  date = date.replace(/..........T/, selectedDate + 'T');
+  date = date.replace('Z', timeZone);
+  return date;
 }

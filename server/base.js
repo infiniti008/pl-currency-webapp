@@ -387,3 +387,16 @@ export async function getAllSubscriptions(mode) {
     console.log(err);
   }
 }
+
+export async function addToContentManager(mode, data) {
+  const baseName = mode === 'dev' ? 'currency_app_test' : 'currency_app'
+  try {
+    const managerCollection = await client.db(baseName).collection('content-manager');
+    const result = await managerCollection.insertOne(data);
+
+    return true;
+  } catch(err) {
+    console.log(err);
+    return false;
+  }
+}

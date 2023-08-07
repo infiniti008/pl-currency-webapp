@@ -1,5 +1,7 @@
 .tabs {
   width: 100%;
+  display: grid;
+  grid-template-rows: 44px 1fr;
 
   &-header {
     display: flex;
@@ -8,22 +10,24 @@
 
     .tab-name {
       cursor: pointer;
-      padding-bottom: 4px;
+      padding: 4px 0px;
       border-bottom: 2px solid white;
+      border-top: 2px solid white;
+      line-height: 14px;
 
       &:hover {
-        border-color: black;
+        border-bottom-color: black;
       }
 
       &.active {
-        font-weight: 900;
+        border-top-color: black;
       }
     }
   }
 
   & .tab {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-rows: 1fr 50px;
 
     &-content {
       display: flex;
@@ -40,7 +44,7 @@
   & .tab-json {
     &__text {
       width: 90%;
-      height: 500px;
+      height: 90%;
       border-radius: 10px;
       padding: 10px;
 
@@ -48,5 +52,29 @@
         box-shadow: 0 0 10px red;
       }
     }
+  }
+
+  & .tab-photo {
+    &__image {
+      width: 49%;
+      box-shadow: 0 0 6px greenyellow;
+    }
+
+    &__spinner {
+      top: 50%;
+      position: relative;
+      height: 64px;
+      transform: translateY(-50%);
+      animation: spin 2s ease-in-out infinite;
+    }
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to { 
+    transform: rotate(360deg);
   }
 }
