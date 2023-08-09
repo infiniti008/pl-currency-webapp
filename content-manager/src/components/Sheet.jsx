@@ -22,8 +22,8 @@ function Sheet({store, updateStore}) {
     fetchData();
   }, []);
 
-  const timeItems = rows.map((row) => {
-    const days = row.days.map(day => <Day store={store} updateStore={updateStore} key={day.index} day={day}/>);
+  const timeItems = rows?.map((row) => {
+    const days = row.days?.map(day => <Day store={store} updateStore={updateStore} key={day.index} day={day}/>);
 
     return <div key={ row.index } className='time-row'>
       <div className='time'>

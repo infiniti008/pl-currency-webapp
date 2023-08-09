@@ -43,7 +43,7 @@ function TopBar() {
         Menu
       </button>
       <button onClick={onClickSettings}>
-        Settings
+        Render Settings
       </button>
       <div className='top-bar__country'>
         <select className='top-bar__country-select' value={selectedCountry} onChange={onSelectCountry}>

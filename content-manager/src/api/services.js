@@ -98,6 +98,30 @@ export async function getGenerateImage({ subscription, time, selectedDate }) {
   }
 }
 
+export async function getRenderSettings() {
+  try {
+    const mode = IS_DEV_MODE ? 'dev' : 'prod'
+
+    const response = await axios.get(`${SERVER_URL}/api/render-settings/${mode}`)   
+    return response.data.data;
+  } catch (err) {
+    console.log(err)
+  }
+}
+
+export async function saveRenderSettings(settings) {
+  try {
+    const mode = IS_DEV_MODE ? 'dev' : 'prod'
+
+    delete settings._id
+    const response = await axios.post(`${SERVER_URL}/api/render-settings/${mode}`, settings)   
+    return response.data;
+  } catch (err) {
+    console.log(err)
+    return {status: false};
+  }
+}
+
 function addZero(number) {
   if (number < 10) {
     return '0' + number; 

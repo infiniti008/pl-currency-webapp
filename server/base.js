@@ -400,3 +400,31 @@ export async function addToContentManager(mode, data) {
     return false;
   }
 }
+
+export async function getRenderSettings(mode) {
+  const baseName = mode === 'dev' ? 'currency_app_test' : 'config_app';
+  const collectionName = 'render_settings';
+  try {
+    const managerCollection = await client.db(baseName).collection(collectionName);
+    const result = await managerCollection.findOne();
+
+    return result;
+  } catch(err) {
+    console.log(err);
+    return false;
+  }
+}
+
+export async function setRenderSettings(mode, settings) {
+  const baseName = mode === 'dev' ? 'currency_app_test' : 'config_app';
+  const collectionName = 'render_settings';
+  try {
+    const managerCollection = await client.db(baseName).collection(collectionName);
+    const result = await managerCollection.updateOne({}, {$set: settings});
+
+    return true;
+  } catch(err) {
+    console.log(err);
+    return false;
+  }
+}

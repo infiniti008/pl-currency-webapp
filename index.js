@@ -27,7 +27,9 @@ import {
   updateSubscription,
   getStatistic,
   addKofiResponse,
-  addToContentManager
+  addToContentManager,
+  getRenderSettings,
+  setRenderSettings
 } from './server/base.js';
 
 const app = express();
@@ -218,6 +220,7 @@ app.delete('/api/subscription/:userId/:subscriptionId', async (req, res) => {
     res.json({ data: data });
   } catch (err) {
     console.log(err);
+    res.json({ status: false });
   }
 });
 
@@ -228,6 +231,7 @@ app.get('/api/statistic', async (req, res) => {
     res.json(data);
   } catch (err) {
     console.log(err);
+    res.json({ status: false });
   }
 });
 
@@ -240,11 +244,22 @@ app.post('/api/integrations/kofi', async (req, res) => {
   }
 });
 
-app.get('/api/tiktok-verify', async (req, res) => {
+app.get('/api/render-settings/:mode', async (req, res) => {
   try {
-    const text = fs.readFileSync(mediaFolderPath + '/static/tiktok-verify.txt').toString();
-    res.send(text);
+    const data = await getRenderSettings(req.params.mode);
+    res.json({ data: data });
   } catch (err) {
     console.log(err);
+    res.json({ status: false });
+  }
+});
+
+app.post('/api/render-settings/:mode', async (req, res) => {
+  try {
+    const status = await setRenderSettings(req.params.mode, req.body);
+    res.json({ status });
+  } catch (err) {
+    console.log(err);
+    res.json({ status: false });
   }
 });

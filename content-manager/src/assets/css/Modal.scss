@@ -36,7 +36,7 @@
   }
 
   &-body {
-    padding: 20px 0;
+    padding: 20px 6px;
     display: flex;
     justify-content: center;
     height: 100%;
@@ -51,5 +51,11 @@
     justify-content: center;
     align-items: center;
     border-color: #a16666;
+  }
+
+  &-footer {
+    display: flex;
+    justify-content: space-around;
+    padding-bottom: 20px;
   }
 }
