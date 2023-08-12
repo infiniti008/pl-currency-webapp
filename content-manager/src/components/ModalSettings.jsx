@@ -81,7 +81,13 @@ function ModalSettings() {
     const settingsPropperty = renderSettings[key]
 
     return (
-      <Input key={key} value={settingsPropperty} itemKey={key} handleUpdateOption={handleUpdateOption.bind(null, key)} />
+      <Input 
+        key={key}
+        value={settingsPropperty}
+        itemKey={key}
+        handleUpdateOption={handleUpdateOption.bind(null, key)}
+        descriptor={descriptor}
+      />
     )
   })
 

@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react';
 import CurrentStoreContext from '../store';
 
-function TabJson() {
+function TabJson({ handleSaveSubscription }) {
   const {
     currentStore,
     setCurrentStore
@@ -29,11 +29,8 @@ function TabJson() {
   function handleSave() {
     try {
       const parsedSubscription = JSON.parse(subscription)
-      console.log(parsedSubscription)
 
-      const clonedStore = {...currentStore}
-      clonedStore.subscriptionToOpenInModal = parsedSubscription
-      setCurrentStore(clonedStore)
+      handleSaveSubscription(parsedSubscription)
     } catch(err) {
       console.log(err.message)
     }

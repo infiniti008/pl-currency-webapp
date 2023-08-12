@@ -29,7 +29,8 @@ import {
   addKofiResponse,
   addToContentManager,
   getRenderSettings,
-  setRenderSettings
+  setRenderSettings,
+  updateSubscriptionFromManager
 } from './server/base.js';
 
 const app = express();
@@ -209,6 +210,16 @@ app.post('/api/subscription-generate-image/:mode', async (req, res) => {
       }
     }, 1000);
   } catch (err) {
+    res.json({ status: false });
+    console.log(err);
+  }
+});
+
+app.post('/api/manage-subscription/:mode/:subscriptionId', async (req, res) => {
+  try {
+    const status = await updateSubscriptionFromManager(req.params.mode, req.params.subscriptionId, req.body);
+    res.json({ status });
+  } catch(err) {
     res.json({ status: false });
     console.log(err);
   }

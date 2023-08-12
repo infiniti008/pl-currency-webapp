@@ -2,17 +2,18 @@ import { useContext, useState } from 'react';
 import CurrentStoreContext from '../store';
 
 import TabJson from './TabJson';
+import TabPhoto from './TabPhoto';
+import TabForm from './TabForm';
 
 import '../assets/css/Tabs.scss'
-import TabPhoto from './TabPhoto';
 
-function SubscriptionTabs() {
+function SubscriptionTabs({ handleSaveSubscription }) {
   const {
     currentStore,
     setCurrentStore
   } = useContext(CurrentStoreContext)
 
-  const [currentTab, setCurrentTab] = useState('PHOTO')
+  const [currentTab, setCurrentTab] = useState('FORM')
 
   return (
     <div className='tabs'>
@@ -20,15 +21,16 @@ function SubscriptionTabs() {
         <div className={`tab-name ${currentTab === 'JSON' ? 'active' : ''}`} onClick={setCurrentTab.bind(null, 'JSON')}>
           JSON
         </div>
-        <div className={`tab-name ${currentTab === 'CONFIG' ? 'active' : ''}`} onClick={setCurrentTab.bind(null, 'CONFIG')}>
-          CONFIG
+        <div className={`tab-name ${currentTab === 'FORM' ? 'active' : ''}`} onClick={setCurrentTab.bind(null, 'FORM')}>
+          FORM
         </div>
         <div className={`tab-name ${currentTab === 'PHOTO' ? 'active' : ''}`} onClick={setCurrentTab.bind(null, 'PHOTO')}>
           PHOTO
         </div>
       </div>
-      {currentTab === 'JSON' && <TabJson />}
-      {currentTab === 'PHOTO' && <TabPhoto />}
+      {currentTab === 'JSON' && <TabJson handleSaveSubscription={ handleSaveSubscription } />}
+      {currentTab === 'PHOTO' && <TabPhoto handleSaveSubscription={ handleSaveSubscription } />}
+      {currentTab === 'FORM' && <TabForm handleSaveSubscription={ handleSaveSubscription } />}
     </div>
   )
 }

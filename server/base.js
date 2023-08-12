@@ -428,3 +428,17 @@ export async function setRenderSettings(mode, settings) {
     return false;
   }
 }
+
+export async function updateSubscriptionFromManager(mode, subscriptionId, subscription) {
+  try {
+    const baseName = mode === 'dev' ? 'currency_app_test' : 'config_app';
+    const collectionName = subscription.platform;
+
+    const collection = await client.db(baseName).collection(collectionName);
+    collection.updateOne({ _id: new ObjectId(subscriptionId) }, {$set: subscription });
+    return true;
+  } catch(err) {
+    console.log(err)
+    return false;
+  }
+}

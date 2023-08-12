@@ -122,6 +122,21 @@ export async function saveRenderSettings(settings) {
   }
 }
 
+export async function saveSubscription(subscription) {
+  try {
+    const mode = IS_DEV_MODE ? 'dev' : 'prod'
+    const subscriptionId = subscription._id
+    const subscriptionToSend = {...subscription}
+    delete subscriptionToSend._id
+
+    const response = await axios.post(`${SERVER_URL}/api/manage-subscription/${mode}/${subscriptionId}`, subscriptionToSend)   
+    return response.data;
+  } catch (err) {
+    console.log(err)
+    return {status: false};
+  }
+}
+
 function addZero(number) {
   if (number < 10) {
     return '0' + number; 

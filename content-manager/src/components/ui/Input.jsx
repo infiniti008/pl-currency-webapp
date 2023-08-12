@@ -1,12 +1,6 @@
-import { useState } from 'react';
-
-import renderSettingsModel from '../../models/renderSettingsModel';
 import '../../assets/css/Input.scss'
 
-
-const { descriptor } = renderSettingsModel;
-
-function Input({itemKey, value, handleUpdateOption}) {
+function Input({itemKey, value, handleUpdateOption, descriptor}) {
   const descriptorItem = descriptor[itemKey]
 
   function handleOnChange(event) {
