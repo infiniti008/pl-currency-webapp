@@ -442,3 +442,17 @@ export async function updateSubscriptionFromManager(mode, subscriptionId, subscr
     return false;
   }
 }
+
+export async function deleteSubscriptionFromManager(mode, subscriptionId, platform) {
+  try {
+    const baseName = mode === 'dev' ? 'currency_app_test' : 'config_app';
+    const collectionName = platform;
+
+    const collection = await client.db(baseName).collection(collectionName);
+    collection.deleteOne({ _id: new ObjectId(subscriptionId) });
+    return true;
+  } catch(err) {
+    console.log(err)
+    return false;
+  }
+}

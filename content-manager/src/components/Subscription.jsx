@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import CurrentStoreContext from '../store';
+import CurrentStoreContext from '../contexsts/store';
 
 import IconStories from './icons/Stories';
 import IconInfo from './icons/Info';

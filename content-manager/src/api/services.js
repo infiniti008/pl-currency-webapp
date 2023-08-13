@@ -129,11 +129,25 @@ export async function saveSubscription(subscription) {
     const subscriptionToSend = {...subscription}
     delete subscriptionToSend._id
 
-    const response = await axios.post(`${SERVER_URL}/api/manage-subscription/${mode}/${subscriptionId}`, subscriptionToSend)   
+    const response = await axios.post(`${SERVER_URL}/api/manage-subscription/${mode}/${subscriptionId}`, subscriptionToSend)
     return response.data;
   } catch (err) {
     console.log(err)
     return {status: false};
+  }
+}
+
+export async function deleteSubscription(subscription) {
+  try {
+    const mode = IS_DEV_MODE ? 'dev' : 'prod'
+    const subscriptionId = subscription._id
+    const platform = subscription.platform
+
+    const response = await axios.delete(`${SERVER_URL}/api/manage-subscription/${mode}/${subscriptionId}/${platform}`, )
+    return response.data;
+  } catch(err) {
+    console.log(err)
+    return {status: false}
   }
 }
 
@@ -146,7 +160,6 @@ function addZero(number) {
 }
 
 function prepareSubscriptionsResponse(data) {
-  console.log(data)
   const rows = getRows();
 
   rows.forEach(row => {

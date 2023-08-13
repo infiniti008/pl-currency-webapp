@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react';
-import CurrentStoreContext from '../store';
+import CurrentStoreContext from '../contexsts/store';
 
 import 'react-toastify/dist/ReactToastify.css';
 

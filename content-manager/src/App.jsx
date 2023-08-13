@@ -4,7 +4,9 @@ import Sheet from './components/Sheet.jsx';
 import TopBar from './components/TopBar.jsx';
 import ModalSettings from './components/ModalSettings'
 import ModalSubscription from './components/ModalSubscription'
-import CurrentStoreContext from './store';
+import CurrentStoreContext from './contexsts/store';
+
+import { EventBusProvider } from './contexsts/eventBus';
 
 function App() {
   const initialStore = {
@@ -17,17 +19,19 @@ function App() {
   const [currentStore, setCurrentStore] = useState(initialStore)
 
   return (
-    <CurrentStoreContext.Provider
-      value={{
-        currentStore,
-        setCurrentStore
-      }}
-    >
-      <TopBar />
-      <Sheet />
-      {currentStore.isSettingsOpen && <ModalSettings />}
-      {currentStore.isModalSubscriptionOpen && <ModalSubscription />}
-    </CurrentStoreContext.Provider>
+    <EventBusProvider>
+      <CurrentStoreContext.Provider
+        value={{
+          currentStore,
+          setCurrentStore
+        }}
+      >
+        <TopBar />
+        <Sheet />
+        {currentStore.isSettingsOpen && <ModalSettings />}
+        {currentStore.isModalSubscriptionOpen && <ModalSubscription />}
+      </CurrentStoreContext.Provider>
+    </EventBusProvider>
   )
 }
 

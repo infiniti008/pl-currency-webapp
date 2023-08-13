@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import CurrentStoreContext from '../store';
+import CurrentStoreContext from '../contexsts/store';
 
 import IconFlagBelarus from './icons/IconFlagBelarus';
 import IconFlagPoland from './icons/IconFlagPoland';

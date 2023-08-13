@@ -30,7 +30,8 @@ import {
   addToContentManager,
   getRenderSettings,
   setRenderSettings,
-  updateSubscriptionFromManager
+  updateSubscriptionFromManager,
+  deleteSubscriptionFromManager
 } from './server/base.js';
 
 const app = express();
@@ -53,6 +54,7 @@ const port = 3000;
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header("Access-Control-Allow-Methods", "*")
   next();
 });
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -218,6 +220,16 @@ app.post('/api/subscription-generate-image/:mode', async (req, res) => {
 app.post('/api/manage-subscription/:mode/:subscriptionId', async (req, res) => {
   try {
     const status = await updateSubscriptionFromManager(req.params.mode, req.params.subscriptionId, req.body);
+    res.json({ status });
+  } catch(err) {
+    res.json({ status: false });
+    console.log(err);
+  }
+});
+
+app.delete('/api/manage-subscription/:mode/:subscriptionId/:platform', async (req, res) => {
+  try {
+    const status = await deleteSubscriptionFromManager(req.params.mode, req.params.subscriptionId, req.params.platform);
     res.json({ status });
   } catch(err) {
     res.json({ status: false });
