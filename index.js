@@ -32,7 +32,8 @@ import {
   setRenderSettings,
   updateSubscriptionFromManager,
   deleteSubscriptionFromManager,
-  createSubscriptionFromManager
+  createSubscriptionFromManager,
+  getKeys
 } from './server/base.js';
 
 const app = express();
@@ -295,5 +296,21 @@ app.post('/api/render-settings/:mode', async (req, res) => {
   } catch (err) {
     console.log(err);
     res.json({ status: false });
+  }
+});
+
+app.get('/api/app/settings', async (req, res) => {
+  try {
+    const appSettings = await getAppSettings();
+    const response = { appSettings }
+
+    for(let i = 0; i < appSettings.countries.length; i++) {
+      const country = appSettings.countries[i];
+      response['keys_' + country] = await getKeys(country);
+    }
+
+    res.json(response);
+  } catch (err) {
+    console.log(err);
   }
 });

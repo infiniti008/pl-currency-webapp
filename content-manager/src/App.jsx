@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './assets/css/App.scss'
 import Sheet from './components/Sheet.jsx';
 import TopBar from './components/TopBar.jsx';
@@ -7,6 +7,7 @@ import ModalSubscription from './components/ModalSubscription'
 import CurrentStoreContext from './contexsts/store';
 
 import { EventBusProvider } from './contexsts/eventBus';
+import { getAppSettings } from './api/services';
 
 function App() {
   const initialStore = {
@@ -14,9 +15,27 @@ function App() {
     isModalSubscriptionOpen: false,
     subscriptionToOpenInModal: null,
     country: 'all',
-    generatedPhotoName: null
+    generatedPhotoName: null,
+    appSettings: {
+      appSettings: {}
+    }
   }
   const [currentStore, setCurrentStore] = useState(initialStore)
+
+  async function fetchAppSettings() {
+    try {
+      const appSettings = await getAppSettings()
+      const clonedStore = {...currentStore}
+      clonedStore.appSettings = appSettings
+      setCurrentStore(clonedStore)
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  useEffect(() => {
+    fetchAppSettings()
+  }, []);
 
   return (
     <EventBusProvider>

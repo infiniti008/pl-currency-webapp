@@ -34,6 +34,7 @@ function ModalSubscription() {
     setCurrentStore(clonedStore)
     document.body.style.overflow = ''
     document.body.style.marginRight = 'unset'
+    emit('FETCH_ALL_SUBSCRIPTIONS', true)
   }
 
   async function onClickDelete() {
@@ -47,7 +48,6 @@ function ModalSubscription() {
           });
 
           onClickClose()
-          emit('FETCH_ALL_SUBSCRIPTIONS', true)
         } else {
           toast.error("Something went wrong! Please try again later!", {
             position: toast.POSITION.BOTTOM_RIGHT

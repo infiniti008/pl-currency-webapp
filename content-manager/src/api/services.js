@@ -98,6 +98,15 @@ export async function getGenerateImage({ subscription, time, selectedDate }) {
   }
 }
 
+export async function getAppSettings() {
+  try {
+    const response = await axios.get(`${SERVER_URL}/api/app/settings`)   
+    return response.data;
+  } catch (err) {
+    console.log(err)
+  }
+}
+
 export async function getRenderSettings() {
   try {
     const mode = IS_DEV_MODE ? 'dev' : 'prod'
