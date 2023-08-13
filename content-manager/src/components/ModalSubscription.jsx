@@ -1,7 +1,7 @@
 import { useContext, useState, useEffect } from 'react';
 import CurrentStoreContext from '../contexsts/store';
 import { ToastContainer, toast } from 'react-toastify';
-import { saveSubscription, deleteSubscription } from '../api/services';
+import { saveSubscription, deleteSubscription, createSubscription } from '../api/services';
 import { EventBusContext } from './../contexsts/eventBus';
 
 import '../assets/css/Modal.scss'
@@ -71,8 +71,15 @@ function ModalSubscription() {
     }
 
     try {
+      const isNewSubscription = newSubscription._id == false 
       setInProgrees(true)
-      const response = await saveSubscription(newSubscription)
+      let response = {status: false}
+      if (isNewSubscription) {
+        response = await createSubscription(newSubscription)
+      } else {
+        response = await saveSubscription(newSubscription)
+      }
+      
       if (response.status) {
         toast.success("Subscription has been saved", {
           position: toast.POSITION.BOTTOM_RIGHT

@@ -6,8 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import '../assets/css/Modal.scss'
 import { getRenderSettings, saveRenderSettings } from '../api/services';
 import renderSettingsModel from '../models/renderSettingsModel';
-import Input from './ui/Input';
-// import '../assets/css/ModalSettings.scss'
+import Inputs from './ui/Inputs';
 
 const { descriptor, model } = renderSettingsModel;
 let cachedSettings = model
@@ -33,7 +32,6 @@ function ModalSettings() {
     }
 
     getSettings()
-    
   }, [])
 
   function onClickClose() {
@@ -77,20 +75,6 @@ function ModalSettings() {
     setRenderSettings(clonedSettings)
   }
 
-  const inputs = Object.keys(renderSettings).filter(key => descriptor[key]?.editable).map(key => {
-    const settingsPropperty = renderSettings[key]
-
-    return (
-      <Input 
-        key={key}
-        value={settingsPropperty}
-        itemKey={key}
-        handleUpdateOption={handleUpdateOption.bind(null, key)}
-        descriptor={descriptor}
-      />
-    )
-  })
-
   return (
     <div className='modal'>
       <div className='modal-overlay'></div>
@@ -101,7 +85,7 @@ function ModalSettings() {
         </div>
         <div className="modal-body">
           <div className="render-settings">
-            {inputs}
+            <Inputs descriptorModel={descriptor} handleUpdateOption={handleUpdateOption} object={renderSettings} model={model}/>
           </div>
         </div>
         <div className="modal-footer">

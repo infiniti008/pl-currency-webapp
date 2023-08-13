@@ -4,7 +4,7 @@ import CurrentStoreContext from '../contexsts/store';
 import 'react-toastify/dist/ReactToastify.css';
 
 import storiesModel from '../models/storiesModel';
-import Input from './ui/Input';
+import Inputs from './ui/Inputs';
 
 const { descriptor, model } = storiesModel;
 let cachedSubscription = model
@@ -19,6 +19,7 @@ function ModalSettings({ handleSaveSubscription }) {
   cachedSubscription = defaultValue
 
   const [subscription, setSubscription] = useState(defaultValue)
+  const isNewSubscription = subscription._id == false
 
   function handleReset() {
     setSubscription(cachedSubscription)
@@ -36,10 +37,6 @@ function ModalSettings({ handleSaveSubscription }) {
       }
     }
 
-    // const clonedStore = {...currentStore}
-    // clonedStore.subscriptionToOpenInModal = newSubscription
-    // setCurrentStore(clonedStore)
-
     handleSaveSubscription(newSubscription)
   }
 
@@ -49,28 +46,18 @@ function ModalSettings({ handleSaveSubscription }) {
     setSubscription(clonedSubscription)
   }
 
-  const inputs = Object.keys(subscription).filter(key => descriptor[key]?.editable).map(key => {
-    const subscriptionPropperty = subscription[key] ?? model[key]
-
-    return (
-      <Input 
-        key={key}
-        value={subscriptionPropperty}
-        itemKey={key}
-        handleUpdateOption={handleUpdateOption.bind(null, key)}
-        descriptor={descriptor}
-      />
-    )
-  })
+  const confirmButtonText = isNewSubscription ? 'Create' : 'Save'
 
   return (
     <div className='tab tab-form'>
       <div className='tab-content'>
-        {inputs}
+        <Inputs descriptorModel={descriptor} handleUpdateOption={handleUpdateOption} object={subscription} model={model}/>
       </div>
       <div className="tab-footer">
         <button onClick={handleReset}>Reset</button>
-        <button onClick={handleSave}>Save</button>
+        <button onClick={handleSave}>
+          {confirmButtonText}
+        </button>
       </div>
       
     </div>

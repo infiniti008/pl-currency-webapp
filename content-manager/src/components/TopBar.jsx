@@ -1,11 +1,14 @@
 import { useContext } from 'react';
 import CurrentStoreContext from '../contexsts/store';
+import storiesModel from '../models/storiesModel';
 
 import IconFlagBelarus from './icons/IconFlagBelarus';
 import IconFlagPoland from './icons/IconFlagPoland';
 import IconFlagAll from './icons/IconFlagAll';
 
 import '../assets/css/TopBar.scss'
+
+const { model } = storiesModel;
 
 function TopBar() {
   const {
@@ -28,6 +31,13 @@ function TopBar() {
     setCurrentStore(clonedStore)
   }
 
+  function onClickCreate() {
+    const clonedStore = {...currentStore}
+    clonedStore.subscriptionToOpenInModal = model
+    clonedStore.isModalSubscriptionOpen = !currentStore.isModalSubscriptionOpen
+    setCurrentStore(clonedStore)
+  }
+
   let countryFlag = ''
   if (currentStore?.country == 'pl') {
     countryFlag = <IconFlagPoland />
@@ -44,6 +54,9 @@ function TopBar() {
       </button>
       <button onClick={onClickSettings}>
         Render Settings
+      </button>
+      <button onClick={onClickCreate}>
+        Create
       </button>
       <div className='top-bar__country'>
         <select className='top-bar__country-select' value={selectedCountry} onChange={onSelectCountry}>

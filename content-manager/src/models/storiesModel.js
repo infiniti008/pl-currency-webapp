@@ -2,9 +2,13 @@ export default {
   descriptor: {
     "country": {
       name: "Страна (pl | by)",
-      inputType: "text",
+      inputType: "select",
       valueType: "string",
       editable: true,
+      options: [
+        {value: 'pl', name: 'PL'},
+        {value: 'by', name: 'BY'}
+      ]
     },
     "keys": {
       name: "Ключи",

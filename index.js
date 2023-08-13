@@ -7,7 +7,7 @@ const env = process.env.environment || 'prod';
 const mediaFolderPath = process.env['mediaFolderPath_' + env];
 
 import express from 'express';
-import cors from 'cors';
+// import cors from 'cors';
 import fs from 'fs';
 import bodyParser from 'body-parser';
 
@@ -31,7 +31,8 @@ import {
   getRenderSettings,
   setRenderSettings,
   updateSubscriptionFromManager,
-  deleteSubscriptionFromManager
+  deleteSubscriptionFromManager,
+  createSubscriptionFromManager
 } from './server/base.js';
 
 const app = express();
@@ -217,9 +218,19 @@ app.post('/api/subscription-generate-image/:mode', async (req, res) => {
   }
 });
 
-app.post('/api/manage-subscription/:mode/:subscriptionId', async (req, res) => {
+app.patch('/api/manage-subscription/:mode/:subscriptionId', async (req, res) => {
   try {
     const status = await updateSubscriptionFromManager(req.params.mode, req.params.subscriptionId, req.body);
+    res.json({ status });
+  } catch(err) {
+    res.json({ status: false });
+    console.log(err);
+  }
+});
+
+app.post('/api/manage-subscription/:mode/', async (req, res) => {
+  try {
+    const status = await createSubscriptionFromManager(req.params.mode, req.body);
     res.json({ status });
   } catch(err) {
     res.json({ status: false });

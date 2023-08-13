@@ -1,7 +1,7 @@
-function Input({itemKey, value, handleUpdateOption, descriptor}) {
+function Checkbox({itemKey, value, handleUpdateOption, descriptor}) {
 
   function handleOnChange(event) {
-    handleUpdateOption(event.target.value)
+    handleUpdateOption(event.target.checked)
   }
 
   return (
@@ -13,12 +13,12 @@ function Input({itemKey, value, handleUpdateOption, descriptor}) {
         className='input' 
         type={descriptor?.inputType} 
         name={itemKey} 
-        id={itemKey} 
-        value={descriptor?.inputType === 'text' && value}
+        id={itemKey}
+        checked={descriptor?.inputType === 'checkbox' && value}
         onChange={handleOnChange}
       />
     </div>
   )
 }
 
-export default Input
+export default Checkbox
