@@ -5,10 +5,8 @@ export default {
       inputType: "select",
       valueType: "string",
       editable: true,
-      options: [
-        {value: 'pl', name: 'PL'},
-        {value: 'by', name: 'BY'}
-      ]
+      optionsVariable: 'countries',
+      isInline: true
     },
     "keys": {
       name: "Ключи",
@@ -24,9 +22,10 @@ export default {
     },
     "time": {
       name: "Базовое время (ни на что не влияет)",
-      inputType: "text",
+      inputType: "time",
       valueType: "string",
       editable: false,
+      isInline: true
     },
     "userId": {
       name: "Айди пользователя (только для бота в телеграме)",
@@ -47,16 +46,19 @@ export default {
       editable: true,
     },
     "color": {
-      name: "Основной цвет (#123321)",
-      inputType: "text",
+      name: "Основной цвет: {COLOR}",
+      inputType: "color",
       valueType: "string",
       editable: true,
+      isInline: true
     },
     "platform": {
       name: "Платформа для постинга",
-      inputType: "text",
+      inputType: "select",
       valueType: "string",
       editable: true,
+      optionsVariable: 'platforms',
+      isInline: true,
     },
     "chanel": {
       name: "Канал для публикации (только для телеграма)",
@@ -66,13 +68,14 @@ export default {
     },
     "timeToGetDiff": {
       name: "Время для получения предыдущих курсов (12:30)",
-      inputType: "text",
+      inputType: "time",
       valueType: "string",
       editable: true,
+      isInline: true
     },
     "weekAvailability": {
       name: "Доступность по дням недели",
-      inputType: "text",
+      inputType: "week",
       valueType: "string",
       editable: true,
     },
@@ -81,6 +84,7 @@ export default {
       inputType: "checkbox",
       valueType: "boolean",
       editable: true,
+      isInline: true
     }
   },
   model: {
@@ -92,11 +96,11 @@ export default {
     "userId": "",
     "times": [""],
     "name": "",
-    "color": "",
+    "color": "#000000",
     "platform": "",
     "chanel": "",
     "timeToGetDiff": "",
-    "weekAvailability": "",
+    "weekAvailability": "*******",
     "doNotPostIfNoChanges": false
   }
 }

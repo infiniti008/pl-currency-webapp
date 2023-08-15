@@ -17,6 +17,7 @@ function TopBar() {
   } = useContext(CurrentStoreContext);
 
   let selectedCountry = currentStore?.country;
+  const countries = currentStore?.appSettings?.appSettings?.countries
 
   function onSelectCountry(event) {
     selectedCountry = event.target.value
@@ -46,6 +47,12 @@ function TopBar() {
   } else if (currentStore?.country == 'all') {
     countryFlag = <IconFlagAll />
   }
+
+  const countriesOptions = [<option value="all">ALL</option>]
+  
+  countries?.forEach(country => {
+    countriesOptions.push(<option value={country}>{country.toUpperCase()}</option>)
+  })
 
   return (
     <div className='top-bar'>

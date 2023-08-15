@@ -1,16 +1,18 @@
-function Select({itemKey, value, handleUpdateOption, descriptor}) {
+function Select({itemKey, value, handleUpdateOption, descriptor, options, isInline}) {
   function handleOnChange(event) {
     handleUpdateOption(event.target.value)
   }
 
-  const options = descriptor?.options?.map(option => {
+  const classes = 'input-group ' + (isInline ? 'input-group--inline' : '')
+
+  const optionElements = options?.map(option => {
     return (
-      <option key={option.name} value={option.value}>{option.name}</option>
+      <option key={option} value={option}>{option.toUpperCase()}</option>
     )
   })
 
   return (
-    <div className="input-group">
+    <div className={classes}>
       <label className='label' htmlFor={itemKey}>
         {descriptor?.name}
       </label>
@@ -20,7 +22,7 @@ function Select({itemKey, value, handleUpdateOption, descriptor}) {
         onChange={handleOnChange}
         value={value}
       >
-        {options}
+        {optionElements}
       </select>
     </div>
   )

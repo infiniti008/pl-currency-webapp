@@ -1,11 +1,13 @@
-function Input({itemKey, value, handleUpdateOption, descriptor}) {
+function Input({itemKey, value, handleUpdateOption, descriptor, isInline}) {
 
   function handleOnChange(event) {
     handleUpdateOption(event.target.value)
   }
 
+  const classes = 'input-group ' + (isInline ? 'input-group--inline' : '')
+
   return (
-    <div className="input-group">
+    <div className={classes}>
       <label className='label' htmlFor={itemKey}>
         {descriptor?.name}
       </label>
@@ -14,7 +16,7 @@ function Input({itemKey, value, handleUpdateOption, descriptor}) {
         type={descriptor?.inputType} 
         name={itemKey} 
         id={itemKey} 
-        value={descriptor?.inputType === 'text' && value}
+        value={value}
         onChange={handleOnChange}
       />
     </div>
