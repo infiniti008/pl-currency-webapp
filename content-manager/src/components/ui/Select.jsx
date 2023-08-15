@@ -22,6 +22,7 @@ function Select({itemKey, value, handleUpdateOption, descriptor, options, isInli
         onChange={handleOnChange}
         value={value}
       >
+        <option value='' disabled>Select Item</option>
         {optionElements}
       </select>
     </div>

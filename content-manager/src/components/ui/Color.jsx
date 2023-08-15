@@ -8,7 +8,7 @@ function Color({itemKey, value, handleUpdateOption, descriptor, isInline}) {
 
   return (
     <div className={classes}>
-      <label className='label' htmlFor={itemKey}>
+      <label style={{ color: value }} className='label' htmlFor={itemKey}>
         {name}
       </label>
       <input 
@@ -18,6 +18,7 @@ function Color({itemKey, value, handleUpdateOption, descriptor, isInline}) {
         id={itemKey} 
         value={value}
         onChange={handleOnChange}
+        style={{ '--after-color': value }}
       />
     </div>
   )

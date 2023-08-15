@@ -5,6 +5,7 @@ import Input from './Input';
 import Select from './Select';
 import Checkbox from './Checkbox';
 import Time from './Time';
+import Times from './Times';
 import Color from './Color';
 import Week from './Week';
 
@@ -53,6 +54,15 @@ function Inputs({object, handleUpdateOption, descriptorModel, model}) {
         />)
       case 'time':
         return (<Time 
+          key={key}
+          value={objectPropperty}
+          itemKey={key}
+          handleUpdateOption={handleUpdateOption.bind(null, key)}
+          descriptor={descriptorModel[key]}
+          isInline={descriptorModel[key].isInline}
+        />)
+        case 'times':
+      return (<Times 
           key={key}
           value={objectPropperty}
           itemKey={key}

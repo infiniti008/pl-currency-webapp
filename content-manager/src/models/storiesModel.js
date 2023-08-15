@@ -1,7 +1,7 @@
 export default {
   descriptor: {
     "country": {
-      name: "Страна (pl | by)",
+      name: "Страна",
       inputType: "select",
       valueType: "string",
       editable: true,
@@ -34,8 +34,8 @@ export default {
       editable: false,
     },
     "times": {
-      name: "Времена для постинга (будет одно время на несколько дней)",
-      inputType: "text",
+      name: "Времена для постинга",
+      inputType: "times",
       valueType: "string[]",
       editable: true,
     },
@@ -62,12 +62,14 @@ export default {
     },
     "chanel": {
       name: "Канал для публикации (только для телеграма)",
-      inputType: "text",
+      inputType: "select",
       valueType: "string",
       editable: true,
+      optionsVariable: 'chanels',
+      isInline: true,
     },
     "timeToGetDiff": {
-      name: "Время для получения предыдущих курсов (12:30)",
+      name: "Время для получения предыдущих курсов",
       inputType: "time",
       valueType: "string",
       editable: true,
@@ -90,11 +92,11 @@ export default {
   model: {
     "_id": "",
     "country": "",
-    "keys": [""],
+    "keys": [],
     "interval": "",
     "time": "",
     "userId": "",
-    "times": [""],
+    "times": [],
     "name": "",
     "color": "#000000",
     "platform": "",
