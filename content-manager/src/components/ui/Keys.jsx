@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-function Keys({itemKey, value, handleUpdateOption, descriptor, options, isInline, isRequired}) {
+function Keys({itemKey, value, handleUpdateOption, descriptor, options, isInline, isRequired, isDidabled}) {
   const [keyInput, setKeyInput] = useState('')
   const [isDropdownOpened, setIsDropdownOpened] = useState(false)
   function handleAddKeyInput(event) {
@@ -91,6 +91,7 @@ function Keys({itemKey, value, handleUpdateOption, descriptor, options, isInline
           value={keyInput}
           onChange={handleAddKeyInput}
           onClick={handleOnClick}
+          disabled={isDidabled}
         />
         {isDropdownOpened && <div className="keys-add__dropdown">
           {filteredOptions}

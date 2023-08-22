@@ -1,4 +1,4 @@
-function Select({itemKey, value, handleUpdateOption, descriptor, options, isInline, isRequired}) {
+function Select({itemKey, value, handleUpdateOption, descriptor, options, isInline, isRequired, isDidabled}) {
   function handleOnChange(event) {
     handleUpdateOption(event.target.value)
   }
@@ -23,6 +23,7 @@ function Select({itemKey, value, handleUpdateOption, descriptor, options, isInli
         id={itemKey}
         onChange={handleOnChange}
         value={value}
+        disabled={isDidabled}
       >
         <option value='' disabled>Select Item</option>
         {optionElements}

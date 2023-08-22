@@ -14,7 +14,8 @@ export default {
       inputType: "keys",
       valueType: "string[]",
       editable: true,
-      isRequired: true
+      isRequired: true,
+      enabledIf: 'object.country'
     },
     "interval": {
       name: "Интервал паблишенга (для создания времен паблишенга в WebApp)",
@@ -72,6 +73,7 @@ export default {
       editable: true,
       optionsVariable: 'chanels',
       isInline: true,
+      enabledIf: 'object.platform === "subscriptions-telegram"'
     },
     "timeToGetDiff": {
       name: "Время для получения предыдущих курсов",

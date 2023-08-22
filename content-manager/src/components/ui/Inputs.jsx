@@ -21,6 +21,11 @@ function Inputs({object, handleUpdateOption, descriptorModel, model}) {
   const appSettings = currentStore?.appSettings?.appSettings || {}
   const keysArr = currentStore?.appSettings['keys_' + object.country] || []
 
+  function checkIsDisabled(enabledIf) {
+    let isEnabled = eval(enabledIf) ?? true
+    return !isEnabled
+  }
+
   const inputs = Object.keys(object).filter(key => descriptorModel[key]?.editable).map(key => {
     const objectPropperty = object[key] ?? model[key]
     const inputType = descriptorModel[key].inputType
@@ -56,6 +61,7 @@ function Inputs({object, handleUpdateOption, descriptorModel, model}) {
           options={appSettings[descriptorModel[key].optionsVariable]}
           isInline={descriptorModel[key].isInline}
           isRequired={descriptorModel[key].isRequired}
+          isDidabled={checkIsDisabled(descriptorModel[key].enabledIf)}
         />)
       case 'time':
         return (<Time 
@@ -107,6 +113,7 @@ function Inputs({object, handleUpdateOption, descriptorModel, model}) {
           options={keysArr}
           isInline={descriptorModel[key].isInline}
           isRequired={descriptorModel[key].isRequired}
+          isDidabled={checkIsDisabled(descriptorModel[key].enabledIf)}
         />)
       default:
         return <div>EMPTY</div>

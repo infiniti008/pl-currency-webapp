@@ -1,5 +1,6 @@
 import { useContext, useState } from 'react';
 import CurrentStoreContext from '../contexsts/store';
+import { toast } from 'react-toastify';
 
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -9,7 +10,7 @@ import Inputs from './ui/Inputs';
 const { descriptor, model } = storiesModel;
 let cachedSubscription = model
 
-function ModalSettings({ handleSaveSubscription }) {
+function TabForm({ handleSaveSubscription }) {
   const {
     currentStore,
     setCurrentStore
@@ -25,6 +26,20 @@ function ModalSettings({ handleSaveSubscription }) {
     setSubscription(cachedSubscription)
   }
 
+  function isModelValid(model) {
+    for(let key in model) {
+      if (descriptor[key]?.isRequired) {
+        if (descriptor[key].valueType.includes('[]') && !model[key].length) {
+          return false
+        } else if (!model[key]) {
+          return false
+        }
+      }
+    }
+    
+    return true
+  }
+
   async function handleSave() {
     const newSubscription = {...cachedSubscription}
 
@@ -37,7 +52,13 @@ function ModalSettings({ handleSaveSubscription }) {
       }
     }
 
-    handleSaveSubscription(newSubscription)
+    if (isModelValid(newSubscription)) {
+      handleSaveSubscription(newSubscription)
+    } else {
+      toast.error("Model is NOT VALID!", {
+        position: toast.POSITION.BOTTOM_RIGHT
+      });
+    }
   }
 
   function handleUpdateOption(key, value) {
@@ -64,4 +85,4 @@ function ModalSettings({ handleSaveSubscription }) {
   )
 }
 
-export default ModalSettings
+export default TabForm
