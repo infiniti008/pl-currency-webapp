@@ -8,6 +8,7 @@ import Time from './Time';
 import Times from './Times';
 import Color from './Color';
 import Week from './Week';
+import Keys from './Keys';
 
 import '../../assets/css/Inputs.scss'
 
@@ -18,6 +19,7 @@ function Inputs({object, handleUpdateOption, descriptorModel, model}) {
   } = useContext(CurrentStoreContext);
 
   const appSettings = currentStore?.appSettings?.appSettings || {}
+  const keysArr = currentStore?.appSettings['keys_' + object.country] || []
 
   const inputs = Object.keys(object).filter(key => descriptorModel[key]?.editable).map(key => {
     const objectPropperty = object[key] ?? model[key]
@@ -86,6 +88,16 @@ function Inputs({object, handleUpdateOption, descriptorModel, model}) {
           itemKey={key}
           handleUpdateOption={handleUpdateOption.bind(null, key)}
           descriptor={descriptorModel[key]}
+          isInline={descriptorModel[key].isInline}
+        />)
+      case 'keys':
+        return (<Keys 
+          key={key}
+          value={objectPropperty}
+          itemKey={key}
+          handleUpdateOption={handleUpdateOption.bind(null, key)}
+          descriptor={descriptorModel[key]}
+          options={keysArr}
           isInline={descriptorModel[key].isInline}
         />)
       default:

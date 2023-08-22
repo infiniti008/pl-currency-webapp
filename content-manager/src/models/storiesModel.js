@@ -10,7 +10,7 @@ export default {
     },
     "keys": {
       name: "Ключи",
-      inputType: "text",
+      inputType: "keys",
       valueType: "string[]",
       editable: true,
     },
