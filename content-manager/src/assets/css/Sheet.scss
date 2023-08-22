@@ -3,10 +3,18 @@
   display: grid;
   grid-template-columns: 60px 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
   padding: 1px 0;
+
+  &--current {
+    background-color: #fafafa;
+  }
 }
 
 .time {
   text-align: center;
   border-right: 1px solid gainsboro;
   padding: 2px 0;
+
+  &--current {
+    background-color: #e1b3b3;
+  }
 }
