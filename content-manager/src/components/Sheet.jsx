@@ -66,16 +66,24 @@ function Sheet({store, updateStore}) {
     return isSameDay
   }
 
-  const timeItems = rows?.map((row) => {
+  const timeItems = rows?.map((row, rowIndex) => {
     const days = row.days?.map(day => {
-
       return <Day store={store} updateStore={updateStore} key={day.index} day={day} isSameDay={checkSameDay(day)}/>
     });
 
-    const isSameTimeRowClass = checkSameTimeRange(row.time) ? 'time-row--current' : ''
-    const isSameTimeClass = checkSameTimeRange(row.time) ? 'time--current' : ''
+    const isRowEmpty = row.days.every(day => day.subscriptions.length === 0)
+    const isPrevRowEmpty = rows[rowIndex - 1]?.days.every(day => day.subscriptions.length === 0) || false
+    const isNextRowEmpty = rows[rowIndex + 1]?.days.every(day => day.subscriptions.length === 0) || false
+    const isSameTimeRange = checkSameTimeRange(row.time)
+    const isRowCanBeHidden = currentStore.isEmptyRowsCollapsed && isRowEmpty && isPrevRowEmpty && isNextRowEmpty && !isSameTimeRange
+    
 
-    const rowClasses = `time-row ${isSameTimeRowClass}`
+    const isHiddenRowClass = isRowCanBeHidden ? 'time-row--hidden' : ''
+    const isEmptyRowClass = isRowEmpty ? 'time-row--empty' : ''
+    const isSameTimeRowClass = isSameTimeRange ? 'time-row--current' : ''
+    const isSameTimeClass = isSameTimeRange ? 'time--current' : ''
+
+    const rowClasses = `time-row ${isSameTimeRowClass} ${isEmptyRowClass} ${isHiddenRowClass}`
     const timeClasses = `time ${isSameTimeClass}`
 
     return <div key={ row.index } className={rowClasses}>

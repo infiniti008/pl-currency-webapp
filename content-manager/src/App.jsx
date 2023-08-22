@@ -16,6 +16,7 @@ function App() {
     subscriptionToOpenInModal: null,
     country: 'all',
     generatedPhotoName: null,
+    isEmptyRowsCollapsed: false,
     appSettings: {
       appSettings: {}
     }

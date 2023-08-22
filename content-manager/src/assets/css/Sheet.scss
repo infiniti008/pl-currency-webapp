@@ -7,6 +7,10 @@
   &--current {
     background-color: #fafafa;
   }
+
+  &--hidden {
+    display: none;
+  }
 }
 
 .time {

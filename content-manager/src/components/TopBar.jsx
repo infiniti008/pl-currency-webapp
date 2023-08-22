@@ -39,6 +39,12 @@ function TopBar() {
     setCurrentStore(clonedStore)
   }
 
+  function onClickSwitchCollapse() {
+    const clonedStore = {...currentStore}
+    clonedStore.isEmptyRowsCollapsed = !clonedStore.isEmptyRowsCollapsed
+    setCurrentStore(clonedStore)
+  }
+
   let countryFlag = ''
   if (currentStore?.country == 'pl') {
     countryFlag = <IconFlagPoland />
@@ -64,6 +70,9 @@ function TopBar() {
       </button>
       <button onClick={onClickCreate}>
         Create
+      </button>
+      <button onClick={onClickSwitchCollapse}>
+        Switch Collapsed
       </button>
       <div className='top-bar__country'>
         <select className='top-bar__country-select' value={selectedCountry} onChange={onSelectCountry}>
