@@ -34,6 +34,7 @@ function Inputs({object, handleUpdateOption, descriptorModel, model}) {
           handleUpdateOption={handleUpdateOption.bind(null, key)}
           descriptor={descriptorModel[key]}
           isInline={descriptorModel[key].isInline}
+          isRequired={descriptorModel[key].isRequired}
         />)
       case 'checkbox':
         return (<Checkbox 
@@ -43,6 +44,7 @@ function Inputs({object, handleUpdateOption, descriptorModel, model}) {
           handleUpdateOption={handleUpdateOption.bind(null, key)}
           descriptor={descriptorModel[key]}
           isInline={descriptorModel[key].isInline}
+          isRequired={descriptorModel[key].isRequired}
         />)
       case 'select':
         return (<Select 
@@ -53,6 +55,7 @@ function Inputs({object, handleUpdateOption, descriptorModel, model}) {
           descriptor={descriptorModel[key]}
           options={appSettings[descriptorModel[key].optionsVariable]}
           isInline={descriptorModel[key].isInline}
+          isRequired={descriptorModel[key].isRequired}
         />)
       case 'time':
         return (<Time 
@@ -62,6 +65,7 @@ function Inputs({object, handleUpdateOption, descriptorModel, model}) {
           handleUpdateOption={handleUpdateOption.bind(null, key)}
           descriptor={descriptorModel[key]}
           isInline={descriptorModel[key].isInline}
+          isRequired={descriptorModel[key].isRequired}
         />)
         case 'times':
       return (<Times 
@@ -71,6 +75,7 @@ function Inputs({object, handleUpdateOption, descriptorModel, model}) {
           handleUpdateOption={handleUpdateOption.bind(null, key)}
           descriptor={descriptorModel[key]}
           isInline={descriptorModel[key].isInline}
+          isRequired={descriptorModel[key].isRequired}
         />)
       case 'color':
         return (<Color 
@@ -80,6 +85,7 @@ function Inputs({object, handleUpdateOption, descriptorModel, model}) {
           handleUpdateOption={handleUpdateOption.bind(null, key)}
           descriptor={descriptorModel[key]}
           isInline={descriptorModel[key].isInline}
+          isRequired={descriptorModel[key].isRequired}
         />)
       case 'week':
         return (<Week 
@@ -89,6 +95,7 @@ function Inputs({object, handleUpdateOption, descriptorModel, model}) {
           handleUpdateOption={handleUpdateOption.bind(null, key)}
           descriptor={descriptorModel[key]}
           isInline={descriptorModel[key].isInline}
+          isRequired={descriptorModel[key].isRequired}
         />)
       case 'keys':
         return (<Keys 
@@ -99,6 +106,7 @@ function Inputs({object, handleUpdateOption, descriptorModel, model}) {
           descriptor={descriptorModel[key]}
           options={keysArr}
           isInline={descriptorModel[key].isInline}
+          isRequired={descriptorModel[key].isRequired}
         />)
       default:
         return <div>EMPTY</div>

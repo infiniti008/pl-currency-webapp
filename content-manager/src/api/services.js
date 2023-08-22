@@ -149,8 +149,10 @@ export async function saveSubscription(subscription) {
 export async function createSubscription(subscription) {
   try {
     const mode = IS_DEV_MODE ? 'dev' : 'prod'
+    const subscriptionToSend = {...subscription}
+    delete subscriptionToSend._id
 
-    const response = await axios.post(`${SERVER_URL}/api/manage-subscription/${mode}`, subscription)
+    const response = await axios.post(`${SERVER_URL}/api/manage-subscription/${mode}`, subscriptionToSend)
     return response.data;
   } catch (err) {
     console.log(err)

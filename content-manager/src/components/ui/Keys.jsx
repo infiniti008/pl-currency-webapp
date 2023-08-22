@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-function Keys({itemKey, value, handleUpdateOption, descriptor, options, isInline}) {
+function Keys({itemKey, value, handleUpdateOption, descriptor, options, isInline, isRequired}) {
   const [keyInput, setKeyInput] = useState('')
   const [isDropdownOpened, setIsDropdownOpened] = useState(false)
   function handleAddKeyInput(event) {
@@ -13,6 +13,7 @@ function Keys({itemKey, value, handleUpdateOption, descriptor, options, isInline
   }
 
   const classes = 'input-group ' + (isInline ? 'input-group--inline' : '')
+  const labelClasses = 'label '
 
   const filteredOptions = options
     .filter(option => {
@@ -79,8 +80,9 @@ function Keys({itemKey, value, handleUpdateOption, descriptor, options, isInline
 
   return (
     <div className={classes}>
-      <label className='label' htmlFor={itemKey}>
+      <label className={labelClasses} htmlFor={itemKey}>
         {descriptor?.name}
+        {isRequired ? <span className="required">*</span> : ''}
       </label>
       <div className="keys-add">
         <input 

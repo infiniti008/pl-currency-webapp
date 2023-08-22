@@ -6,13 +6,15 @@ export default {
       valueType: "string",
       editable: true,
       optionsVariable: 'countries',
-      isInline: true
+      isInline: true,
+      isRequired: true
     },
     "keys": {
       name: "Ключи",
       inputType: "keys",
       valueType: "string[]",
       editable: true,
+      isRequired: true
     },
     "interval": {
       name: "Интервал паблишенга (для создания времен паблишенга в WebApp)",
@@ -38,12 +40,14 @@ export default {
       inputType: "times",
       valueType: "string[]",
       editable: true,
+      isRequired: true
     },
     "name": {
       name: "Название (Заголовок)",
       inputType: "text",
       valueType: "string",
       editable: true,
+      isRequired: true
     },
     "color": {
       name: "Основной цвет: {COLOR}",
@@ -59,6 +63,7 @@ export default {
       editable: true,
       optionsVariable: 'platforms',
       isInline: true,
+      isRequired: true
     },
     "chanel": {
       name: "Канал для публикации (только для телеграма)",
@@ -79,7 +84,7 @@ export default {
       name: "Доступность по дням недели",
       inputType: "week",
       valueType: "string",
-      editable: true,
+      editable: true
     },
     "doNotPostIfNoChanges": {
       name: "Нужно постить если нет никаких изменений?",

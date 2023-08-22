@@ -1,4 +1,4 @@
-function Week({itemKey, value, handleUpdateOption, descriptor, isInline}) {
+function Week({itemKey, value, handleUpdateOption, descriptor, isInline, isRequired}) {
   function handleOnChange(index, event) {
     weekArray[index] = event.target.checked ? '*' : '_'
     handleUpdateOption(weekArray.join(''))
@@ -31,6 +31,7 @@ function Week({itemKey, value, handleUpdateOption, descriptor, isInline}) {
     <div className={classes}>
       <span className="label">
         {descriptor?.name}
+        {isRequired ? <span className="required">*</span> : ''}
       </span>
       <div className='input-group__wrapper'>
         {daysOfWeek}

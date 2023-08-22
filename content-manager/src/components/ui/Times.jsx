@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-function Times({itemKey, value, handleUpdateOption, descriptor, isInline}) {
+function Times({itemKey, value, handleUpdateOption, descriptor, isInline, isRequired}) {
   const [selectedTime, setSelectedTime] = useState('09:00')
 
   function handleOnChange(event) {
@@ -41,11 +41,13 @@ function Times({itemKey, value, handleUpdateOption, descriptor, isInline}) {
 
 
   const classes = 'input-group ' + (isInline ? 'input-group--inline' : '')
+  const labelClasses = 'label '
 
   return (
     <div className={classes}>
-      <label className='label' htmlFor={itemKey}>
+      <label className={labelClasses} htmlFor={itemKey}>
         {descriptor?.name}
+        {isRequired ? <span className="required">*</span> : ''}
       </label>
       <div className='times-wrapper__time-add-new'>
         <input 

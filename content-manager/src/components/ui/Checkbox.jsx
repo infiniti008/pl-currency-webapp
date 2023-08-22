@@ -1,15 +1,17 @@
-function Checkbox({itemKey, value, handleUpdateOption, descriptor, isInline}) {
+function Checkbox({itemKey, value, handleUpdateOption, descriptor, isInline, isRequired}) {
 
   function handleOnChange(event) {
     handleUpdateOption(event.target.checked)
   }
 
   const classes = 'input-group ' + (isInline ? 'input-group--inline' : '')
+  const labelClasses = 'label '
 
   return (
     <div className={classes}>
-      <label className='label' htmlFor={itemKey}>
+      <label className={labelClasses} htmlFor={itemKey}>
         {descriptor?.name}
+        {isRequired ? <span className="required">*</span> : ''}
       </label>
       <input 
         className='input' 

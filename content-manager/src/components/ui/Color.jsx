@@ -1,4 +1,4 @@
-function Color({itemKey, value, handleUpdateOption, descriptor, isInline}) {
+function Color({itemKey, value, handleUpdateOption, descriptor, isInline, isRequired}) {
   function handleOnChange(event) {
     handleUpdateOption(event.target.value)
   }
@@ -10,6 +10,7 @@ function Color({itemKey, value, handleUpdateOption, descriptor, isInline}) {
     <div className={classes}>
       <label style={{ color: value }} className='label' htmlFor={itemKey}>
         {name}
+        {isRequired ? <span className="required">*</span> : ''}
       </label>
       <input 
         className='input' 

@@ -76,6 +76,7 @@ function ModalSubscription() {
       let response = {status: false}
       if (isNewSubscription) {
         response = await createSubscription(newSubscription)
+
       } else {
         response = await saveSubscription(newSubscription)
       }
@@ -90,6 +91,8 @@ function ModalSubscription() {
         setCurrentStore(clonedStore)
 
         cachedSubscription = newSubscription
+
+        onClickClose()
       } else {
         toast.error("Subscription has NOT been saved", {
           position: toast.POSITION.BOTTOM_RIGHT

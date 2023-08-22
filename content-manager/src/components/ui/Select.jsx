@@ -1,9 +1,10 @@
-function Select({itemKey, value, handleUpdateOption, descriptor, options, isInline}) {
+function Select({itemKey, value, handleUpdateOption, descriptor, options, isInline, isRequired}) {
   function handleOnChange(event) {
     handleUpdateOption(event.target.value)
   }
 
   const classes = 'input-group ' + (isInline ? 'input-group--inline' : '')
+  const labelClasses = 'label '
 
   const optionElements = options?.map(option => {
     return (
@@ -13,8 +14,9 @@ function Select({itemKey, value, handleUpdateOption, descriptor, options, isInli
 
   return (
     <div className={classes}>
-      <label className='label' htmlFor={itemKey}>
+      <label className={labelClasses} htmlFor={itemKey}>
         {descriptor?.name}
+        {isRequired ? <span className="required">*</span> : ''}
       </label>
       <select 
         name={itemKey}

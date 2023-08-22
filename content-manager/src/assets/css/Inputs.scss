@@ -29,6 +29,10 @@
 
   & .label {
     font-weight: bold;
+
+    & .required {
+      color: #ff0000;
+    }
   }
 
   & .input[type="checkbox"] {
