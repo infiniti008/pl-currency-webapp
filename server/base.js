@@ -470,3 +470,19 @@ export async function deleteSubscriptionFromManager(mode, subscriptionId, platfo
     return false;
   }
 }
+
+
+export async function getKeyData(data) {
+  try {
+    const baseName = 'currency_' + data.country;
+    const collectionName = data.key;
+
+    const collection = await client.db(baseName).collection(collectionName);
+    const values = await collection.find({ timestamp: { $gt: data.startTimeStamp} }).toArray()
+
+    return values;
+  } catch(err) {
+    console.log(err)
+    return false;
+  }
+}

@@ -4,6 +4,7 @@ import Sheet from './components/Sheet.jsx';
 import TopBar from './components/TopBar.jsx';
 import ModalSettings from './components/ModalSettings'
 import ModalSubscription from './components/ModalSubscription'
+import ModalStream from './components/ModalStream'
 import CurrentStoreContext from './contexsts/store';
 
 import { EventBusProvider } from './contexsts/eventBus';
@@ -17,6 +18,7 @@ function App() {
     country: 'all',
     generatedPhotoName: null,
     isEmptyRowsCollapsed: false,
+    isStreamModalOpened: false,
     appSettings: {
       appSettings: {}
     }
@@ -50,6 +52,7 @@ function App() {
         <Sheet />
         {currentStore.isSettingsOpen && <ModalSettings />}
         {currentStore.isModalSubscriptionOpen && <ModalSubscription />}
+        {currentStore.isStreamModalOpened && <ModalStream />}
       </CurrentStoreContext.Provider>
     </EventBusProvider>
   )

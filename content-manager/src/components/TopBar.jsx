@@ -45,6 +45,12 @@ function TopBar() {
     setCurrentStore(clonedStore)
   }
 
+  function onClickOpenStream() {
+    const clonedStore = {...currentStore}
+    clonedStore.isStreamModalOpened = !clonedStore.isStreamModalOpened
+    setCurrentStore(clonedStore)
+  }
+
   let countryFlag = ''
   if (currentStore?.country == 'pl') {
     countryFlag = <IconFlagPoland />
@@ -73,6 +79,9 @@ function TopBar() {
       </button>
       <button onClick={onClickSwitchCollapse}>
         Switch Collapsed
+      </button>
+      <button onClick={onClickOpenStream}>
+        Open Stream Window
       </button>
       <div className='top-bar__country'>
         <select className='top-bar__country-select' value={selectedCountry} onChange={onSelectCountry}>

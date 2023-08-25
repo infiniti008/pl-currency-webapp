@@ -33,7 +33,8 @@ import {
   updateSubscriptionFromManager,
   deleteSubscriptionFromManager,
   createSubscriptionFromManager,
-  getKeys
+  getKeys,
+  getKeyData
 } from './server/base.js';
 
 const app = express();
@@ -312,5 +313,15 @@ app.get('/api/app/settings', async (req, res) => {
     res.json(response);
   } catch (err) {
     console.log(err);
+  }
+});
+
+app.post('/api/get-key-data', async (req, res) => {
+  try {
+    const data = await getKeyData(req.body);
+    res.json({ data });
+  } catch (err) {
+    console.log(err);
+    res.json({ status: false });
   }
 });

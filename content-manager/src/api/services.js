@@ -228,3 +228,18 @@ function getDateToGenerateImage(time, selectedDate, country) {
   date = date.replace('Z', timeZone);
   return date;
 }
+
+export async function getKeyData(data) {
+  try {
+    const response = await axios.post(`${SERVER_URL}/api/get-key-data`, data)
+    if (response?.data?.data?.length) {
+      const values = response?.data?.data;
+
+      return values
+    }
+    return [];
+  } catch (err) {
+    console.log(err)
+    return {status: false};
+  }
+}
