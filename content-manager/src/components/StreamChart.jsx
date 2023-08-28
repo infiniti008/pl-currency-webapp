@@ -3,10 +3,14 @@ import CurrentStoreContext from '../contexsts/store';
 import ChartElement from './Charts/Chart';
 import { getKeyData } from '../api/services';
 import { toast } from 'react-toastify';
-import { format, addMinutes, parse, formatRelative, subDays } from 'date-fns'
+import { format, addMinutes, parse, differenceInMinutes } from 'date-fns'
 import { formatInTimeZone, utcToZonedTime, zonedTimeToUtc } from 'date-fns-tz'
 
 const currentTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+let setDataSetInterval = null
+let itemsToChart = []
+
 
 function ModalStream({chart, handleRemoveChart}) {
   const {
@@ -15,9 +19,9 @@ function ModalStream({chart, handleRemoveChart}) {
   } = useContext(CurrentStoreContext)
 
   const [selectedCountry, setSelectedCountry] = useState('by')
-  const [selectedKey, setSelectedKey] = useState('by-moex-usd-tom')
-  const [startTime, setStartTime] = useState('08:30')
-  const [endTime, setEndTime] = useState('15:00')
+  const [selectedKey, setSelectedKey] = useState('nbrb-usd-tomorow')
+  const [startTime, setStartTime] = useState('09:30')
+  const [endTime, setEndTime] = useState('14:00')
   const [isStarted, setIsStarted] = useState(false)
   const [isDataReady, setIsDataReady] = useState(false)
   const [dataSet, setDataSet] = useState([])
@@ -51,6 +55,22 @@ function ModalStream({chart, handleRemoveChart}) {
     }
   }, [isStarted])
 
+  useEffect(() => {
+    console.log('useEffect - dataset', itemsToChart.length)
+    if (dataSet.length > 0 && itemsToChart.length > 0) {
+      console.log('Add item')
+      setTimeout(() => {
+        const clonedDataSet = [...dataSet]
+        const item = itemsToChart.shift()
+        if (item?.y) {
+          clonedDataSet.push(item)
+          setDataSet(clonedDataSet)
+        }
+        
+      }, 800)
+    }
+  }, [dataSet])
+
   const settings = currentStore?.appSettings || {}
   const keysArr = settings['keys_' + selectedCountry] || []
 
@@ -69,10 +89,12 @@ function ModalStream({chart, handleRemoveChart}) {
   }
 
   function handleToggleStarted() {
+    itemsToChart = []
     setIsStarted(!isStarted)
   }
 
   async function fetchData() {
+    itemsToChart = []
     try {
       let startTimeStamp = new Date()
       startTimeStamp = new Date(startTimeStamp.setHours(startTime.split(':')[0]))
@@ -92,10 +114,22 @@ function ModalStream({chart, handleRemoveChart}) {
       }
       const data = await getKeyData(request)
 
-      prepareDataToChart(data)
-      prepareNameToChart()
-      
-      setIsDataReady(true)
+      if (data.length) {
+        prepareNameToChart()
+        const [preparedDataSet, labels] = prepareDataToChart(data)
+
+        setLabels(labels)
+
+        const clonedDataSet = [...dataSet]
+        const item = preparedDataSet.shift()
+        clonedDataSet.push(item)
+        itemsToChart = preparedDataSet
+        setDataSet(clonedDataSet)
+
+        setIsDataReady(true)
+      } else (
+        handleToggleStarted()
+      )
     } catch(err) {
       console.log(err)
       setIsStarted(false)
@@ -112,19 +146,19 @@ function ModalStream({chart, handleRemoveChart}) {
   }
 
   function prepareDataToChart(data) {
-    const labels = []
-    const dataSet = []
+    const newDataSet = []
+    const newLabels = []
 
     data.forEach(item => {
       let time = new Date(item.timestamp)
       time = formatInTimeZone(time, timeZone, 'HH:mm')
-      labels.push(time)
-      dataSet.push(item.value)
+      newDataSet.push({ x: time, y: item.value })
+      newLabels.push(time)
     })
 
-    const diffMins = data?.[1]?.date?.split(':')?.[1] - data?.[0]?.date?.split(':')?.[1]
+    const diffMins = differenceInMinutes(new Date(data?.[1]?.timestamp), new Date(data?.[0]?.timestamp))
 
-    const lastLebelTime = labels[labels.length - 1]
+    const lastLebelTime = newDataSet[newDataSet.length - 1]?.x || ''
     const lastLebelTimeInt = parseInt(lastLebelTime.split(':').join(''))
     const endTimeInt = parseInt(endTime.split(':').join(''))
     const parsedDate = parse(lastLebelTime, "HH:mm", new Date())
@@ -133,20 +167,21 @@ function ModalStream({chart, handleRemoveChart}) {
       const newDate = addMinutes(parsedDate, diffMins)
       const newTimeString = format(newDate, "HH:mm")
       let newTimeStringInt = parseInt(newTimeString.split(':').join(''))
-      labels.push(newTimeString)
+      newDataSet.push({ x: newTimeString, y: null })
+      newLabels.push(newTimeString)
 
       while(newTimeStringInt < endTimeInt) {
-        const lastLebelTime = labels[labels.length - 1]
+        const lastLebelTime = newDataSet[newDataSet.length - 1].x
         const parsedDate = parse(lastLebelTime, "HH:mm", new Date())
         const newDate = addMinutes(parsedDate, diffMins)
         const newTimeString = format(newDate, "HH:mm")
         newTimeStringInt = parseInt(newTimeString.split(':').join(''))
-        labels.push(newTimeString)
+        newDataSet.push({ x: newTimeString, y: null })
+        newLabels.push(newTimeString)
       }
     }
 
-    setDataSet(dataSet)
-    setLabels(labels)
+    return [newDataSet, newLabels]
   }
 
   function prepareNameToChart() {
@@ -189,7 +224,7 @@ function ModalStream({chart, handleRemoveChart}) {
         <button onClick={handleRemoveChart}>Remove</button>
       </div>
       <div className='chart__view'>
-        {isDataReady && <ChartElement config={config} labels={labels} title={title} dataSet={dataSet} />}
+        {isDataReady && <ChartElement config={config} title={title} dataSet={dataSet} labels={labels} />}
       </div>
     </div>
   )
