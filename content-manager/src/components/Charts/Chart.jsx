@@ -1,31 +1,44 @@
 import React from 'react';
+import { useEffect, useRef } from 'react';
 import { Line } from 'react-chartjs-2';
-import { Chart, registerables } from 'chart.js';
+import { Chart, registerables, Tooltip } from 'chart.js';
 import 'chartjs-adapter-date-fns';
-import ChartDataLabels from 'chartjs-plugin-datalabels';
-
+import { format } from 'date-fns'
 
 Chart.register(...registerables);
-// Chart.register(ChartDataLabels);
 
-function ChartElement({config, title, dataSet, labels}) {
+function ChartElement({config, title, dataSet, labels, lastPoint, prevLastPoint, colorRGB, datasetMax, datasetMin, selectedKey}) {
+  let lastSettetPointToTooltip = null;
+  const chartRef = useRef(null);
 
-  const plugin = {
-    // id: "tooltips",
+  const updateTitle = {
+    id: "updateTitle",
     afterDatasetDraw(chart, args, options) {
-      const data = chart.data.datasets[0].data
-      const lastValue = data.findLast(item => item.y ? true : false)?.y || ''
-      const titleText = chart.config.options.plugins.title.text
-      
-      if (titleText !== lastValue) {        
-        chart.config.options.plugins.title.text = lastValue
-        chart.update({
-          duration: 0,
-          lazy: true,
-          easing: 'easeOutBounce'
-        })
+        const lastPointIndex = chart.getDatasetMeta(0).data.length - 1;
+
+        if (lastPointIndex >= 0) {
+          const tooltip = chart.tooltip;
+          if (lastSettetPointToTooltip !== lastPointIndex) {
+            tooltip.setActiveElements([
+              {
+                datasetIndex: 0,
+                index: lastPointIndex,
+              },
+            ],
+            {});
+
+            chart.update();
+            lastSettetPointToTooltip = lastPointIndex
+          }
       }
     }
+  };
+
+  Tooltip.positioners.myCustomPositioner = function(elements, eventPosition) {
+    return {
+        x: this.chart.chartArea.right,
+        y: 0
+    };
   };
 
   const data = {
@@ -34,12 +47,14 @@ function ChartElement({config, title, dataSet, labels}) {
       {
         label: title,
         data: dataSet,
-        borderWidth: 2,
+        borderWidth: 3,
         tension: 0.2,
         // stepped: true,
-        pointRadius: 0,
-        // backgroundColor: 'red',
-        showTooltip: true
+        pointRadius: 1,
+        borderColor: `rgba(${colorRGB}, 1)`,
+        backgroundColor: `rgba(${colorRGB}, 0.2)`,
+        showTooltip: true,
+        fill: true
       }
     ],
   };
@@ -50,6 +65,8 @@ function ChartElement({config, title, dataSet, labels}) {
     scales: {
       y: {
         beginAtZero: false,
+        suggestedMin: datasetMin,
+        suggestedMax: datasetMax, 
       },
       x: {
         type: 'time',
@@ -57,23 +74,27 @@ function ChartElement({config, title, dataSet, labels}) {
           parser: 'HH:mm',
           unit: 'minute',
           displayFormats: {
-            minute: 'HH:mm'  // Example: 'Jan 1'
+            minute: 'HH:mm'
           }
         }
-      }
-    },
-    animations: {
-      tension: {
-        duration: 300,
-        easing: 'linear',
-        from: 0.2,
-        to: 0.02
       }
     },
     plugins: {
       title: {
         display: true,
-        text: '',
+        text: (ctx) => {
+          const lastValue = lastPoint?.y?.toFixed(4)
+          const arrow = lastPoint.y >= prevLastPoint.y ? '⬆' : '⬇'
+          const diff = (lastPoint?.y - prevLastPoint?.y)
+          const isGreateThanZero = diff >= 0 ? '+' : ''
+          return `${arrow}  LAST: ${lastValue}  ${isGreateThanZero}${diff.toFixed(4)}`
+        },
+        color: (ctx) => {
+          if (lastPoint.y >= prevLastPoint.y) {
+            return 'green'
+          }
+          return 'red'
+        },
         position: 'top',
         font: {
           size: 22
@@ -82,13 +103,49 @@ function ChartElement({config, title, dataSet, labels}) {
           top: 0,
           bottom: 0
         }
+      },
+      tooltip: {
+        // enabled: false,
+        // mode: 'index',
+        position: 'myCustomPositioner',
+        // position: 'average',
+        intersect: false,
+        displayColors: false,
+        backgroundColor: 'rgba(0, 0, 0, 0.6)',
+        titleAlign: 'center',
+        bodyAlign: 'center',
+        bodyFont: {
+          size: 18
+        },
+        padding: {
+          left: 36,
+          right: 36,
+          top: 6,
+          bottom: 6
+        },
+        titleColor: '#ff8484',
+        bodyColor: '#84dcff',
+        callbacks: {
+          label: function(context) {
+            const obj = context.parsed
+            let label = obj?.y
+            return label?.toFixed(4);
+          },
+          title: function(context) {
+            const item = context[0]
+
+            let label = format(new Date(item?.parsed.x), 'dd MMM yyyy, HH:mm')
+            return label;
+          },
+        },
+        caretSize: 0
       }
     }
   };
 
   return (
     <div className='chart-element'>
-      <Line data={data} options={options} plugins={[plugin]} />
+      <Line key={'chartLine-' + selectedKey} ref={chartRef} data={data} options={options} plugins={[updateTitle]} />
     </div>
   )
 }

@@ -9,7 +9,7 @@ import { formatInTimeZone, utcToZonedTime, zonedTimeToUtc } from 'date-fns-tz'
 const currentTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
 let setDataSetInterval = null
-let itemsToChart = []
+let itemsToChart = {}
 
 
 function ModalStream({chart, handleRemoveChart}) {
@@ -19,15 +19,32 @@ function ModalStream({chart, handleRemoveChart}) {
   } = useContext(CurrentStoreContext)
 
   const [selectedCountry, setSelectedCountry] = useState('by')
-  const [selectedKey, setSelectedKey] = useState('nbrb-usd-tomorow')
-  const [startTime, setStartTime] = useState('09:30')
-  const [endTime, setEndTime] = useState('14:00')
+  const [selectedKey, setSelectedKey] = useState('by-moex-usd-tod')
+  const [startTime, setStartTime] = useState('18:30')
+  const [endTime, setEndTime] = useState('14:15')
   const [isStarted, setIsStarted] = useState(false)
   const [isDataReady, setIsDataReady] = useState(false)
   const [dataSet, setDataSet] = useState([])
   const [labels, setLabels] = useState([])
   const [title, setTitle] = useState('')
   const [timeZone, setTimeZone] = useState('')
+  const [lastPoint, setLastPoint] = useState({})
+  const [prevLastPoint, setPrevLastPoint] = useState({})
+  const [color, setColor] = useState('#84c8ff')
+  const [colorRGB, setColorRGB] = useState('0, 0, 0')
+  const [datasetMin, setDatasetMin] = useState(0)
+  const [datasetMax, setDatasetMax] = useState(0)
+
+  useEffect(() => {
+    let result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(color);
+    result = {
+      r: parseInt(result[1], 16),
+      g: parseInt(result[2], 16),
+      b: parseInt(result[3], 16)
+    };
+
+    setColorRGB(`${result.r}, ${result.g}, ${result.b}`)
+  }, [color])
 
   useEffect(() => {
     switch (selectedCountry) {
@@ -56,17 +73,19 @@ function ModalStream({chart, handleRemoveChart}) {
   }, [isStarted])
 
   useEffect(() => {
-    console.log('useEffect - dataset', itemsToChart.length)
-    if (dataSet.length > 0 && itemsToChart.length > 0) {
-      console.log('Add item')
+    if (isStarted && dataSet.length > 0 && itemsToChart[selectedKey]?.length >= 0) {
       setTimeout(() => {
         const clonedDataSet = [...dataSet]
-        const item = itemsToChart.shift()
+        const item = itemsToChart[selectedKey]?.shift()
         if (item?.y) {
           clonedDataSet.push(item)
           setDataSet(clonedDataSet)
         }
-        
+        else if (dataSet.length >= 0 && (itemsToChart[selectedKey]?.every(item => item.y === null) || itemsToChart[selectedKey]?.length === 0)) {
+          setTimeout(() => {
+            fetchData()
+          }, 2000)
+        }
       }, 800)
     }
   }, [dataSet])
@@ -89,12 +108,12 @@ function ModalStream({chart, handleRemoveChart}) {
   }
 
   function handleToggleStarted() {
-    itemsToChart = []
     setIsStarted(!isStarted)
   }
 
   async function fetchData() {
-    itemsToChart = []
+    itemsToChart[selectedKey] = []
+
     try {
       let startTimeStamp = new Date()
       startTimeStamp = new Date(startTimeStamp.setHours(startTime.split(':')[0]))
@@ -118,13 +137,23 @@ function ModalStream({chart, handleRemoveChart}) {
         prepareNameToChart()
         const [preparedDataSet, labels] = prepareDataToChart(data)
 
-        setLabels(labels)
+        setLabels(labels)       
 
-        const clonedDataSet = [...dataSet]
+        const clonedDataSet = []
         const item = preparedDataSet.shift()
         clonedDataSet.push(item)
-        itemsToChart = preparedDataSet
+        itemsToChart[selectedKey] = preparedDataSet
+
+        const lastOne = preparedDataSet.findLast(item => item.y ? true : false) || item
+        const prevLastOne = preparedDataSet.findLast(item => item.y && item.y !== lastOne.y ? true : false) || item
+        const datasetMin = Math.min(...preparedDataSet.filter(item => item.y !== null).map(item => item.y))
+        const datasetMax = Math.max(...preparedDataSet.filter(item => item.y !== null).map(item => item.y))
+
+        setLastPoint(lastOne)
+        setPrevLastPoint(prevLastOne)
         setDataSet(clonedDataSet)
+        setDatasetMax(datasetMax)
+        setDatasetMin(datasetMin)
 
         setIsDataReady(true)
       } else (
@@ -218,13 +247,34 @@ function ModalStream({chart, handleRemoveChart}) {
           </label>
           <input type="time" value={endTime} onChange={onChange.bind(null, setEndTime)} />
         </div>
+        <div className='chart__config-group'>
+          <label htmlFor="">
+            Color
+          </label>
+          <input type="color" value={color} onChange={onChange.bind(null, setColor)} />
+        </div>
         <button onClick={handleToggleStarted}>
           {actionButtonText}
         </button>
         <button onClick={handleRemoveChart}>Remove</button>
       </div>
       <div className='chart__view'>
-        {isDataReady && <ChartElement config={config} title={title} dataSet={dataSet} labels={labels} />}
+        {
+          isDataReady && 
+          <ChartElement
+            key={chart + 'chartElement-' + selectedKey}
+            config={config}
+            title={title}
+            dataSet={dataSet}
+            labels={labels}
+            lastPoint={lastPoint}
+            prevLastPoint={prevLastPoint}
+            colorRGB={colorRGB}
+            datasetMin={datasetMin}
+            datasetMax={datasetMax}
+            selectedKey={chart + selectedKey}
+          />
+        }
       </div>
     </div>
   )

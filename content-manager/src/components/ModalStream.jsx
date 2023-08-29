@@ -32,7 +32,7 @@ function ModalStream() {
 
   function onClickAddKey() {
     const clonedCharts = [...charts]
-    clonedCharts.push('-chart')
+    clonedCharts.push('-chart-' + new Date().valueOf())
 
     setCharts(clonedCharts)
   }
@@ -44,7 +44,7 @@ function ModalStream() {
 
   const chartItems = charts.map((chart, index) => {
     return (
-      <StreamChart key={index + chart} handleRemoveChart={handleRemoveChart.bind(null, index)} />
+      <StreamChart chart={index + chart} key={index + chart} handleRemoveChart={handleRemoveChart.bind(null, index)} />
     )
   })
 
