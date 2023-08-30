@@ -7,20 +7,14 @@ import { format, addMinutes, parse, differenceInMinutes } from 'date-fns'
 import { formatInTimeZone, utcToZonedTime, zonedTimeToUtc } from 'date-fns-tz'
 
 const currentTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-
-let setDataSetInterval = null
 let itemsToChart = {}
 
-
-function ModalStream({chart, handleRemoveChart, isAllHidden}) {
-  const {
-    currentStore,
-    setCurrentStore
-  } = useContext(CurrentStoreContext)
+function ModalStream({chart, handleRemoveChart, isAllHidden, handleSelectTimeZone}) {
+  const { currentStore } = useContext(CurrentStoreContext)
 
   const [selectedCountry, setSelectedCountry] = useState('by')
   const [selectedKey, setSelectedKey] = useState('by-moex-usd-tod')
-  const [startTime, setStartTime] = useState('18:30')
+  const [startTime, setStartTime] = useState('11:30')
   const [endTime, setEndTime] = useState('14:15')
   const [isStarted, setIsStarted] = useState(false)
   const [isDataReady, setIsDataReady] = useState(false)
@@ -50,12 +44,15 @@ function ModalStream({chart, handleRemoveChart, isAllHidden}) {
     switch (selectedCountry) {
       case 'by':
         setTimeZone('Europe/Minsk')
+        handleSelectTimeZone('Europe/Minsk')
         break;
       case 'pl':
         setTimeZone('Europe/Warsaw')
+        handleSelectTimeZone('Europe/Warsaw')
         break;
       default:
         setTimeZone('Europe/Warsaw')
+        handleSelectTimeZone('Europe/Warsaw')
         break;
     }
   }, [selectedCountry])
@@ -84,7 +81,7 @@ function ModalStream({chart, handleRemoveChart, isAllHidden}) {
         else if (dataSet.length >= 0 && (itemsToChart[selectedKey]?.every(item => item.y === null) || itemsToChart[selectedKey]?.length === 0)) {
           setTimeout(() => {
             fetchData()
-          }, 2000)
+          }, 5000)
         }
       }, 800)
     }

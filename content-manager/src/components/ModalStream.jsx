@@ -21,6 +21,7 @@ function ModalStream() {
 
   const [charts, setCharts] = useState([])
   const [isAllHidden, setIsAllHidden] = useState(false)
+  const [timeZone, setTimeZone] = useState('')
 
   function onClickClose() {
     const clonedStore = {...currentStore}
@@ -44,9 +45,19 @@ function ModalStream() {
     setCharts(filteredCharts)
   }
 
+  function handleSelectTimeZone(timeZone) {
+    setTimeZone(timeZone)
+  }
+
   const chartItems = charts.map((chart, index) => {
     return (
-      <StreamChart chart={index + chart} key={index + chart} handleRemoveChart={handleRemoveChart.bind(null, index)} isAllHidden={isAllHidden} />
+      <StreamChart
+        chart={index + chart}
+        key={index + chart}
+        handleRemoveChart={handleRemoveChart.bind(null, index)}
+        isAllHidden={isAllHidden}
+        handleSelectTimeZone={handleSelectTimeZone}
+      />
     )
   })
 
@@ -65,7 +76,7 @@ function ModalStream() {
               Add Chart
             </button>
           }
-          <Clock />
+          <Clock timeZone={timeZone} />
           <button onClick={onClickClose} className='stream__close'>-</button>
         </div>
         <div className='stream__body'>
