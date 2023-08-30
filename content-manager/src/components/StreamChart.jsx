@@ -9,13 +9,13 @@ import { formatInTimeZone, utcToZonedTime, zonedTimeToUtc } from 'date-fns-tz'
 const currentTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 let itemsToChart = {}
 
-function ModalStream({chart, handleRemoveChart, isAllHidden, handleSelectTimeZone}) {
+function ModalStream({ chart, handleRemoveChart, isAllHidden, handleSelectTimeZone, handleStartChart, model }) {
   const { currentStore } = useContext(CurrentStoreContext)
 
   const [selectedCountry, setSelectedCountry] = useState('by')
   const [selectedKey, setSelectedKey] = useState('by-moex-usd-tod')
-  const [startTime, setStartTime] = useState('11:30')
-  const [endTime, setEndTime] = useState('14:15')
+  const [startTime, setStartTime] = useState('21:30')
+  const [endTime, setEndTime] = useState('23:15')
   const [isStarted, setIsStarted] = useState(false)
   const [isDataReady, setIsDataReady] = useState(false)
   const [dataSet, setDataSet] = useState([])
@@ -28,6 +28,19 @@ function ModalStream({chart, handleRemoveChart, isAllHidden, handleSelectTimeZon
   const [colorRGB, setColorRGB] = useState('0, 0, 0')
   const [datasetMin, setDatasetMin] = useState(0)
   const [datasetMax, setDatasetMax] = useState(0)
+
+  useEffect(() => {
+    if (model.selectedKey) {
+      setSelectedCountry(model.selectedCountry)
+      setSelectedKey(model.selectedKey)
+      setStartTime(model.startTime)
+      setEndTime(model.endTime)
+      setColor(model.color)
+      if (model.isAutoRun) {
+        setIsStarted(true)
+      }
+    }
+  }, [])
 
   useEffect(() => {
     let result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(color);
@@ -60,6 +73,15 @@ function ModalStream({chart, handleRemoveChart, isAllHidden, handleSelectTimeZon
   useEffect(() => {
     if (isStarted && selectedCountry && selectedKey && startTime && endTime) {
       fetchData()
+      const startedChart = {
+        selectedCountry,
+        selectedKey,
+        startTime,
+        endTime,
+        color
+      }
+
+      handleStartChart(chart, startedChart)
     } else if (isStarted) {
       toast.error("Please fill all fields", {
         position: toast.POSITION.BOTTOM_RIGHT

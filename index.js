@@ -34,7 +34,9 @@ import {
   deleteSubscriptionFromManager,
   createSubscriptionFromManager,
   getKeys,
-  getKeyData
+  getKeyData,
+  setChartView,
+  getChartView
 } from './server/base.js';
 
 const app = express();
@@ -320,6 +322,26 @@ app.post('/api/get-key-data', async (req, res) => {
   try {
     const data = await getKeyData(req.body);
     res.json({ data });
+  } catch (err) {
+    console.log(err);
+    res.json({ status: false });
+  }
+});
+
+app.post('/api/manage-charts-view/:mode', async (req, res) => {
+  try {
+    const status = await setChartView(req.params.mode, req.body);
+    res.json({ status });
+  } catch (err) {
+    console.log(err);
+    res.json({ status: false });
+  }
+});
+
+app.get('/api/manage-charts-view/:mode/:name', async (req, res) => {
+  try {
+    const chartsView = await getChartView(req.params.mode, req.params.name);
+    res.json(chartsView);
   } catch (err) {
     console.log(err);
     res.json({ status: false });

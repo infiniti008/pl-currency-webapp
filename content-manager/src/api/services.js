@@ -243,3 +243,26 @@ export async function getKeyData(data) {
     return {status: false};
   }
 }
+
+export async function saveChartsView(data) {
+  try {
+    const mode = IS_DEV_MODE ? 'dev' : 'prod'
+
+    const response = await axios.post(`${SERVER_URL}/api/manage-charts-view/${mode}`, data)
+    return response.data;
+  } catch (err) {
+    console.log(err)
+    return {status: false};
+  }
+}
+
+export async function getChartsView(name) {
+  try {
+    const mode = IS_DEV_MODE ? 'dev' : 'prod'
+    const response = await axios.get(`${SERVER_URL}/api/manage-charts-view/${mode}/${name}`)
+    return response.data;
+  } catch(err) {
+    console.log(err);
+    return null;
+  }
+}

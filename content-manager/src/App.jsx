@@ -10,6 +10,8 @@ import CurrentStoreContext from './contexsts/store';
 import { EventBusProvider } from './contexsts/eventBus';
 import { getAppSettings } from './api/services';
 
+const keysToDisableDisplayingSheet = ['chartsViewName']
+
 function App() {
   const initialStore = {
     isSettingsOpen: false,
@@ -23,13 +25,17 @@ function App() {
       appSettings: {}
     }
   }
-  const [currentStore, setCurrentStore] = useState(initialStore)
 
-  async function fetchAppSettings() {
+  const [currentStore, setCurrentStore] = useState(initialStore)
+  const [chartsViewNameFromPath, setChartsViewNameFromPath] = useState('')
+  const [showSheet, setShowSheet] = useState(false)
+
+  async function fetchAppSettings(extendingToStore) {
     try {
       const appSettings = await getAppSettings()
       const clonedStore = {...currentStore}
       clonedStore.appSettings = appSettings
+      Object.assign(clonedStore, extendingToStore)
       setCurrentStore(clonedStore)
     } catch (err) {
       console.log(err)
@@ -37,7 +43,29 @@ function App() {
   }
 
   useEffect(() => {
-    fetchAppSettings()
+    const search = window.location.search || ''
+    const searchWithoutQuestion = search.split('?')[1] || ''
+    const splittedSearch = searchWithoutQuestion.split('&')
+    const searchMap = splittedSearch.reduce((acc, item) => {
+      const splittedItem = item.split('=')
+      if (splittedItem.length === 2) {
+        acc[splittedItem[0]] = splittedItem[1]
+      }
+      return acc
+    }, {})
+
+    let isStreamModalOpened = false
+
+    if (searchMap.chartsViewName) {
+      setChartsViewNameFromPath(searchMap.chartsViewName)
+      isStreamModalOpened = true
+    }
+
+    fetchAppSettings({isStreamModalOpened})
+
+    if (!Object.keys(searchMap).some(searchKey => keysToDisableDisplayingSheet.includes(searchKey))) {
+      setShowSheet(true)
+    }
   }, []);
 
   return (
@@ -49,10 +77,10 @@ function App() {
         }}
       >
         <TopBar />
-        <Sheet />
+        {showSheet && <Sheet /> }
         {currentStore.isSettingsOpen && <ModalSettings />}
         {currentStore.isModalSubscriptionOpen && <ModalSubscription />}
-        {currentStore.isStreamModalOpened && <ModalStream />}
+        {currentStore.isStreamModalOpened && <ModalStream chartsViewNameFromPath={chartsViewNameFromPath} />}
       </CurrentStoreContext.Provider>
     </EventBusProvider>
   )

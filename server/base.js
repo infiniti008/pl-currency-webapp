@@ -486,3 +486,44 @@ export async function getKeyData(data) {
     return false;
   }
 }
+
+export async function setChartView(mode, chartsView) {
+  try {
+    const baseName = mode === 'dev' ? 'currency_app_test' : 'config_app';
+    const collectionName = 'chart-views';
+
+    const collection = await client.db(baseName).collection(collectionName);
+    const filter = { chartsViewName: { $eq: chartsView.chartsViewName } };
+    
+    await collection.deleteOne(filter)
+
+    const result = await collection.insertOne(chartsView)
+
+    return true;
+  } catch(err) {
+    console.log(err)
+    return false;
+  }
+}
+
+export async function getChartView(mode, name) {
+  try {
+    const baseName = mode === 'dev' ? 'currency_app_test' : 'config_app';
+    const collectionName = 'chart-views';
+
+    const collection = await client.db(baseName).collection(collectionName);
+    if (name === 'all') {
+      const result = await collection.find({}, { projection: { chartsViewName: 1, _id: 0 } }).toArray()
+
+      return result;
+    } else {
+      const filter = { chartsViewName: { $eq: name } };
+      const result = await collection.findOne(filter)
+
+      return result;
+    }
+  } catch(err) {
+    console.log(err)
+    return false;
+  }
+}
