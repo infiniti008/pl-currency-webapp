@@ -489,7 +489,7 @@ export async function getKeyData(data) {
 
 export async function setChartView(mode, chartsView) {
   try {
-    const baseName = mode === 'dev' ? 'currency_app_test' : 'config_app';
+    const baseName = mode === 'dev' ? 'currency_app_test' : 'currency_app';
     const collectionName = 'chart-views';
 
     const collection = await client.db(baseName).collection(collectionName);
@@ -508,7 +508,7 @@ export async function setChartView(mode, chartsView) {
 
 export async function getChartView(mode, name) {
   try {
-    const baseName = mode === 'dev' ? 'currency_app_test' : 'config_app';
+    const baseName = mode === 'dev' ? 'currency_app_test' : 'currency_app';
     const collectionName = 'chart-views';
 
     const collection = await client.db(baseName).collection(collectionName);
