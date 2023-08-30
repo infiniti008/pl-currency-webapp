@@ -19,6 +19,7 @@ function ModalStream() {
   }, [])
 
   const [charts, setCharts] = useState([])
+  const [isAllHidden, setIsAllHidden] = useState(false)
 
   function onClickClose() {
     const clonedStore = {...currentStore}
@@ -44,17 +45,25 @@ function ModalStream() {
 
   const chartItems = charts.map((chart, index) => {
     return (
-      <StreamChart chart={index + chart} key={index + chart} handleRemoveChart={handleRemoveChart.bind(null, index)} />
+      <StreamChart chart={index + chart} key={index + chart} handleRemoveChart={handleRemoveChart.bind(null, index)} isAllHidden={isAllHidden} />
     )
   })
+
+  const hideText = isAllHidden ? '>' : '<'
 
   return (
     <div className='stream'>
       <div className='stream__container'>
         <div className='stream__header'>
-          <button onClick={onClickAddKey} className='stream__close'>
-            Add Chart
+          <button onClick={setIsAllHidden.bind(null, !isAllHidden)} className='stream__close'>
+            {hideText}
           </button>
+          {
+            !isAllHidden && 
+            <button onClick={onClickAddKey} className='stream__close'>
+              Add Chart
+            </button>
+          }
           <button onClick={onClickClose} className='stream__close'>X</button>
         </div>
         <div className='stream__body'>

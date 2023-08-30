@@ -12,7 +12,7 @@ let setDataSetInterval = null
 let itemsToChart = {}
 
 
-function ModalStream({chart, handleRemoveChart}) {
+function ModalStream({chart, handleRemoveChart, isAllHidden}) {
   const {
     currentStore,
     setCurrentStore
@@ -219,45 +219,53 @@ function ModalStream({chart, handleRemoveChart}) {
     setTitle(name)
   }
 
+  const chartClasses = [
+    'chart',
+    isAllHidden ? 'chart--full' : ''
+  ].join(' ')
+
   return (
-    <div className='chart'>
-      <div className='chart__config'>
-        <div className='chart__config-group'>
-          <select className='chart__config-select' value={selectedCountry} onChange={onChange.bind(null, setSelectedCountry)}>
-            <option value="" disabled>Country</option>
-            <option value="pl">PL</option>
-            <option value="by">BY</option>
-          </select>
+    <div className={chartClasses}>
+      {
+        !isAllHidden &&
+        <div className='chart__config'>
+          <div className='chart__config-group'>
+            <select className='chart__config-select' value={selectedCountry} onChange={onChange.bind(null, setSelectedCountry)}>
+              <option value="" disabled>Country</option>
+              <option value="pl">PL</option>
+              <option value="by">BY</option>
+            </select>
+          </div>
+          <div className='chart__config-group'>
+            <select className='chart__config-select' value={selectedKey} onChange={onChange.bind(null, setSelectedKey)}>
+              <option value="" disabled>Key</option>
+              {keys}
+            </select>
+          </div>
+          <div className='chart__config-group'>
+            <label htmlFor="">
+              Start Time
+            </label>
+            <input type="time" value={startTime} onChange={onChange.bind(null, setStartTime)} />
+          </div>
+          <div className='chart__config-group'>
+            <label htmlFor="">
+              End Time
+            </label>
+            <input type="time" value={endTime} onChange={onChange.bind(null, setEndTime)} />
+          </div>
+          <div className='chart__config-group'>
+            <label htmlFor="">
+              Color
+            </label>
+            <input type="color" value={color} onChange={onChange.bind(null, setColor)} />
+          </div>
+          <button onClick={handleToggleStarted}>
+            {actionButtonText}
+          </button>
+          <button onClick={handleRemoveChart}>Remove</button>
         </div>
-        <div className='chart__config-group'>
-          <select className='chart__config-select' value={selectedKey} onChange={onChange.bind(null, setSelectedKey)}>
-            <option value="" disabled>Key</option>
-            {keys}
-          </select>
-        </div>
-        <div className='chart__config-group'>
-          <label htmlFor="">
-            Start Time
-          </label>
-          <input type="time" value={startTime} onChange={onChange.bind(null, setStartTime)} />
-        </div>
-        <div className='chart__config-group'>
-          <label htmlFor="">
-            End Time
-          </label>
-          <input type="time" value={endTime} onChange={onChange.bind(null, setEndTime)} />
-        </div>
-        <div className='chart__config-group'>
-          <label htmlFor="">
-            Color
-          </label>
-          <input type="color" value={color} onChange={onChange.bind(null, setColor)} />
-        </div>
-        <button onClick={handleToggleStarted}>
-          {actionButtonText}
-        </button>
-        <button onClick={handleRemoveChart}>Remove</button>
-      </div>
+      }
       <div className='chart__view'>
         {
           isDataReady && 

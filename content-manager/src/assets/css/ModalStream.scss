@@ -55,6 +55,10 @@
     padding: 10px;
     gap: 10px;
 
+    &--full {
+      grid-template-columns: 1fr;
+    }
+
     &__config {
       display: flex;
       flex-direction: column;
