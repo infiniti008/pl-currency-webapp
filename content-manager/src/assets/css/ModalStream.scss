@@ -27,7 +27,7 @@
   }
 
   &__header {
-    height: 34;
+    height: 34px;
     padding: 4px;
     display: flex;
     justify-content: space-between;
@@ -98,5 +98,21 @@
   .chart-element {
     width: 100%;
     height: 100%;
+  }
+
+  .clock {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 36px;
+    width: 360px;
+
+    &__time-char {
+      display: inline-block;
+      width: 20px;
+      text-align: center;
+      font-weight: bold;
+      color: #7fb3ff;
+    }
   }
 }

@@ -5,6 +5,7 @@ import StreamChart from './StreamChart';
 import { ToastContainer } from 'react-toastify';
 
 import '../assets/css/ModalStream.scss'
+import Clock from './ui/Clock';
 
 function ModalStream() {
   const { emit } = useContext(EventBusContext)
@@ -49,7 +50,7 @@ function ModalStream() {
     )
   })
 
-  const hideText = isAllHidden ? '>' : '<'
+  const hideText = isAllHidden ? '+' : '<'
 
   return (
     <div className='stream'>
@@ -64,7 +65,8 @@ function ModalStream() {
               Add Chart
             </button>
           }
-          <button onClick={onClickClose} className='stream__close'>X</button>
+          <Clock />
+          <button onClick={onClickClose} className='stream__close'>-</button>
         </div>
         <div className='stream__body'>
           {chartItems}
