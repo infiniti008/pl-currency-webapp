@@ -14,7 +14,7 @@ function ModalStream({ chart, handleRemoveChart, isAllHidden, handleSelectTimeZo
 
   const [selectedCountry, setSelectedCountry] = useState('by')
   const [selectedKey, setSelectedKey] = useState('by-moex-usd-tod')
-  const [startTime, setStartTime] = useState('21:30')
+  const [startTime, setStartTime] = useState('14:30')
   const [endTime, setEndTime] = useState('23:15')
   const [isStarted, setIsStarted] = useState(false)
   const [isDataReady, setIsDataReady] = useState(false)
@@ -72,7 +72,7 @@ function ModalStream({ chart, handleRemoveChart, isAllHidden, handleSelectTimeZo
 
   useEffect(() => {
     if (isStarted && selectedCountry && selectedKey && startTime && endTime) {
-      fetchData()
+      fetchData(true)
       const startedChart = {
         selectedCountry,
         selectedKey,
@@ -95,15 +95,24 @@ function ModalStream({ chart, handleRemoveChart, isAllHidden, handleSelectTimeZo
     if (isStarted && dataSet.length > 0 && itemsToChart[selectedKey]?.length >= 0) {
       setTimeout(() => {
         const clonedDataSet = [...dataSet]
-        const item = itemsToChart[selectedKey]?.shift()
-        if (item?.y) {
-          clonedDataSet.push(item)
-          setDataSet(clonedDataSet)
-        }
-        else if (dataSet.length >= 0 && (itemsToChart[selectedKey]?.every(item => item.y === null) || itemsToChart[selectedKey]?.length === 0)) {
-          setTimeout(() => {
-            fetchData()
-          }, 5000)
+        const firstEmptyItem = clonedDataSet.find(item => item.y === null)
+        if (firstEmptyItem) {
+          const itemToFillByTime = itemsToChart[selectedKey]?.find(item => item.x === firstEmptyItem.x && item.y !== null)
+          if (itemToFillByTime) {
+            firstEmptyItem.y = itemToFillByTime.y
+            const nextAfterEmpty = clonedDataSet.indexOf(firstEmptyItem)
+            clonedDataSet[nextAfterEmpty + 1].y = null
+            // clonedDataSet[nextAfterEmpty + 2].y = null
+            setDataSet(clonedDataSet)
+          } else {
+            clonedDataSet[0].y = null
+            // clonedDataSet[1].y = null
+            setDataSet(clonedDataSet)
+
+            fetchData(false)
+          }
+        } else {
+          console.log(3)
         }
       }, 800)
     }
@@ -130,7 +139,7 @@ function ModalStream({ chart, handleRemoveChart, isAllHidden, handleSelectTimeZo
     setIsStarted(!isStarted)
   }
 
-  async function fetchData() {
+  async function fetchData(resetDataSet) {
     itemsToChart[selectedKey] = []
 
     try {
@@ -158,9 +167,7 @@ function ModalStream({ chart, handleRemoveChart, isAllHidden, handleSelectTimeZo
 
         setLabels(labels)       
 
-        const clonedDataSet = []
-        const item = preparedDataSet.shift()
-        clonedDataSet.push(item)
+        const item = preparedDataSet[0]
         itemsToChart[selectedKey] = preparedDataSet
 
         const lastOne = preparedDataSet.findLast(item => item.y ? true : false) || item
@@ -170,9 +177,18 @@ function ModalStream({ chart, handleRemoveChart, isAllHidden, handleSelectTimeZo
 
         setLastPoint(lastOne)
         setPrevLastPoint(prevLastOne)
-        setDataSet(clonedDataSet)
         setDatasetMax(datasetMax)
         setDatasetMin(datasetMin)
+
+        if (resetDataSet) {
+          const clonedDataSet = preparedDataSet.map(item => {
+            return {
+              x: item.x,
+              y: null
+            }
+          })
+          setDataSet(clonedDataSet)
+        }
 
         setIsDataReady(true)
       } else (

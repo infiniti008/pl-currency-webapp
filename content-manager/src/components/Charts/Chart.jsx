@@ -14,7 +14,8 @@ function ChartElement({config, title, dataSet, labels, lastPoint, prevLastPoint,
   const updateTitle = {
     id: "updateTitle",
     afterDatasetDraw(chart, args, options) {
-        const lastPointIndex = chart.getDatasetMeta(0).data.length - 1;
+        const lastPoint = chart.getDatasetMeta(0).data.find(item => item.$context.raw.y === null);
+        const lastPointIndex = chart.getDatasetMeta(0).data.indexOf(lastPoint) - 1
 
         if (lastPointIndex >= 0) {
           const tooltip = chart.tooltip;
@@ -127,7 +128,7 @@ function ChartElement({config, title, dataSet, labels, lastPoint, prevLastPoint,
         bodyColor: '#84dcff',
         callbacks: {
           label: function(context) {
-            const obj = context.parsed
+            const obj = context.raw
             let label = obj?.y
             return label?.toFixed(4);
           },
