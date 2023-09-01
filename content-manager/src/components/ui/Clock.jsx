@@ -4,7 +4,7 @@ import { utcToZonedTime, zonedTimeToUtc } from 'date-fns-tz'
 
 const currentTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-function Clock({ timeZone }) {
+function Clock({ timeZone, setIsAllHidden }) {
   const [time, setTime] = useState('')
 
   useEffect(() => {
@@ -19,8 +19,8 @@ function Clock({ timeZone }) {
   }, [time])
 
   return (
-    <div className="clock">
-      {new Date().toLocaleDateString('ru-RU')}
+    <div className="clock" onClick={setIsAllHidden}>
+      {format(new Date(), 'd MMM yyyy')}
       <span>  -  </span>
       {time}
     </div>

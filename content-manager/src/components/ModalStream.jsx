@@ -8,6 +8,8 @@ import '../assets/css/ModalStream.scss'
 import Clock from './ui/Clock';
 import { saveChartsView, getChartsView } from '../api/services';
 import displaySaveChartViewsPrompt from './ui/ToastSaveChartsView';
+import Copyright from './ui/Copyright';
+import Logo from './ui/Logo';
 
 const initialChartsView = {
   charts: [],
@@ -162,32 +164,31 @@ function ModalStream({ chartsViewNameFromPath }) {
   return (
     <div className='stream'>
       <div className='stream__container'>
-        <div className='stream__header'>
-          <button onClick={setIsAllHidden.bind(null, !isAllHidden)} className='stream__close'>
-            {hideText}
-          </button>
-          {
-            !isAllHidden && 
+        { isAllHidden &&
+          <div className='stream__header'>
+            <Logo />
+            <Clock timeZone={timeZone} setIsAllHidden={setIsAllHidden.bind(null, false)} />
+            <Copyright />
+          </div>
+        }
+        {!isAllHidden && 
+          <div className='stream__header'>
+            <button onClick={setIsAllHidden.bind(null, !isAllHidden)} className='stream__close'>
+              {hideText}
+            </button>
             <button onClick={onClickAddKey} className='stream__close'>
               Add Chart
             </button>
-          }
-          {
-            !isAllHidden && 
             <button onClick={onClickSaveAll} className='stream__close'>
               Save All
             </button>
-          }
-          {
-            !isAllHidden && 
             <select value={selectedChartsView} onChange={handleSelectChartsView}>
               <option disabled value="">Select Charts View</option>
               {chartsViewOptions}
             </select>
-          }
-          { isAllHidden && <Clock timeZone={timeZone} /> }
-          <button onClick={onClickClose} className='stream__close'>-</button>
-        </div>
+            <button onClick={onClickClose} className='stream__close'>-</button>
+          </div>
+        }
         <div className='stream__body'>
           {chartItems}
         </div>
