@@ -3,19 +3,26 @@ import CurrentStoreContext from '../contexsts/store';
 import ChartElement from './Charts/Chart';
 import { getKeyData } from '../api/services';
 import { toast } from 'react-toastify';
-import { format, addMinutes, parse, differenceInMinutes } from 'date-fns'
+import { format, addMinutes, parse, differenceInMinutes, sub } from 'date-fns'
 import { formatInTimeZone, utcToZonedTime, zonedTimeToUtc } from 'date-fns-tz'
 
 const currentTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 let itemsToChart = {}
 
-function ModalStream({ chart, handleRemoveChart, isAllHidden, handleSelectTimeZone, handleStartChart, model }) {
+function ModalStream({ chart, handleRemoveChart, isAllHidden, handleSelectTimeZone, handleStartChart, model, index }) {
   const { currentStore } = useContext(CurrentStoreContext)
+  const nowDate = new Date()
+  const todayDate = format(nowDate, 'yyyy-MM-dd')
+  const initialEndTime = format(nowDate, 'HH:mm')
+  const initialStartTime =  format(sub(nowDate, { hours: 3 }), 'HH:mm');
+
 
   const [selectedCountry, setSelectedCountry] = useState('by')
   const [selectedKey, setSelectedKey] = useState('by-moex-usd-tod')
-  const [startTime, setStartTime] = useState('14:30')
-  const [endTime, setEndTime] = useState('23:15')
+  const [startTime, setStartTime] = useState(initialStartTime)
+  const [endTime, setEndTime] = useState(initialEndTime)
+  const [startDate, setStartDate] = useState(todayDate)
+  const [endDate, setEndDate] = useState(todayDate)
   const [isStarted, setIsStarted] = useState(false)
   const [isDataReady, setIsDataReady] = useState(false)
   const [dataSet, setDataSet] = useState([])
@@ -142,25 +149,29 @@ function ModalStream({ chart, handleRemoveChart, isAllHidden, handleSelectTimeZo
     setIsStarted(!isStarted)
   }
 
+  function getTimeStamp(time, date) {
+    let timeStamp = parse(`${date}, ${time}`, "yyyy-MM-dd, HH:mm", new Date())
+    timeStamp = zonedTimeToUtc(timeStamp, timeZone);
+    timeStamp = utcToZonedTime(timeStamp, currentTimeZone);
+    timeStamp = timeStamp.valueOf()
+
+    return timeStamp
+  }
+
   async function fetchData(resetDataSet) {
     itemsToChart[selectedKey] = []
 
     try {
-      let startTimeStamp = new Date()
-      startTimeStamp = new Date(startTimeStamp.setHours(startTime.split(':')[0]))
-      startTimeStamp = new Date(startTimeStamp.setMinutes(startTime.split(':')[1]))
-      const utcDate = zonedTimeToUtc(startTimeStamp, timeZone);
-      const targetDateTime = utcToZonedTime(utcDate, currentTimeZone);
+      const startTimeStamp = getTimeStamp(startTime, startDate)
+      const endTimeStamp = getTimeStamp(endTime, endDate)
 
-      startTimeStamp = targetDateTime
-
-      startTimeStamp = startTimeStamp.valueOf()
       const request = {
         country: selectedCountry,
         key: selectedKey,
         startTime,
         endTime,
-        startTimeStamp
+        startTimeStamp,
+        endTimeStamp
       }
       const data = await getKeyData(request)
 
@@ -218,7 +229,7 @@ function ModalStream({ chart, handleRemoveChart, isAllHidden, handleSelectTimeZo
 
     data.forEach(item => {
       let time = new Date(item.timestamp)
-      time = formatInTimeZone(time, timeZone, 'HH:mm')
+      time = formatInTimeZone(time, timeZone, 'yyyy-MM-dd, HH:mm')
       newDataSet.push({ x: time, y: item.value })
       newLabels.push(time)
     })
@@ -228,20 +239,20 @@ function ModalStream({ chart, handleRemoveChart, isAllHidden, handleSelectTimeZo
     const lastLebelTime = newDataSet[newDataSet.length - 1]?.x || ''
     const lastLebelTimeInt = parseInt(lastLebelTime.split(':').join(''))
     const endTimeInt = parseInt(endTime.split(':').join(''))
-    const parsedDate = parse(lastLebelTime, "HH:mm", new Date())
+    const parsedDate = parse(lastLebelTime, "yyyy-MM-dd, HH:mm", new Date())
 
     if (lastLebelTimeInt < endTimeInt) {
       const newDate = addMinutes(parsedDate, diffMins)
-      const newTimeString = format(newDate, "HH:mm")
+      const newTimeString = format(newDate, "yyyy-MM-dd, HH:mm")
       let newTimeStringInt = parseInt(newTimeString.split(':').join(''))
       newDataSet.push({ x: newTimeString, y: null })
       newLabels.push(newTimeString)
 
       while(newTimeStringInt < endTimeInt) {
         const lastLebelTime = newDataSet[newDataSet.length - 1].x
-        const parsedDate = parse(lastLebelTime, "HH:mm", new Date())
+        const parsedDate = parse(lastLebelTime, "yyyy-MM-dd, HH:mm", new Date())
         const newDate = addMinutes(parsedDate, diffMins)
-        const newTimeString = format(newDate, "HH:mm")
+        const newTimeString = format(newDate, "yyyy-MM-dd, HH:mm")
         newTimeStringInt = parseInt(newTimeString.split(':').join(''))
         newDataSet.push({ x: newTimeString, y: null })
         newLabels.push(newTimeString)
@@ -281,22 +292,15 @@ function ModalStream({ chart, handleRemoveChart, isAllHidden, handleSelectTimeZo
             </select>
           </div>
           <div className='chart__config-group'>
-            <label htmlFor="">
-              Start Time
-            </label>
+            <input type="date" value={startDate} onChange={onChange.bind(null, setStartDate)} />
             <input type="time" value={startTime} onChange={onChange.bind(null, setStartTime)} />
           </div>
           <div className='chart__config-group'>
-            <label htmlFor="">
-              End Time
-            </label>
+            <input type="date" value={endDate} onChange={onChange.bind(null, setEndDate)} />
             <input type="time" value={endTime} onChange={onChange.bind(null, setEndTime)} />
           </div>
           <div className='chart__config-group'>
-            <label htmlFor="">
-              Color
-            </label>
-            <input type="color" value={color} onChange={onChange.bind(null, setColor)} />
+            <input className={'color-chart-' + index} type="color" value={color} style={{ ['--after-color-chart-' + index]: color }} onChange={onChange.bind(null, setColor)} />
           </div>
           <button onClick={handleToggleStarted}>
             {actionButtonText}

@@ -21,7 +21,7 @@ function Clock({ timeZone, setIsAllHidden }) {
   return (
     <div className="clock" onClick={setIsAllHidden}>
       {format(new Date(), 'd MMM yyyy')}
-      <span>  -  </span>
+      <span className='transparent'>  --  </span>
       {time}
     </div>
   )

@@ -478,7 +478,7 @@ export async function getKeyData(data) {
     const collectionName = data.key;
 
     const collection = await client.db(baseName).collection(collectionName);
-    const values = await collection.find({ timestamp: { $gt: data.startTimeStamp} }).toArray()
+    const values = await collection.find({ timestamp: { $gt: data.startTimeStamp, $lt: data.endTimeStamp} }).toArray()
 
     return values;
   } catch(err) {

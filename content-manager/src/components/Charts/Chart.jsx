@@ -72,7 +72,7 @@ function ChartElement({config, title, dataSet, labels, lastPoint, prevLastPoint,
       x: {
         type: 'time',
         time: {
-          parser: 'HH:mm',
+          parser: 'yyyy-MM-dd, HH:mm',
           unit: 'minute',
           displayFormats: {
             minute: 'HH:mm'
