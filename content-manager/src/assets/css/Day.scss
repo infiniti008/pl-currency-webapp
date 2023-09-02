@@ -1,14 +1,14 @@
 .day {
-  border-right: 1px solid gainsboro;
+  border: 1px solid gainsboro;
   display: flex;
   flex-direction: column;
-  gap: 1px;
+  gap: 4px;
+  padding: 4px;
+  overflow: hidden;
+  border-radius: 14px;
+  box-shadow: 0 0 10px -6px;
 
   &--current {
-    background-color: #fafafa;
+    box-shadow: #17ff00 0 0 10px -6px;
   }
-}
-
-.day:last-child {
-  border: none;
 }

@@ -21,7 +21,7 @@ function Subscription({subscription}) {
     setCurrentStore(clonedStore)
   }
 
-  return (<div className='subscription' style={{boxShadow: 'inset 0px 0px 6px 0px' + subscription.color}}>
+  return (<div className='subscription' style={{boxShadow: 'inset 0px 0px 10px -6px' + subscription.color}}>
     {subscription.country === 'by' ? <IconFlagBelarus /> : <IconFlagPoland />}
     <IconStories />
     <IconInfo className="subscription__info" onClick={handleClickInfo} />
