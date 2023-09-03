@@ -237,14 +237,14 @@ function ModalStream({ chart, handleRemoveChart, isAllHidden, handleSelectTimeZo
     const diffMins = differenceInMinutes(new Date(data?.[1]?.timestamp), new Date(data?.[0]?.timestamp))
 
     const lastLebelTime = newDataSet[newDataSet.length - 1]?.x || ''
-    const lastLebelTimeInt = parseInt(lastLebelTime.split(':').join(''))
-    const endTimeInt = parseInt(endTime.split(':').join(''))
+    const lastLebelTimeInt = getIntTimeFromLabel(lastLebelTime)
+    const endTimeInt = getIntTimeFromLabel(`${endDate}, ${endTime}`)
     const parsedDate = parse(lastLebelTime, "yyyy-MM-dd, HH:mm", new Date())
 
     if (lastLebelTimeInt < endTimeInt) {
       const newDate = addMinutes(parsedDate, diffMins)
       const newTimeString = format(newDate, "yyyy-MM-dd, HH:mm")
-      let newTimeStringInt = parseInt(newTimeString.split(':').join(''))
+      let newTimeStringInt = getIntTimeFromLabel(newTimeString)
       newDataSet.push({ x: newTimeString, y: null })
       newLabels.push(newTimeString)
 
@@ -253,13 +253,28 @@ function ModalStream({ chart, handleRemoveChart, isAllHidden, handleSelectTimeZo
         const parsedDate = parse(lastLebelTime, "yyyy-MM-dd, HH:mm", new Date())
         const newDate = addMinutes(parsedDate, diffMins)
         const newTimeString = format(newDate, "yyyy-MM-dd, HH:mm")
-        newTimeStringInt = parseInt(newTimeString.split(':').join(''))
+        newTimeStringInt = getIntTimeFromLabel(newTimeString)
         newDataSet.push({ x: newTimeString, y: null })
         newLabels.push(newTimeString)
       }
     }
 
     return [newDataSet, newLabels]
+  }
+
+  function getIntTimeFromLabel(dateTime) {
+    const value = parseInt(
+      format(
+        parse(
+          dateTime,
+          'yyyy-MM-dd, HH:mm',
+          new Date()
+        ),
+        'HHmm'
+      )
+    )
+
+    return value
   }
 
   function prepareNameToChart() {
