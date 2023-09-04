@@ -3,7 +3,7 @@ import CurrentStoreContext from '../contexsts/store';
 import ChartElement from './Charts/Chart';
 import { getKeyData } from '../api/services';
 import { toast } from 'react-toastify';
-import { format, addMinutes, parse, differenceInMinutes, sub } from 'date-fns'
+import { format, addMinutes, parse, differenceInMinutes, sub, setMilliseconds, setSeconds } from 'date-fns'
 import { formatInTimeZone, utcToZonedTime, zonedTimeToUtc } from 'date-fns-tz'
 
 const currentTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -234,7 +234,9 @@ function ModalStream({ chart, handleRemoveChart, isAllHidden, handleSelectTimeZo
       newLabels.push(time)
     })
 
-    const diffMins = differenceInMinutes(new Date(data?.[1]?.timestamp), new Date(data?.[0]?.timestamp))
+    const firstTime = setMilliseconds(setSeconds(new Date(data?.[0]?.timestamp), 0), 0)
+    const secondTime = setMilliseconds(setSeconds(new Date(data?.[1]?.timestamp), 0), 0)
+    const diffMins = differenceInMinutes(secondTime, firstTime)
 
     const lastLebelTime = newDataSet[newDataSet.length - 1]?.x || ''
     const lastLebelTimeInt = getIntTimeFromLabel(lastLebelTime)
