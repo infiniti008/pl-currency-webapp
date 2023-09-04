@@ -1,11 +1,17 @@
+.sheet {
+  padding: 0 4px;
+}
+
 .time-row {
-  border-bottom: 1px solid gainsboro;
   display: grid;
   grid-template-columns: 60px 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-  padding: 1px 0;
+  padding: 2px 0;
+  gap: 4px;
 
   &--current {
-    background-color: #fafafa;
+    & .day {
+      background-color: #e1b3b3;
+    }
   }
 
   &--hidden {
@@ -14,9 +20,16 @@
 }
 
 .time {
-  text-align: center;
-  border-right: 1px solid gainsboro;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  border: 1px solid gainsboro;
   padding: 2px 0;
+  border-radius: 14px;
+  box-shadow: 0 0 10px -6px;
+  font-weight: bold;
+  color: #6487b0;
+  user-select: none;
 
   &--current {
     background-color: #e1b3b3;

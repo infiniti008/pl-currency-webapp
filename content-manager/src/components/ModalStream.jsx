@@ -149,6 +149,7 @@ function ModalStream({ chartsViewNameFromPath }) {
         isAllHidden={isAllHidden}
         handleSelectTimeZone={handleSelectTimeZone}
         handleStartChart={handleStartChart}
+        index={index}
       />
     )
   })
