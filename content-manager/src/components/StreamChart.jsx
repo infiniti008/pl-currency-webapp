@@ -3,16 +3,16 @@ import CurrentStoreContext from '../contexsts/store';
 import ChartElement from './Charts/Chart';
 import { getKeyData } from '../api/services';
 import { toast } from 'react-toastify';
-import { format, addMinutes, parse, differenceInMinutes, sub, setMilliseconds, setSeconds } from 'date-fns'
+import { format, addMinutes, parse, sub } from 'date-fns'
 import { formatInTimeZone, utcToZonedTime, zonedTimeToUtc } from 'date-fns-tz'
 
 const currentTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 let itemsToChart = {}
+const LABELS_DIFF_IN_MINUTES = 5
 
 function ModalStream({ chart, handleRemoveChart, isAllHidden, handleSelectTimeZone, handleStartChart, model, index }) {
   const { currentStore } = useContext(CurrentStoreContext)
   const nowDate = new Date()
-  const todayDate = format(nowDate, 'yyyy-MM-dd')
   const initialEndTime = format(nowDate, 'HH:mm')
   const initialStartTime =  format(sub(nowDate, { hours: 3 }), 'HH:mm');
 
@@ -21,8 +21,6 @@ function ModalStream({ chart, handleRemoveChart, isAllHidden, handleSelectTimeZo
   const [selectedKey, setSelectedKey] = useState('by-moex-usd-tod')
   const [startTime, setStartTime] = useState(initialStartTime)
   const [endTime, setEndTime] = useState(initialEndTime)
-  const [startDate, setStartDate] = useState(todayDate)
-  const [endDate, setEndDate] = useState(todayDate)
   const [isStarted, setIsStarted] = useState(false)
   const [isDataReady, setIsDataReady] = useState(false)
   const [dataSet, setDataSet] = useState([])
@@ -149,8 +147,8 @@ function ModalStream({ chart, handleRemoveChart, isAllHidden, handleSelectTimeZo
     setIsStarted(!isStarted)
   }
 
-  function getTimeStamp(time, date) {
-    let timeStamp = parse(`${date}, ${time}`, "yyyy-MM-dd, HH:mm", new Date())
+  function getTimeStamp(time) {
+    let timeStamp = parse(`${time}`, "HH:mm", new Date())
     timeStamp = zonedTimeToUtc(timeStamp, timeZone);
     timeStamp = utcToZonedTime(timeStamp, currentTimeZone);
     timeStamp = timeStamp.valueOf()
@@ -158,12 +156,12 @@ function ModalStream({ chart, handleRemoveChart, isAllHidden, handleSelectTimeZo
     return timeStamp
   }
 
-  async function fetchData(resetDataSet) {
+  async function fetchData(initialRun) {
     itemsToChart[selectedKey] = []
 
     try {
-      const startTimeStamp = getTimeStamp(startTime, startDate)
-      const endTimeStamp = getTimeStamp(endTime, endDate)
+      const startTimeStamp = getTimeStamp(startTime)
+      const endTimeStamp = getTimeStamp(endTime) + 10000
 
       const request = {
         country: selectedCountry,
@@ -176,10 +174,16 @@ function ModalStream({ chart, handleRemoveChart, isAllHidden, handleSelectTimeZo
       const data = await getKeyData(request)
 
       if (data.length) {
-        prepareNameToChart()
-        const [preparedDataSet, labels] = prepareDataToChart(data)
+        const newLabels = labels.length > 0 ? labels : prepareLabels()
+        
+        if (initialRun) {
+          setLabels(newLabels)
 
-        setLabels(labels)       
+          const name = prepareNameToChart()
+          setTitle(name)
+        }
+        
+        const preparedDataSet = prepareDataToChart(data, newLabels)
 
         const item = preparedDataSet[0]
         itemsToChart[selectedKey] = preparedDataSet
@@ -194,17 +198,19 @@ function ModalStream({ chart, handleRemoveChart, isAllHidden, handleSelectTimeZo
         setDatasetMax(datasetMax)
         setDatasetMin(datasetMin)
 
-        if (resetDataSet) {
+        if (initialRun) {
           const clonedDataSet = preparedDataSet.map(item => {
             return {
               x: item.x,
               y: null
             }
           })
+
           setDataSet(clonedDataSet)
+          
+          setIsDataReady(true)
         }
 
-        setIsDataReady(true)
       } else (
         handleToggleStarted()
       )
@@ -223,66 +229,63 @@ function ModalStream({ chart, handleRemoveChart, isAllHidden, handleSelectTimeZo
     endTime
   }
 
-  function prepareDataToChart(data) {
+  function getIntFromTime(time) {
+    return parseInt(time.split(':').join(''))
+  }
+
+  function prepareLabels() {
+    const newLabels = [startTime]
+    let count = 0
+    const countLimit = 100
+
+    const intOfEndTime = getIntFromTime(endTime)
+    let previousTime = parse(newLabels[newLabels.length - 1], "HH:mm", new Date())
+    let nextTime = format(addMinutes(previousTime, LABELS_DIFF_IN_MINUTES), 'HH:mm')
+    let intOfNextTime = getIntFromTime(nextTime)
+
+    while(count < countLimit && intOfNextTime < intOfEndTime) {
+      previousTime = parse(newLabels[newLabels.length - 1], "HH:mm", new Date())
+      nextTime = format(addMinutes(previousTime, LABELS_DIFF_IN_MINUTES), 'HH:mm')
+      intOfNextTime = getIntFromTime(nextTime)
+
+      newLabels.push(nextTime)
+      count += 1
+    }
+
+    return newLabels
+  }
+
+  function prepareDataToChart(data, newLabels) {
     const newDataSet = []
-    const newLabels = []
 
     data.forEach(item => {
       let time = new Date(item.timestamp)
-      time = formatInTimeZone(time, timeZone, 'yyyy-MM-dd, HH:mm')
+      time = formatInTimeZone(time, timeZone, 'HH:mm')
       newDataSet.push({ x: time, y: item.value })
-      newLabels.push(time)
     })
 
-    const firstTime = setMilliseconds(setSeconds(new Date(data?.[0]?.timestamp), 0), 0)
-    const secondTime = setMilliseconds(setSeconds(new Date(data?.[1]?.timestamp), 0), 0)
-    const diffMins = differenceInMinutes(secondTime, firstTime)
+    const lastDataSetItem = newDataSet[newDataSet.length - 1]
+    const intOfLastDataSetItem = getIntFromTime(lastDataSetItem.x)
+    const intOfEndTime = getIntFromTime(endTime)
 
-    const lastLebelTime = newDataSet[newDataSet.length - 1]?.x || ''
-    const lastLebelTimeInt = getIntTimeFromLabel(lastLebelTime)
-    const endTimeInt = getIntTimeFromLabel(`${endDate}, ${endTime}`)
-    const parsedDate = parse(lastLebelTime, "yyyy-MM-dd, HH:mm", new Date())
-
-    if (lastLebelTimeInt < endTimeInt) {
-      const newDate = addMinutes(parsedDate, diffMins)
-      const newTimeString = format(newDate, "yyyy-MM-dd, HH:mm")
-      let newTimeStringInt = getIntTimeFromLabel(newTimeString)
-      newDataSet.push({ x: newTimeString, y: null })
-      newLabels.push(newTimeString)
-
-      while(newTimeStringInt < endTimeInt) {
-        const lastLebelTime = newDataSet[newDataSet.length - 1].x
-        const parsedDate = parse(lastLebelTime, "yyyy-MM-dd, HH:mm", new Date())
-        const newDate = addMinutes(parsedDate, diffMins)
-        const newTimeString = format(newDate, "yyyy-MM-dd, HH:mm")
-        newTimeStringInt = getIntTimeFromLabel(newTimeString)
-        newDataSet.push({ x: newTimeString, y: null })
-        newLabels.push(newTimeString)
+    newLabels.forEach(labelItem => {
+      const intOfLabelItem = getIntFromTime(labelItem)
+      if (intOfLabelItem > intOfLastDataSetItem && intOfLastDataSetItem <= intOfEndTime) {
+        newDataSet.push({
+          x: labelItem,
+          y: null
+        })
       }
-    }
+    })
 
-    return [newDataSet, newLabels]
-  }
-
-  function getIntTimeFromLabel(dateTime) {
-    const value = parseInt(
-      format(
-        parse(
-          dateTime,
-          'yyyy-MM-dd, HH:mm',
-          new Date()
-        ),
-        'HHmm'
-      )
-    )
-
-    return value
+    return newDataSet
   }
 
   function prepareNameToChart() {
     let name = keysArr.find(item => item.key === selectedKey) || {}
     name = name.currency + ' - ' + name.name
-    setTitle(name)
+    
+    return name
   }
 
   const chartClasses = [
@@ -309,15 +312,19 @@ function ModalStream({ chart, handleRemoveChart, isAllHidden, handleSelectTimeZo
             </select>
           </div>
           <div className='chart__config-group'>
-            <input type="date" value={startDate} onChange={onChange.bind(null, setStartDate)} />
+            <label htmlFor="">
+              Start Time
+            </label>
             <input type="time" value={startTime} onChange={onChange.bind(null, setStartTime)} />
           </div>
           <div className='chart__config-group'>
-            <input type="date" value={endDate} onChange={onChange.bind(null, setEndDate)} />
+            <label htmlFor="">
+              End Time
+            </label>
             <input type="time" value={endTime} onChange={onChange.bind(null, setEndTime)} />
           </div>
           <div className='chart__config-group'>
-            <input className={'color-chart-' + index} type="color" value={color} style={{ ['--after-color-chart-' + index]: color }} onChange={onChange.bind(null, setColor)} />
+            <input type="color" value={color} onChange={onChange.bind(null, setColor)} />
           </div>
           <button onClick={handleToggleStarted}>
             {actionButtonText}
