@@ -1,5 +1,6 @@
 .sheet {
   padding: 0 4px;
+  background-color: #f5f5f5;
 }
 
 .time-row {
@@ -30,6 +31,7 @@
   font-weight: bold;
   color: #6487b0;
   user-select: none;
+  background-color: white;
 
   &--current {
     background-color: #e1b3b3;
