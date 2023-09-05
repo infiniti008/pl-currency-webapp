@@ -324,7 +324,7 @@ function ModalStream({ chart, handleRemoveChart, isAllHidden, handleSelectTimeZo
             <input type="time" value={endTime} onChange={onChange.bind(null, setEndTime)} />
           </div>
           <div className='chart__config-group'>
-            <input type="color" value={color} onChange={onChange.bind(null, setColor)} />
+            <input className={'color-chart-' + index} type="color" value={color} style={{ ['--after-color-chart-' + index]: color }} onChange={onChange.bind(null, setColor)} />
           </div>
           <button onClick={handleToggleStarted}>
             {actionButtonText}
