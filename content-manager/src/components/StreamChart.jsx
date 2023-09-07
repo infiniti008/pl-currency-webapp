@@ -33,6 +33,7 @@ function ModalStream({ chart, handleRemoveChart, isAllHidden, handleSelectTimeZo
   const [colorRGB, setColorRGB] = useState('0, 0, 0')
   const [datasetMin, setDatasetMin] = useState(0)
   const [datasetMax, setDatasetMax] = useState(0)
+  const [selectedPointSize, setSelectedPointSize] = useState('1')
 
   useEffect(() => {
     if (model.selectedKey) {
@@ -41,6 +42,7 @@ function ModalStream({ chart, handleRemoveChart, isAllHidden, handleSelectTimeZo
       setStartTime(model.startTime)
       setEndTime(model.endTime)
       setColor(model.color)
+      setSelectedPointSize(model.selectedPointSize)
       if (model.isAutoRun) {
         setIsStarted(true)
       }
@@ -83,7 +85,8 @@ function ModalStream({ chart, handleRemoveChart, isAllHidden, handleSelectTimeZo
         selectedKey,
         startTime,
         endTime,
-        color
+        color,
+        selectedPointSize
       }
 
       handleStartChart(chart, startedChart)
@@ -304,6 +307,15 @@ function ModalStream({ chart, handleRemoveChart, isAllHidden, handleSelectTimeZo
               <option value="pl">PL</option>
               <option value="by">BY</option>
             </select>
+            <select className='chart__config-select' value={selectedPointSize} onChange={onChange.bind(null, setSelectedPointSize)}>
+              <option value="" disabled>Point</option>
+              <option value="0">0</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+            </select>
           </div>
           <div className='chart__config-group'>
             <select className='chart__config-select' value={selectedKey} onChange={onChange.bind(null, setSelectedKey)}>
@@ -347,6 +359,7 @@ function ModalStream({ chart, handleRemoveChart, isAllHidden, handleSelectTimeZo
             datasetMin={datasetMin}
             datasetMax={datasetMax}
             selectedKey={chart + selectedKey}
+            selectedPointSize={selectedPointSize}
           />
         }
       </div>

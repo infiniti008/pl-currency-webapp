@@ -7,7 +7,7 @@ import { format } from 'date-fns'
 
 Chart.register(...registerables);
 
-function ChartElement({config, title, dataSet, labels, lastPoint, prevLastPoint, colorRGB, datasetMax, datasetMin, selectedKey}) {
+function ChartElement({config, title, dataSet, labels, lastPoint, prevLastPoint, colorRGB, datasetMax, datasetMin, selectedKey, selectedPointSize}) {
   let lastSettetPointToTooltip = null;
   const chartRef = useRef(null);
   const [gradient, setGradient] = useState(null);
@@ -62,7 +62,7 @@ function ChartElement({config, title, dataSet, labels, lastPoint, prevLastPoint,
         borderWidth: 3,
         tension: 0.2,
         // stepped: true,
-        pointRadius: 1,
+        pointRadius: parseInt(selectedPointSize),
         borderColor: `rgba(${colorRGB}, 1)`,
         backgroundColor: gradient,
         showTooltip: true,
