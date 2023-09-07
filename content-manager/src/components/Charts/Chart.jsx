@@ -1,5 +1,5 @@
 import React from 'react';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Line } from 'react-chartjs-2';
 import { Chart, registerables, Tooltip } from 'chart.js';
 import 'chartjs-adapter-date-fns';
@@ -10,6 +10,17 @@ Chart.register(...registerables);
 function ChartElement({config, title, dataSet, labels, lastPoint, prevLastPoint, colorRGB, datasetMax, datasetMin, selectedKey}) {
   let lastSettetPointToTooltip = null;
   const chartRef = useRef(null);
+  const [gradient, setGradient] = useState(null);
+
+  useEffect(() => {
+    if (chartRef.current) {
+      const ctx = chartRef.current.ctx;
+      const gradient = ctx.createLinearGradient(0, 0, 0, 230);
+      gradient.addColorStop(0, `rgba(${colorRGB}, 0.7)`);
+      gradient.addColorStop(1, `rgba(${colorRGB}, 0)`);
+      setGradient(gradient);
+    }
+  }, [chartRef]);
 
   const updateTitle = {
     id: "updateTitle",
@@ -53,7 +64,7 @@ function ChartElement({config, title, dataSet, labels, lastPoint, prevLastPoint,
         // stepped: true,
         pointRadius: 1,
         borderColor: `rgba(${colorRGB}, 1)`,
-        backgroundColor: `rgba(${colorRGB}, 0.2)`,
+        backgroundColor: gradient,
         showTooltip: true,
         fill: true
       }
