@@ -1,7 +1,7 @@
 import { useContext, useState, useEffect } from 'react';
 import CurrentStoreContext from '../contexsts/store';
 import { EventBusContext } from '../contexsts/eventBus';
-import StreamChart from './Charts/RealTimeStreamChart/RealTimeStreamChartWrapper';
+import RealTimeHorizontalStreamChart from './Charts/RealTimeHorizontalStreamChart/RealTimeHorizontalStreamChart';
 import { ToastContainer } from 'react-toastify';
 
 import '../assets/css/ModalStream.scss'
@@ -16,7 +16,8 @@ const initialChartsView = {
   chartsViewName:'',
   isAllHidden: false,
   isAutoRun: true,
-  url: ''
+  url: '',
+  selectedChartTemplate: ''
 }
 
 function ModalStream({ chartsViewNameFromPath }) {
@@ -32,6 +33,7 @@ function ModalStream({ chartsViewNameFromPath }) {
   const [selectedChartsView, setSelectedChartsView] = useState(chartsViewNameFromPath)
   const [loadedChartsView, setLoadedChartsView] = useState(initialChartsView)
   const [availableChartsView, setAvailableChartsView] = useState([])
+  const [selectedChartTemplate, setSelectedChartTemplate] = useState('')
 
   useEffect(() => {
     window.scrollTo({ top: 0 });
@@ -59,6 +61,7 @@ function ModalStream({ chartsViewNameFromPath }) {
       })
       setSelectedChartsView(loadedChartsView.chartsViewName)
       setIsAllHidden(loadedChartsView.isAllHidden)
+      setSelectedChartTemplate(loadedChartsView.selectedChartTemplate)
 
       setCharts(newCharts)
     }
@@ -115,6 +118,10 @@ function ModalStream({ chartsViewNameFromPath }) {
     setSelectedChartsView(event.target.value)
   }
 
+  function handleSelectedChartTemplate(event) {
+    setSelectedChartTemplate(event.target.value)
+  }
+
   async function onClickSaveAll() {
     console.log('onClickSaveAll')
     if (charts.length > 0) {
@@ -134,24 +141,30 @@ function ModalStream({ chartsViewNameFromPath }) {
       const isHrefWithQuestion = href.includes('?')
       const delimiter = isHrefWithQuestion ? '&' : '?'
       data.url = `${href}${delimiter}chartsViewName=${promtData.chartsViewName}`
+      data.selectedChartTemplate = selectedChartTemplate
 
       const response = await saveChartsView(data)
     }
   }
 
   const chartItems = charts.map((chart, index) => {
-    return (
-      <StreamChart
-        chart={chart.name}
-        key={chart.name}
-        model={chart.model}
-        handleRemoveChart={handleRemoveChart.bind(null, index)}
-        isAllHidden={isAllHidden}
-        handleSelectTimeZone={handleSelectTimeZone}
-        handleStartChart={handleStartChart}
-        index={index}
-      />
-    )
+    switch (selectedChartTemplate) {
+      case 'RealTimeHorizontalStreamChart':
+        return (
+          <RealTimeHorizontalStreamChart
+            chart={chart.name}
+            key={chart.name}
+            model={chart.model}
+            handleRemoveChart={handleRemoveChart.bind(null, index)}
+            isAllHidden={isAllHidden}
+            handleSelectTimeZone={handleSelectTimeZone}
+            handleStartChart={handleStartChart}
+            index={index}
+          />
+        )    
+      default:
+        return ''
+    }
   })
 
   const chartsViewOptions = availableChartsView.map(item => {
@@ -160,7 +173,7 @@ function ModalStream({ chartsViewNameFromPath }) {
     )
   })
 
-  const hideText = isAllHidden ? '+' : '<'
+  const hideText = isAllHidden ? 'Expand' : 'Collapse'
 
   return (
     <div className='stream'>
@@ -183,11 +196,15 @@ function ModalStream({ chartsViewNameFromPath }) {
             <button onClick={onClickSaveAll} className='stream__close'>
               Save All
             </button>
+            <select value={selectedChartTemplate} onChange={handleSelectedChartTemplate}>
+              <option disabled value="">Select Charts Template</option>
+              <option value="RealTimeHorizontalStreamChart">Real Time Horizontal Stream Chart</option>
+            </select>
             <select value={selectedChartsView} onChange={handleSelectChartsView}>
               <option disabled value="">Select Charts View</option>
               {chartsViewOptions}
             </select>
-            <button onClick={onClickClose} className='stream__close'>-</button>
+            <button onClick={onClickClose} className='stream__close'>Close</button>
           </div>
         }
         <div className='stream__body'>

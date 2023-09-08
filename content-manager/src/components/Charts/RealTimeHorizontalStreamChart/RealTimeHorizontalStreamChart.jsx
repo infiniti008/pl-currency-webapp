@@ -10,7 +10,7 @@ const currentTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 let itemsToChart = {}
 const LABELS_DIFF_IN_MINUTES = 5
 
-function ModalStream({ chart, handleRemoveChart, isAllHidden, handleSelectTimeZone, handleStartChart, model, index }) {
+function RealTimeHorizontalStreamChart({ chart, handleRemoveChart, isAllHidden, handleSelectTimeZone, handleStartChart, model, index }) {
   const { currentStore } = useContext(CurrentStoreContext)
   const nowDate = new Date()
   const initialEndTime = format(nowDate, 'HH:mm')
@@ -377,4 +377,4 @@ function ModalStream({ chart, handleRemoveChart, isAllHidden, handleSelectTimeZo
   )
 }
 
-export default ModalStream
+export default RealTimeHorizontalStreamChart
