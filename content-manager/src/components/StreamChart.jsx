@@ -105,12 +105,22 @@ function ModalStream({ chart, handleRemoveChart, isAllHidden, handleSelectTimeZo
         const clonedDataSet = [...dataSet]
         const firstEmptyItem = clonedDataSet.find(item => item.y === null)
         if (firstEmptyItem) {
-          const itemToFillByTime = itemsToChart[selectedKey]?.find(item => item.x === firstEmptyItem.x && item.y !== null)
+          
+          const filteredData = itemsToChart[selectedKey].filter((item) => {
+            if (getIntFromTime(firstEmptyItem.x) <= getIntFromTime(item.x) && item.y !== null) {
+              return true
+            }
+
+            return false
+          })
+
+          const itemToFillByTime = filteredData[0]
+
           if (itemToFillByTime) {
             firstEmptyItem.y = itemToFillByTime.y
-            const nextAfterEmpty = clonedDataSet.indexOf(firstEmptyItem)
-            if (clonedDataSet[nextAfterEmpty + 1]) {
-              clonedDataSet[nextAfterEmpty + 1].y = null
+            const indexOfNextAfterEmpty = clonedDataSet.indexOf(firstEmptyItem)
+            if (clonedDataSet[indexOfNextAfterEmpty + 1]) {
+              clonedDataSet[indexOfNextAfterEmpty + 1].y = null
             } else {
               clonedDataSet[0].y = null
             }
