@@ -2,7 +2,7 @@ import { useContext, useState, useEffect } from 'react';
 import CurrentStoreContext from '../contexsts/store';
 import { EventBusContext } from '../contexsts/eventBus';
 import RealTimeHorizontalStreamChart from './Charts/RealTimeHorizontalStreamChart/RealTimeHorizontalStreamChart';
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 
 import '../assets/css/ModalStream.scss'
 import Clock from './ui/Clock';
@@ -122,6 +122,15 @@ function ModalStream({ chartsViewNameFromPath }) {
     setSelectedChartTemplate(event.target.value)
   }
 
+  async function handleOnclickUrl() {
+    try {
+      await navigator.clipboard.writeText(loadedChartsView.url);
+      toast.info('URL copied to clipboard: ' + loadedChartsView.url)
+    } catch (err) {
+      console.error('Error in copying URL: ', err);
+    }
+  }
+
   async function onClickSaveAll() {
     console.log('onClickSaveAll')
     if (charts.length > 0) {
@@ -196,14 +205,15 @@ function ModalStream({ chartsViewNameFromPath }) {
             <button onClick={onClickSaveAll} className='stream__close'>
               Save All
             </button>
-            <select value={selectedChartTemplate} onChange={handleSelectedChartTemplate}>
+            <select className='stream__select' value={selectedChartTemplate} onChange={handleSelectedChartTemplate}>
               <option disabled value="">Select Charts Template</option>
               <option value="RealTimeHorizontalStreamChart">Real Time Horizontal Stream Chart</option>
             </select>
-            <select value={selectedChartsView} onChange={handleSelectChartsView}>
+            <select className='stream__select' value={selectedChartsView} onChange={handleSelectChartsView}>
               <option disabled value="">Select Charts View</option>
               {chartsViewOptions}
             </select>
+            <button onClick={handleOnclickUrl} className='stream__close'>URL</button>
             <button onClick={onClickClose} className='stream__close'>Close</button>
           </div>
         }
