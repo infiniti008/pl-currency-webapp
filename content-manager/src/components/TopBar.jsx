@@ -47,7 +47,7 @@ function TopBar() {
 
   function onClickOpenStream() {
     const clonedStore = {...currentStore}
-    clonedStore.isStreamModalOpened = !clonedStore.isStreamModalOpened
+    clonedStore.isModalChartsOpened = !clonedStore.isModalChartsOpened
     setCurrentStore(clonedStore)
   }
 

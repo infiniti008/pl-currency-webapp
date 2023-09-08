@@ -1,7 +1,7 @@
 import { useContext, useState, useEffect } from 'react';
-import CurrentStoreContext from '../contexsts/store';
-import ChartElement from './Charts/Chart';
-import { getKeyData } from '../api/services';
+import CurrentStoreContext from '../../../contexsts/store';
+import ChartElement from './Chart';
+import { getKeyData } from '../../../api/services';
 import { toast } from 'react-toastify';
 import { format, addMinutes, parse, sub } from 'date-fns'
 import { formatInTimeZone, utcToZonedTime, zonedTimeToUtc } from 'date-fns-tz'

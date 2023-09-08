@@ -1,7 +1,7 @@
 import { useContext, useState, useEffect } from 'react';
 import CurrentStoreContext from '../contexsts/store';
-import { EventBusContext } from './../contexsts/eventBus';
-import StreamChart from './StreamChart';
+import { EventBusContext } from '../contexsts/eventBus';
+import StreamChart from './Charts/RealTimeStreamChart/RealTimeStreamChartWrapper';
 import { ToastContainer } from 'react-toastify';
 
 import '../assets/css/ModalStream.scss'
@@ -81,7 +81,7 @@ function ModalStream({ chartsViewNameFromPath }) {
 
   function onClickClose() {
     const clonedStore = {...currentStore}
-    clonedStore.isStreamModalOpened = !currentStore?.isStreamModalOpened
+    clonedStore.isModalChartsOpened = !currentStore?.isModalChartsOpened
 
     setCurrentStore(clonedStore)
 

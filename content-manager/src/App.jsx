@@ -4,7 +4,7 @@ import Sheet from './components/Sheet.jsx';
 import TopBar from './components/TopBar.jsx';
 import ModalSettings from './components/ModalSettings'
 import ModalSubscription from './components/ModalSubscription'
-import ModalStream from './components/ModalStream'
+import ModalStream from './components/ModalCharts'
 import CurrentStoreContext from './contexsts/store';
 
 import { EventBusProvider } from './contexsts/eventBus';
@@ -20,7 +20,7 @@ function App() {
     country: 'all',
     generatedPhotoName: null,
     isEmptyRowsCollapsed: false,
-    isStreamModalOpened: false,
+    isModalChartsOpened: false,
     appSettings: {
       appSettings: {}
     }
@@ -54,14 +54,14 @@ function App() {
       return acc
     }, {})
 
-    let isStreamModalOpened = false
+    let isModalChartsOpened = false
 
     if (searchMap.chartsViewName) {
       setChartsViewNameFromPath(searchMap.chartsViewName)
-      isStreamModalOpened = true
+      isModalChartsOpened = true
     }
 
-    fetchAppSettings({isStreamModalOpened})
+    fetchAppSettings({isModalChartsOpened})
 
     if (!Object.keys(searchMap).some(searchKey => keysToDisableDisplayingSheet.includes(searchKey))) {
       setShowSheet(true)
@@ -80,7 +80,7 @@ function App() {
         {showSheet && <Sheet /> }
         {currentStore.isSettingsOpen && <ModalSettings />}
         {currentStore.isModalSubscriptionOpen && <ModalSubscription />}
-        {currentStore.isStreamModalOpened && <ModalStream chartsViewNameFromPath={chartsViewNameFromPath} />}
+        {currentStore.isModalChartsOpened && <ModalStream chartsViewNameFromPath={chartsViewNameFromPath} />}
       </CurrentStoreContext.Provider>
     </EventBusProvider>
   )
