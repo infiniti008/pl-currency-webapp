@@ -266,3 +266,15 @@ export async function getChartsView(name) {
     return null;
   }
 }
+
+export async function removeChartsView(name) {
+  try {
+    const mode = IS_DEV_MODE ? 'dev' : 'prod'
+    const response = await axios.delete(`${SERVER_URL}/api/manage-charts-view/${mode}/${name}`)
+    return response.data;
+  } catch(err) {
+    console.log(err);
+    return null;
+  }
+}
+

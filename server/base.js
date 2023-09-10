@@ -527,3 +527,22 @@ export async function getChartView(mode, name) {
     return false;
   }
 }
+
+export async function removeChartView(mode, chartsViewName) {
+  try {
+    const baseName = mode === 'dev' ? 'currency_app_test' : 'currency_app';
+    const collectionName = 'chart-views';
+
+    const collection = await client.db(baseName).collection(collectionName);
+    const filter = { chartsViewName: { $eq: chartsViewName } };
+    
+    await collection.deleteOne(filter)
+
+    return true;
+  } catch(err) {
+    console.log(err)
+    return false;
+  }
+}
+
+removeChartView

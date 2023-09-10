@@ -6,7 +6,7 @@ import { ToastContainer, toast } from 'react-toastify';
 
 import '../assets/css/ModalStream.scss'
 import Clock from './ui/Clock';
-import { saveChartsView, getChartsView } from '../api/services';
+import { saveChartsView, getChartsView, removeChartsView } from '../api/services';
 import displaySaveChartViewsPrompt from './ui/ToastSaveChartsView';
 import Copyright from './ui/Copyright';
 import Logo from './ui/Logo';
@@ -35,20 +35,20 @@ function ModalStream({ chartsViewNameFromPath }) {
   const [availableChartsView, setAvailableChartsView] = useState([])
   const [selectedChartTemplate, setSelectedChartTemplate] = useState('')
 
+  async function fetchAvailableChartsViews() {
+    try {
+      const chartsViews = await getChartsView('all')
+      if (chartsViews) {
+        setAvailableChartsView(chartsViews)
+      }
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
   useEffect(() => {
     window.scrollTo({ top: 0 });
     document.body.style.overflow = 'hidden'
-
-    async function fetchAvailableChartsViews() {
-      try {
-        const chartsViews = await getChartsView('all')
-        if (chartsViews) {
-          setAvailableChartsView(chartsViews)
-        }
-      } catch (err) {
-        console.log(err)
-      }
-    }
 
     fetchAvailableChartsViews()
   }, [])
@@ -94,10 +94,14 @@ function ModalStream({ chartsViewNameFromPath }) {
   }
 
   function onClickAddKey() {
-    const clonedCharts = [...charts]
-    clonedCharts.push({name: 'chart-' + new Date().valueOf(), model: {}})
+    if (selectedChartTemplate) {
+      const clonedCharts = [...charts]
+      clonedCharts.push({name: 'chart-' + new Date().valueOf(), model: {}})
 
-    setCharts(clonedCharts)
+      setCharts(clonedCharts)
+    } else {
+      toast.error('Please select Chart Template First')
+    }
   }
 
   function handleRemoveChart(indexToRemove) {
@@ -120,6 +124,20 @@ function ModalStream({ chartsViewNameFromPath }) {
 
   function handleSelectedChartTemplate(event) {
     setSelectedChartTemplate(event.target.value)
+  }
+
+  async function handleOnclickRemove() {
+    try {
+      const response = await removeChartsView(selectedChartsView)
+      if (response) {
+        toast.success(`Chatrs View ${selectedChartsView} Removed`)
+        setSelectedChartsView('')
+        fetchAvailableChartsViews()
+      }
+      console.log(response)
+    } catch(err) {
+      console.log(err)
+    }
   }
 
   async function handleOnclickUrl() {
@@ -214,6 +232,7 @@ function ModalStream({ chartsViewNameFromPath }) {
               {chartsViewOptions}
             </select>
             <button onClick={handleOnclickUrl} className='stream__close'>URL</button>
+            <button onClick={handleOnclickRemove} className='stream__close'>Remove</button>
             <button onClick={onClickClose} className='stream__close'>Close</button>
           </div>
         }

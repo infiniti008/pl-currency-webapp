@@ -36,7 +36,8 @@ import {
   getKeys,
   getKeyData,
   setChartView,
-  getChartView
+  getChartView,
+  removeChartView
 } from './server/base.js';
 
 const app = express();
@@ -341,6 +342,16 @@ app.post('/api/manage-charts-view/:mode', async (req, res) => {
 app.get('/api/manage-charts-view/:mode/:name', async (req, res) => {
   try {
     const chartsView = await getChartView(req.params.mode, req.params.name);
+    res.json(chartsView);
+  } catch (err) {
+    console.log(err);
+    res.json({ status: false });
+  }
+});
+
+app.delete('/api/manage-charts-view/:mode/:name', async (req, res) => {
+  try {
+    const chartsView = await removeChartView(req.params.mode, req.params.name);
     res.json(chartsView);
   } catch (err) {
     console.log(err);
