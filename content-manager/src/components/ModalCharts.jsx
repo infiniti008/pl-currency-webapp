@@ -33,7 +33,7 @@ function ModalStream({ chartsViewNameFromPath }) {
   const [selectedChartsView, setSelectedChartsView] = useState(chartsViewNameFromPath)
   const [loadedChartsView, setLoadedChartsView] = useState(initialChartsView)
   const [availableChartsView, setAvailableChartsView] = useState([])
-  const [selectedChartTemplate, setSelectedChartTemplate] = useState('')
+  const [selectedChartTemplate, setSelectedChartTemplate] = useState('RealTimeHorizontalStreamChart')
 
   async function fetchAvailableChartsViews() {
     try {

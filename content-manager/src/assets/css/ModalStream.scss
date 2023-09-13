@@ -57,6 +57,7 @@
     grid-template-columns: 230px 1fr;
     padding: 10px;
     gap: 10px;
+    position: relative;
 
     &--full {
       grid-template-columns: 1fr;

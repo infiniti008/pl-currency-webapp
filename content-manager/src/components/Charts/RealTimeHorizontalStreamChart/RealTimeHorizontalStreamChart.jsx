@@ -1,6 +1,7 @@
 import { useContext, useState, useEffect } from 'react';
 import CurrentStoreContext from '../../../contexsts/store';
 import ChartElement from './Chart';
+import CustomTooltip from './CustomTooltip';
 import { getKeyData } from '../../../api/services';
 import { toast } from 'react-toastify';
 import { format, addMinutes, parse, sub } from 'date-fns'
@@ -26,7 +27,9 @@ function RealTimeHorizontalStreamChart({ chart, handleRemoveChart, isAllHidden, 
   const [dataSet, setDataSet] = useState([])
   const [labels, setLabels] = useState([])
   const [title, setTitle] = useState('')
+  const [currencyKey, setCurrencyKey] = useState('')
   const [timeZone, setTimeZone] = useState('')
+  const [firstPoint, setFirstPoint] = useState({})
   const [lastPoint, setLastPoint] = useState({})
   const [prevLastPoint, setPrevLastPoint] = useState({})
   const [color, setColor] = useState('#84c8ff')
@@ -34,6 +37,7 @@ function RealTimeHorizontalStreamChart({ chart, handleRemoveChart, isAllHidden, 
   const [datasetMin, setDatasetMin] = useState(0)
   const [datasetMax, setDatasetMax] = useState(0)
   const [selectedPointSize, setSelectedPointSize] = useState('1')
+  const [currentSettedPoint, setCurrentSettedPoint] = useState({}) 
 
   useEffect(() => {
     if (model.selectedKey) {
@@ -105,7 +109,6 @@ function RealTimeHorizontalStreamChart({ chart, handleRemoveChart, isAllHidden, 
         const clonedDataSet = [...dataSet]
         const firstEmptyItem = clonedDataSet.find(item => item.y === null)
         if (firstEmptyItem) {
-          
           const filteredData = itemsToChart[selectedKey].filter((item) => {
             if (getIntFromTime(firstEmptyItem.x) <= getIntFromTime(item.x) && item.y !== null) {
               return true
@@ -117,25 +120,22 @@ function RealTimeHorizontalStreamChart({ chart, handleRemoveChart, isAllHidden, 
           const itemToFillByTime = filteredData[0]
 
           if (itemToFillByTime) {
-            firstEmptyItem.y = itemToFillByTime.y
-            const indexOfNextAfterEmpty = clonedDataSet.indexOf(firstEmptyItem)
-            if (clonedDataSet[indexOfNextAfterEmpty + 1]) {
-              clonedDataSet[indexOfNextAfterEmpty + 1].y = null
-            } else {
-              clonedDataSet[0].y = null
+            const nextItemToFillByTime = filteredData[1]
+            const indexOfFirstEmpty = clonedDataSet.indexOf(firstEmptyItem)
+            clonedDataSet[indexOfFirstEmpty].y = itemToFillByTime.y
+            setCurrentSettedPoint(clonedDataSet[indexOfFirstEmpty])
+            if (nextItemToFillByTime) {
+              clonedDataSet[indexOfFirstEmpty + 1] = { x: nextItemToFillByTime.x, y: null }
             }
-            setDataSet(clonedDataSet)
-          } else {
-            clonedDataSet[0].y = null
-            // clonedDataSet[1].y = null
-            setDataSet(clonedDataSet)
 
-            fetchData(false)
+            setDataSet(clonedDataSet)
           }
         } else {
-          console.log(3)
+          clonedDataSet[0].y = null
+          setDataSet(clonedDataSet)
+          fetchData(false)
         }
-      }, 800)
+      }, 1000)
     }
   }, [dataSet])
 
@@ -198,26 +198,27 @@ function RealTimeHorizontalStreamChart({ chart, handleRemoveChart, isAllHidden, 
         
         const preparedDataSet = prepareDataToChart(data, newLabels)
 
-        const item = preparedDataSet[0]
         itemsToChart[selectedKey] = preparedDataSet
 
-        const lastOne = preparedDataSet.findLast(item => item.y ? true : false) || item
-        const prevLastOne = preparedDataSet.findLast(item => item.y && item.y !== lastOne.y ? true : false) || item
+        const firstOne = preparedDataSet[0]
+        const lastOne = preparedDataSet.findLast(item => item.y ? true : false) || firstOne
+        const prevLastOne = preparedDataSet.findLast(item => item.y && item.y !== lastOne.y ? true : false) || firstOne
         const datasetMin = Math.min(...preparedDataSet.filter(item => item.y !== null).map(item => item.y))
         const datasetMax = Math.max(...preparedDataSet.filter(item => item.y !== null).map(item => item.y))
 
+        setFirstPoint(firstOne)
         setLastPoint(lastOne)
         setPrevLastPoint(prevLastOne)
         setDatasetMax(datasetMax)
         setDatasetMin(datasetMin)
 
         if (initialRun) {
-          const clonedDataSet = preparedDataSet.map(item => {
-            return {
-              x: item.x,
+          const clonedDataSet = [
+            {
+              x: preparedDataSet[0].x,
               y: null
             }
-          })
+          ]
 
           setDataSet(clonedDataSet)
           
@@ -277,26 +278,13 @@ function RealTimeHorizontalStreamChart({ chart, handleRemoveChart, isAllHidden, 
       newDataSet.push({ x: time, y: item.value })
     })
 
-    const lastDataSetItem = newDataSet[newDataSet.length - 1]
-    const intOfLastDataSetItem = getIntFromTime(lastDataSetItem.x)
-    const intOfEndTime = getIntFromTime(endTime)
-
-    newLabels.forEach(labelItem => {
-      const intOfLabelItem = getIntFromTime(labelItem)
-      if (intOfLabelItem > intOfLastDataSetItem && intOfLastDataSetItem <= intOfEndTime) {
-        newDataSet.push({
-          x: labelItem,
-          y: null
-        })
-      }
-    })
-
     return newDataSet
   }
 
   function prepareNameToChart() {
-    let name = keysArr.find(item => item.key === selectedKey) || {}
-    name = name.currency + ' - ' + name.name
+    const definedCurrencyKey = keysArr.find(item => item.key === selectedKey) || {}
+    const name = definedCurrencyKey.currency + ' - ' + definedCurrencyKey.name
+    setCurrencyKey(definedCurrencyKey)
     
     return name
   }
@@ -373,6 +361,24 @@ function RealTimeHorizontalStreamChart({ chart, handleRemoveChart, isAllHidden, 
           />
         }
       </div>
+      {isDataReady && 
+        <CustomTooltip 
+          key={chart + 'chartElementTooltip-' + selectedKey}
+          config={config}
+          currencyKey={currencyKey}
+          dataSet={dataSet}
+          firstPoint={firstPoint}
+          labels={labels}
+          lastPoint={lastPoint}
+          prevLastPoint={prevLastPoint}
+          colorRGB={colorRGB}
+          datasetMin={datasetMin}
+          datasetMax={datasetMax}
+          selectedKey={chart + selectedKey}
+          selectedPointSize={selectedPointSize}
+          currentSettedPoint={currentSettedPoint}
+        />
+      }
     </div>
   )
 }
