@@ -35,11 +35,15 @@
           }
 
           &--up {
-            color: #5D9C59;
+            color: #119e00;
           }
 
           &--down {
             color: #FD4650;
+          }
+
+          &--plate {
+            color: #7fb3ff;
           }
 
           &--start-end-diff {
@@ -64,6 +68,8 @@
 
           &--current {
             font-weight: bold;
+            font-size: 20px;
+            line-height: 30px;
           }
         }
 

@@ -1,19 +1,20 @@
 import '../../../assets/css/Tooltipe.scss'
 
-function CustomTooltip({config, currencyKey, dataSet, labels, firstPoint, lastPoint, prevLastPoint, colorRGB, datasetMax, datasetMin, selectedKey, selectedPointSize, currentSettedPoint}) {
+function CustomTooltip({ currencyKey, dataSet, firstPoint, lastPoint, colorRGB, currentSettedPoint}) {
 
   let currentIndex = dataSet.indexOf(currentSettedPoint)
   const currentPoint = currentSettedPoint
   const beforeCurrent = dataSet?.[currentIndex - 1] || dataSet?.[0]
+
   const currentDiff = (currentPoint?.y - beforeCurrent?.y).toFixed(4)
-  const currentDiffDirection = currentDiff >= 0 ? 'up' : 'down'
-  const currentDiffText = currentDiff >= 0 ? `+${currentDiff}` : currentDiff
-  const currentDiffTitle = currentDiff >= 0 ? '⬆' : '⬇'
+  const currentDiffDirection = currentDiff > 0 ? 'up' : currentDiff < 0 ? 'down' : 'plate'
+  const currentDiffText = currentDiff > 0 ? `+${currentDiff}` : currentDiff
+  const currentDiffTitle = currentDiff > 0 ? '⬆' : currentDiff < 0 ? '⬇' : ''
 
   const startEndDiff = (lastPoint?.y - firstPoint?.y).toFixed(4)
-  const startEndDiffDirection = startEndDiff >= 0 ? 'up' : 'down'
-  const startEndDiffText = startEndDiff >= 0 ? `+${startEndDiff}` : startEndDiff
-  const startEndDiffTitle = startEndDiff >= 0 ? '⬆' : '⬇'
+  const startEndDiffDirection = startEndDiff >= 0 ? 'up' : startEndDiff < 0 ? 'down' : 'plate'
+  const startEndDiffText = startEndDiff > 0 ? `+${startEndDiff}` : startEndDiff
+  const startEndDiffTitle = startEndDiff >= 0 ? '⬆' : startEndDiff < 0 ? '⬇' : ''
 
   return (
     <div className="tooltip-wrapper">
