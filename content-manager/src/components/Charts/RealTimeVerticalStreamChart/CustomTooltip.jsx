@@ -19,7 +19,11 @@ function CustomTooltip({ currencyKey, dataSet, firstPoint, lastPoint, colorRGB, 
   function getCurrencyHTML(value, addDirection) {
     if (typeof value === 'number') {
       const valueToFixed = value?.toFixed(4) || ''
-      const valueWithDirection = addDirection && value > 0 ? `+${valueToFixed}` : valueToFixed
+      let valueWithDirection = valueToFixed
+
+      if (addDirection) {
+        valueWithDirection = value > 0 ? `+${valueToFixed}` : value < 0 ? valueToFixed : ` ${valueToFixed}`
+      }
 
       const splittedValue = valueWithDirection.split('')
       const firstPart = splittedValue.slice(0, -2).map(char => thinChars.includes(char) ? `<tc>${char}</tc>` : `<wc>${char}</wc>`)
@@ -47,15 +51,24 @@ function CustomTooltip({ currencyKey, dataSet, firstPoint, lastPoint, colorRGB, 
   return (
     <div className={$s['tooltip-wrapper']}>
       <div className={$s['tooltip__real-time--horizontal']}>
-        <div className={$s['tooltip__group--left']}>
 
+        <div className={$s['tooltip__group--center']}>
+          <span className={$s['tooltip__title--label']} style={{color: currencyKey.bankColor}}>
+            {currencyKey.name}
+          </span>
+          <span className={$s['tooltip__title--value']} style={{color: `rgb(${colorRGB})`}}>
+            {currencyKey.currency} / {currencyKey.currencyBase}
+          </span>
+        </div>
+
+        <div className={$s['tooltip__group--left']}>
             <span 
               className={[$s['tooltip__item--time'], $s['tooltip__item--start-time']].join(' ')}
               dangerouslySetInnerHTML={{ __html: getTimeHTML(firstPoint.x) }}
             />
 
             <span 
-              className='tooltip__item--start-value'
+              className={$s['tooltip__item--start-value']}
               dangerouslySetInnerHTML={{ __html: getCurrencyHTML(firstPoint.y, false) }}
             />
 
@@ -79,16 +92,6 @@ function CustomTooltip({ currencyKey, dataSet, firstPoint, lastPoint, colorRGB, 
               className={[$s['tooltip__item--time'], $s['tooltip__item--end-time']].join(' ')}
               dangerouslySetInnerHTML={{ __html: getTimeHTML(lastPoint.x) }}
             />
-
-        </div>
-
-        <div className={$s['tooltip__group--center']}>
-          <span className={$s['tooltip__title--label']} style={{color: currencyKey.bankColor}}>
-            {currencyKey.name}
-          </span>
-          <span className={$s['tooltip__title--value']} style={{color: `rgb(${colorRGB})`}}>
-            {currencyKey.currency} / {currencyKey.currencyBase}
-          </span>
         </div>
 
         <div className={$s['tooltip__group--right']}>

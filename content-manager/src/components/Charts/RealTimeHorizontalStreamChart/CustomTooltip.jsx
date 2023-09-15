@@ -19,7 +19,11 @@ function CustomTooltip({ currencyKey, dataSet, firstPoint, lastPoint, colorRGB, 
   function getCurrencyHTML(value, addDirection) {
     if (typeof value === 'number') {
       const valueToFixed = value?.toFixed(4) || ''
-      const valueWithDirection = addDirection && value > 0 ? `+${valueToFixed}` : valueToFixed
+      let valueWithDirection = valueToFixed
+
+      if (addDirection) {
+        valueWithDirection = value > 0 ? `+${valueToFixed}` : value < 0 ? valueToFixed : ` ${valueToFixed}`
+      }
 
       const splittedValue = valueWithDirection.split('')
       const firstPart = splittedValue.slice(0, -2).map(char => thinChars.includes(char) ? `<tc>${char}</tc>` : `<wc>${char}</wc>`)

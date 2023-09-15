@@ -14,36 +14,41 @@
     &--horizontal {
       display: grid;
       height: 100%;
-      grid-template-columns: 1fr 450px 1fr;
+      grid-template-rows: 100px 100px 100px;
+      gap: 10px;
 
       .tooltip {
 
         &__group {
           &--left {
             display: flex;
-            justify-content: start;
+            justify-content: space-between;
             padding: 0 10px;
             align-items: center;
             gap: 10px;
             color: #B9B4C7;
-            font-size: 30px;
+            font-size: 50px;
+            line-height: 50px;
             font-weight: bold;
+            background-color: #fefefd;
+            filter: drop-shadow(0px 1px 3px lightgrey);
+            border-radius: 10px;
 
             & wc {
               display: inline-block;
-              width: 16px;
+              width: 28px;
             }
 
             & tc {
               display: inline-block;
-              width: 8px;
+              width: 12px;
             }
           }
 
           &--center {
             padding: 0 6px;
             font-weight: bold;
-            font-size: 22px;
+            font-size: 42px;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -57,22 +62,27 @@
 
           &--right {
             display: flex;
-            justify-content: space-around;
+            justify-content: space-between;
             padding: 0 10px;
             align-items: center;
             gap: 10px;
             color: #B9B4C7;
-            font-size: 46px;
+            font-size: 80px;
+            line-height: 80px;
             font-weight: bold;
+            background-color: #fefefd;
+            filter: drop-shadow(0px 1px 3px lightgrey);
+            border-radius: 10px;
+            
 
             & wc {
               display: inline-block;
-              width: 26px;
+              width: 42px;
             }
 
             & tc {
               display: inline-block;
-              width: 10px;
+              width: 20px;
             }
           }
 
@@ -104,27 +114,27 @@
           }
 
           &--arrow  {
-            font-size: 40px;
+            font-size: 90px;
             font-weight: bold;
-            width: 40px;
+            width: 90px;
             text-align: center;
           }
 
           &--start-time  {
-            width: 90px;
+            // width: 90px;
             color: #26577C;
 
             &::after {
               content: '|';
               position: relative;
-              left: 8px;
+              left: 12px;
               top: -2px;
               color: #E55604;
             }
           }
 
           &--start-value {
-            width: 140px;
+            // width: 140px;
             text-align: start;
 
             em {
@@ -134,12 +144,12 @@
           }
 
           &--start-end-diff {
-            width: 130px;
+            // width: 130px;
             text-align: start;
           }
 
           &--end-value {
-            width: 140px;
+            // width: 140px;
             text-align: end;
             
             em {
@@ -148,30 +158,30 @@
           }
 
           &--end-time  {
-            width: 90px;
+            // width: 90px;
             color: #E55604;
 
             &::before {
               content: '|';
               position: relative;
-              left: -8px;
+              left: -10px;
               top: -2px;
               color: #26577C;
             }
           }
 
           &--current-time  {
-            width: 130px;
+            // width: 200px;
             color: #A2678A;
           }
 
           &--current-diff-text {
-            width: 174px;
+            // width: 250px;
             text-align: end;
           }
 
           &--current-value {
-            min-width: 210px;
+            // min-width: 380px;
             text-align: end;
           }
         }

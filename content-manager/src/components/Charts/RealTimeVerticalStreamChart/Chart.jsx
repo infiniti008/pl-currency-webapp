@@ -14,7 +14,7 @@ function ChartElement({dataSet, labels, colorRGB, datasetMax, datasetMin, select
   useEffect(() => {
     if (chartRef.current) {
       const ctx = chartRef.current.ctx;
-      const gradient = ctx.createLinearGradient(0, 0, 0, 230);
+      const gradient = ctx.createLinearGradient(0, 0, 0, 130);
       gradient.addColorStop(0, `rgba(${colorRGB}, 0.7)`);
       gradient.addColorStop(1, `rgba(${colorRGB}, 0)`);
       setGradient(gradient);
@@ -26,7 +26,7 @@ function ChartElement({dataSet, labels, colorRGB, datasetMax, datasetMin, select
     datasets: [
       {
         data: dataSet,
-        borderWidth: 3,
+        borderWidth: 5,
         tension: 0.2,
         // stepped: true,
         pointRadius: parseInt(selectedPointSize),
@@ -45,7 +45,12 @@ function ChartElement({dataSet, labels, colorRGB, datasetMax, datasetMin, select
       y: {
         beginAtZero: false,
         suggestedMin: datasetMin,
-        suggestedMax: datasetMax, 
+        suggestedMax: datasetMax,
+        ticks: {
+          font: {
+            size: 30  // sets font size of x-axis labels
+          }
+        }
       },
       x: {
         type: 'time',
@@ -55,12 +60,17 @@ function ChartElement({dataSet, labels, colorRGB, datasetMax, datasetMin, select
           displayFormats: {
             minute: 'HH:mm'
           }
+        },
+        ticks: {
+          font: {
+            size: 30  // sets font size of x-axis labels
+          }
         }
       }
     },
     layout: {
       padding: {
-        top: 60
+        top: 330
       }
     },
     plugins: {

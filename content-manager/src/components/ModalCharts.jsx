@@ -215,15 +215,21 @@ function ModalStream({ chartsViewNameFromPath }) {
   })
 
   const hideText = isAllHidden ? 'Expand' : 'Collapse'
+  const isCopyrightInline = selectedChartTemplate === 'RealTimeVerticalStreamChart'
+
+  const headerClasses = [
+    'stream__header',
+    selectedChartTemplate === 'RealTimeVerticalStreamChart' ? 'stream__header--expanded' : ''
+  ].join(' ')
 
   return (
     <div className='stream'>
       <div className='stream__container'>
         { isAllHidden &&
-          <div className='stream__header'>
+          <div className={headerClasses}>
             <Logo />
             <Clock timeZone={timeZone} setIsAllHidden={setIsAllHidden.bind(null, false)} />
-            <Copyright />
+            <Copyright isInline={isCopyrightInline}/>
           </div>
         }
         {!isAllHidden && 
