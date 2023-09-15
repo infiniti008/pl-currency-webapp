@@ -12,7 +12,7 @@ const currentTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 let itemsToChart = {}
 const LABELS_DIFF_IN_MINUTES = 5
 
-function RealTimeHorizontalStreamChart({ chart, handleRemoveChart, isAllHidden, handleSelectTimeZone, handleStartChart, model, index }) {
+function RealTimeVerticalStreamChart({ chart, handleRemoveChart, isAllHidden, handleSelectTimeZone, handleStartChart, model, index }) {
   const { currentStore } = useContext(CurrentStoreContext)
   const nowDate = new Date()
   const initialEndTime = format(nowDate, 'HH:mm')
@@ -384,4 +384,4 @@ function RealTimeHorizontalStreamChart({ chart, handleRemoveChart, isAllHidden, 
   )
 }
 
-export default RealTimeHorizontalStreamChart
+export default RealTimeVerticalStreamChart

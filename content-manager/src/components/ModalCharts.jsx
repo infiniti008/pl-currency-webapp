@@ -2,6 +2,7 @@ import { useContext, useState, useEffect } from 'react';
 import CurrentStoreContext from '../contexsts/store';
 import { EventBusContext } from '../contexsts/eventBus';
 import RealTimeHorizontalStreamChart from './Charts/RealTimeHorizontalStreamChart/RealTimeHorizontalStreamChart';
+import RealTimeVerticalStreamChart from './Charts/RealTimeVerticalStreamChart/RealTimeVerticalStreamChart';
 import { ToastContainer, toast } from 'react-toastify';
 
 import '../assets/css/ModalStream.scss'
@@ -188,7 +189,20 @@ function ModalStream({ chartsViewNameFromPath }) {
             handleStartChart={handleStartChart}
             index={index}
           />
-        )    
+        )
+      case 'RealTimeVerticalStreamChart':
+        return (
+          <RealTimeVerticalStreamChart
+            chart={chart.name}
+            key={chart.name}
+            model={chart.model}
+            handleRemoveChart={handleRemoveChart.bind(null, index)}
+            isAllHidden={isAllHidden}
+            handleSelectTimeZone={handleSelectTimeZone}
+            handleStartChart={handleStartChart}
+            index={index}
+          />
+        )   
       default:
         return ''
     }
@@ -226,6 +240,7 @@ function ModalStream({ chartsViewNameFromPath }) {
             <select className='stream__select' value={selectedChartTemplate} onChange={handleSelectedChartTemplate}>
               <option disabled value="">Select Charts Template</option>
               <option value="RealTimeHorizontalStreamChart">Real Time Horizontal Stream Chart</option>
+              <option value="RealTimeVerticalStreamChart">Real Time Vertical Stream Chart</option>
             </select>
             <select className='stream__select' value={selectedChartsView} onChange={handleSelectChartsView}>
               <option disabled value="">Select Charts View</option>
