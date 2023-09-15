@@ -5,7 +5,8 @@
   right: 4px;
   border-radius: 6px;
   height: 60px;
-  background: white;
+  // background: white;
+  background-color: #fffffd;
 }
 
 .tooltip {
@@ -13,75 +14,165 @@
     &--horizontal {
       display: grid;
       height: 100%;
-      grid-template-columns: 1fr 1fr 1fr auto 1fr 1fr 1fr;
+      grid-template-columns: 1fr 450px 1fr;
 
       .tooltip {
+
+        &__group {
+          &--left {
+            display: flex;
+            justify-content: start;
+            padding: 0 10px;
+            align-items: center;
+            gap: 10px;
+            color: #B9B4C7;
+            font-size: 30px;
+            font-weight: bold;
+
+            & wc {
+              display: inline-block;
+              width: 16px;
+            }
+
+            & tc {
+              display: inline-block;
+              width: 8px;
+            }
+          }
+
+          &--center {
+            padding: 0 6px;
+            font-weight: bold;
+            font-size: 22px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background-color: #fefcf6;
+            // background-color: #fdfdfd;
+            border-radius: 10px;
+            align-items: center;
+            filter: drop-shadow(0px 2px 2px grey);
+            overflow: hidden;
+          }
+
+          &--right {
+            display: flex;
+            justify-content: space-around;
+            padding: 0 10px;
+            align-items: center;
+            gap: 10px;
+            color: #B9B4C7;
+            font-size: 46px;
+            font-weight: bold;
+
+            & wc {
+              display: inline-block;
+              width: 26px;
+            }
+
+            & tc {
+              display: inline-block;
+              width: 10px;
+            }
+          }
+
+        }
+
         &__item {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: space-between;
-
-          &--top {
-            flex: 1;
-            display: flex;
-            align-items: center;
-          }
-
-          &--bottom {
-            flex: 1;
-            display: flex;
-            align-items: center;
-          }
-
           &--up {
-            color: #119e00;
+            & em {
+              color: #119e00;
+            }
           }
 
           &--down {
-            color: #FD4650;
+            & em {
+              color: #FD4650;
+            }
           }
 
           &--plate {
-            color: #7fb3ff;
+            & em {
+              color: #7fb3ff;
+            }
+          }
+
+          &--time  {
+            
+            text-align: center;
+            color: #A2678A;
+          }
+
+          &--arrow  {
+            font-size: 40px;
+            font-weight: bold;
+            width: 40px;
+            text-align: center;
+          }
+
+          &--start-time  {
+            width: 90px;
+            color: #26577C;
+
+            &::after {
+              content: '|';
+              position: relative;
+              left: 8px;
+              top: -2px;
+              color: #E55604;
+            }
+          }
+
+          &--start-value {
+            width: 140px;
+            text-align: start;
+
+            em {
+              color: #26577C;
+            }
+
           }
 
           &--start-end-diff {
-            font-size: 20px;
-            font-weight: bold;
+            width: 130px;
+            text-align: start;
+          }
 
-            .tooltip__item--top {
-              font-size: 30px;
-              line-height: 30px;
+          &--end-value {
+            width: 140px;
+            text-align: end;
+            
+            em {
+              color: #E55604;
             }
           }
 
-          &--current-diff {
-            font-size: 20px;
-            font-weight: bold;
+          &--end-time  {
+            width: 90px;
+            color: #E55604;
 
-            .tooltip__item--top {
-              font-size: 30px;
-              line-height: 30px;
+            &::before {
+              content: '|';
+              position: relative;
+              left: -8px;
+              top: -2px;
+              color: #26577C;
             }
           }
 
-          &--current {
-            font-weight: bold;
-            font-size: 20px;
-            line-height: 30px;
-          }
-        }
-
-        &__title {
-          &--label {
-            font-weight: bold;
-            font-size: 22px;
+          &--current-time  {
+            width: 130px;
+            color: #A2678A;
           }
 
-          &--value {
-            font-weight: bold;
-            font-size: 22px;
+          &--current-diff-text {
+            width: 174px;
+            text-align: end;
+          }
+
+          &--current-value {
+            min-width: 210px;
+            text-align: end;
           }
         }
       }
