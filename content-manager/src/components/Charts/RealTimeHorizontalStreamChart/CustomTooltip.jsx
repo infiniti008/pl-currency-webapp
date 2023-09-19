@@ -2,7 +2,8 @@ import $s from './Tooltipe.module.scss'
 
 const thinChars = ['.', ',', ';', ':']
 
-function CustomTooltip({ currencyKey, dataSet, firstPoint, lastPoint, colorRGB, currentSettedPoint}) {
+function CustomTooltip({ currencyKey, dataSet, firstPoint, lastPoint, colorRGB, currentSettedPoint, selectedKey}) {
+  const chartHeight = (document.getElementById(selectedKey)?.getClientRects()?.[0]?.height || 0) + 12
 
   let currentIndex = dataSet.indexOf(currentSettedPoint)
   const currentPoint = currentSettedPoint
@@ -59,7 +60,7 @@ function CustomTooltip({ currencyKey, dataSet, firstPoint, lastPoint, colorRGB, 
             />
 
             <span 
-              className='tooltip__item--start-value'
+              className={$s['tooltip__item--start-value']}
               dangerouslySetInnerHTML={{ __html: getCurrencyHTML(firstPoint.y, false) }}
             />
 
@@ -95,27 +96,29 @@ function CustomTooltip({ currencyKey, dataSet, firstPoint, lastPoint, colorRGB, 
           </span>
         </div>
 
-        <div className={$s['tooltip__group--right']}>
+        <div className={$s['tooltip__group--right']} style={{height: chartHeight}}>
           <span 
             className={[$s['tooltip__item--time'], $s['tooltip__item--current-time']].join(' ')}
             dangerouslySetInnerHTML={{ __html: getTimeHTML(currentPoint.x) }}
           />
-
-          <span className={[$s['tooltip__item--arrow'], $s['tooltip__item--' + currentDiffDirection]].join(' ')}>
-            <em>
-              {currentDiffTitle}
-            </em>
-          </span>
 
           <span 
             className={[$s['tooltip__item--current-diff-text'], $s['tooltip__item--' + currentDiffDirection]].join(' ')}
             dangerouslySetInnerHTML={{ __html: getCurrencyHTML(currentDiff, true) }}
           />
 
-          <span 
-            className={[$s['tooltip__item--current-value'], $s['tooltip__item--' + currentDiffDirection]].join(' ')}
-            dangerouslySetInnerHTML={{ __html: getCurrencyHTML(currentPoint.y, false) }}
-          />
+          <div className={$s['tooltip__item--current-value-group']}>
+            <span className={[$s['tooltip__item--arrow'], $s['tooltip__item--' + currentDiffDirection]].join(' ')}>
+              <em>
+                {currentDiffTitle}
+              </em>
+            </span>
+            <span 
+              className={[$s['tooltip__item--current-value'], $s['tooltip__item--' + currentDiffDirection]].join(' ')}
+              dangerouslySetInnerHTML={{ __html: getCurrencyHTML(currentPoint.y, false) }}
+            />
+          </div>
+          
         </div>
         
       </div>

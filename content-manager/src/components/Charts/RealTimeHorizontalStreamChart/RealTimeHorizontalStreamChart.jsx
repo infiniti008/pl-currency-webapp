@@ -401,7 +401,7 @@ function RealTimeHorizontalStreamChart({ chart, handleRemoveChart, isAllHidden, 
           <button onClick={handleRemoveChart}>Remove</button>
         </div>
       }
-      <div className={$s['chart__view']}>
+      <div className={$s['chart__view']} id={chart + config.selectedKey}>
         {
           draw.isDataReady && 
           <ChartElement

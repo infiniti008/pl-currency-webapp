@@ -60,7 +60,8 @@ function ChartElement({dataSet, labels, colorRGB, datasetMax, datasetMin, select
     },
     layout: {
       padding: {
-        top: 60
+        top: 66,
+        right: 296
       }
     },
     plugins: {

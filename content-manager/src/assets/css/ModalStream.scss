@@ -23,7 +23,7 @@
     border-radius: 10px;
     box-sizing: border-box;
     box-shadow: 0 0 16px #b3b3b3;
-    background-color: white;
+    background-color: #e7e7e7;
   }
 
   &__header {
@@ -77,8 +77,8 @@
   .copyright {
     position: absolute;
     right: 10px;
-    top: 12px;
-    font-size: 14px;
+    top: 8px;
+    font-size: 20px;
 
     & em {
       color: #FD4650;

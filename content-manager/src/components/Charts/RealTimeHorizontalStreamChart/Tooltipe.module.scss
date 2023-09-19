@@ -5,7 +5,6 @@
   right: 4px;
   border-radius: 6px;
   height: 60px;
-  // background: white;
   background-color: #fffffd;
 }
 
@@ -14,41 +13,45 @@
     &--horizontal {
       display: grid;
       height: 100%;
-      grid-template-columns: 1fr 450px 1fr;
+      grid-template-columns: 1fr 766px;
+      gap: 10px;
 
       .tooltip {
 
         &__group {
           &--left {
             display: flex;
-            justify-content: start;
+            justify-content: space-between;
             padding: 0 10px;
             align-items: center;
-            gap: 10px;
             color: #B9B4C7;
-            font-size: 30px;
+            font-size: 54px;
+            line-height: 54px;
             font-weight: bold;
+            border-radius: 10px;
+            background-color: #fef7f1;
+            filter: drop-shadow(0px 1px 3px lightgrey);
 
             & wc {
               display: inline-block;
-              width: 16px;
+              width: 30px;
             }
 
             & tc {
               display: inline-block;
-              width: 8px;
+              width: 12px;
             }
           }
 
           &--center {
+            margin-right: 300px;
             padding: 0 6px;
             font-weight: bold;
             font-size: 22px;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            background-color: #fefefd;
-            // background-color: #fdfdfd;
+            background-color: #f5f1fe;
             border-radius: 10px;
             align-items: center;
             filter: drop-shadow(0px 1px 3px lightgrey);
@@ -56,23 +59,30 @@
           }
 
           &--right {
+            position: absolute;
+            right: 0;
             display: flex;
-            justify-content: space-around;
-            padding: 0 10px;
+            width: 290px;
+            flex-direction: column;
+            justify-content: space-between;
+            padding-bottom: 10px;
             align-items: center;
-            gap: 10px;
             color: #B9B4C7;
-            font-size: 46px;
+            font-size: 64px;
+            line-height: 64px;
             font-weight: bold;
+            border-radius: 10px;
+            background-color: #fef1f1;
+            filter: drop-shadow(0px 1px 3px lightgrey);
 
             & wc {
               display: inline-block;
-              width: 26px;
+              width: 34px;
             }
 
             & tc {
               display: inline-block;
-              width: 10px;
+              width: 14px;
             }
           }
 
@@ -98,33 +108,22 @@
           }
 
           &--time  {
-            
             text-align: center;
             color: #A2678A;
           }
 
           &--arrow  {
-            font-size: 40px;
+            font-size: 50px;
+            line-height: 50px;
             font-weight: bold;
-            width: 40px;
             text-align: center;
           }
 
           &--start-time  {
-            width: 90px;
             color: #26577C;
-
-            &::after {
-              content: '|';
-              position: relative;
-              left: 8px;
-              top: -2px;
-              color: #E55604;
-            }
           }
 
           &--start-value {
-            width: 140px;
             text-align: start;
 
             em {
@@ -134,12 +133,10 @@
           }
 
           &--start-end-diff {
-            width: 130px;
             text-align: start;
           }
 
           &--end-value {
-            width: 140px;
             text-align: end;
             
             em {
@@ -148,31 +145,29 @@
           }
 
           &--end-time  {
-            width: 90px;
             color: #E55604;
-
-            &::before {
-              content: '|';
-              position: relative;
-              left: -8px;
-              top: -2px;
-              color: #26577C;
-            }
           }
 
           &--current-time  {
-            width: 130px;
             color: #A2678A;
           }
 
           &--current-diff-text {
-            width: 174px;
             text-align: end;
+            width: 100%;
+            padding: 0 10px;
           }
 
           &--current-value {
-            min-width: 210px;
             text-align: end;
+          }
+
+          &--current-value-group {
+            padding: 0 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
           }
         }
       }
