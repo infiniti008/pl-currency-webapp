@@ -46,8 +46,6 @@ function RealTimeHorizontalStreamChart({ chart, handleRemoveChart, isAllHidden, 
   const [endTime, set_endTime] = useState(initialEndTime)
   const [color, set_color] = useState('#84c8ff')
   const [selectedPointSize, set_selectedPointSize] = useState(1)
-  const [timeZone, set_timeZone] = useState('')
-  const [colorRGB, set_colorRGB] = useState('0, 0, 0')
   const [currentSettedPoint, setCurrentSettedPoint] = useState({})
 
   const [config, set_config] = useState(initialConfig)
@@ -88,34 +86,6 @@ function RealTimeHorizontalStreamChart({ chart, handleRemoveChart, isAllHidden, 
       startDrawing()
     }
   }, [isAutoRun])
-
-  useEffect(() => {
-    let result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(color);
-    result = {
-      r: parseInt(result[1], 16),
-      g: parseInt(result[2], 16),
-      b: parseInt(result[3], 16)
-    };
-
-    set_colorRGB(`${result.r}, ${result.g}, ${result.b}`)
-  }, [color])
-
-  useEffect(() => {
-    switch (selectedCountry) {
-      case 'by':
-        set_timeZone('Europe/Minsk')
-        handleSelectTimeZone('Europe/Minsk')
-        break;
-      case 'pl':
-        set_timeZone('Europe/Warsaw')
-        handleSelectTimeZone('Europe/Warsaw')
-        break;
-      default:
-        set_timeZone('Europe/Warsaw')
-        handleSelectTimeZone('Europe/Warsaw')
-        break;
-    }
-  }, [selectedCountry])
 
   useEffect(() => {
     ref_draw.current = draw;
@@ -174,15 +144,17 @@ function RealTimeHorizontalStreamChart({ chart, handleRemoveChart, isAllHidden, 
       const newConfig = Object.assign({}, initialConfig)
 
       const definedKeyObj = keysArr.find(item => item.key === selectedKey) || {}
+      const newTimeZone = getTimeZone(selectedCountry)
+      const newColorRGB = parseHexColor(color)
 
       newConfig.selectedCountry = selectedCountry
       newConfig.selectedKey = selectedKey
       newConfig.selectedPointSize = selectedPointSize
       newConfig.startTime = startTime
       newConfig.endTime = endTime
-      newConfig.timeZone = timeZone
+      newConfig.timeZone = newTimeZone
       newConfig.color = color
-      newConfig.colorRGB = colorRGB
+      newConfig.colorRGB = newColorRGB
       newConfig.currencyKeyObj = definedKeyObj
 
       set_config(newConfig)
@@ -345,6 +317,29 @@ function RealTimeHorizontalStreamChart({ chart, handleRemoveChart, isAllHidden, 
   function getIntFromTime(time) {
     return parseInt(time.split(':').join(''))
   }
+
+  function parseHexColor(color) {
+    let result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(color);
+    result = {
+      r: parseInt(result[1], 16),
+      g: parseInt(result[2], 16),
+      b: parseInt(result[3], 16)
+    };
+
+    return `${result.r}, ${result.g}, ${result.b}`
+  }
+
+  function getTimeZone(country) {
+    if (country === 'by') {
+      const tz = 'Europe/Minsk'
+      handleSelectTimeZone(tz)
+      return tz
+    }
+  
+    const tz = 'Europe/Warsaw'
+      handleSelectTimeZone(tz)
+      return tz
+    }
 
   const actionButtonText = isStarted ? 'Stop' : 'Start'
 
