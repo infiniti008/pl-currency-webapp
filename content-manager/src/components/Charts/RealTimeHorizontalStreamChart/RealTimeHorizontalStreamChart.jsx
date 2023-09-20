@@ -160,7 +160,7 @@ function RealTimeHorizontalStreamChart({ chart, handleRemoveChart, isAllHidden, 
       set_config(newConfig)
       ref_config.current = newConfig
 
-      fetchData(true)
+      fetchData()
 
       set_isStarted(true)
     } else {
@@ -200,12 +200,12 @@ function RealTimeHorizontalStreamChart({ chart, handleRemoveChart, isAllHidden, 
 
       if (data.length) {
         setDataToDrawing(data)
-      } else (
-        endDrawing()
-      )
+      } else {
+        setTimeout(fetchData, 10000)
+      }
     } catch(err) {
       console.log(err)
-      endDrawing()
+      setTimeout(fetchData, 10000)
     }
   }
 
