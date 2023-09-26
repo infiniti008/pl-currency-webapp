@@ -61,6 +61,22 @@ function ModalSubscription() {
     }
   }
 
+  async function onClickClone() {
+    onClickClose()
+
+    const toClone = Object.assign({}, cachedSubscription)
+
+    setTimeout(() => {
+      cachedSubscription = {}
+      toClone._id = ""
+      const clonedStore = {...currentStore}
+      clonedStore.subscriptionToOpenInModal = toClone
+      clonedStore.isModalSubscriptionOpen = true
+      setCurrentStore(clonedStore)
+    }, 300)
+    
+  }
+
   async function handleSaveSubscription(newSubscription) {
     if (JSON.stringify(cachedSubscription) === JSON.stringify(newSubscription)) {
       toast.warn("Same Subscription! Nothing to Save", {
@@ -115,6 +131,9 @@ function ModalSubscription() {
           Subscription
           <button onClick={onClickDelete} className='modal-subscription__btn-delete'>
             Delete
+          </button>
+          <button onClick={onClickClone} className='modal-subscription__btn-delete'>
+            Clone
           </button>
           <button onClick={onClickClose} className='modal-close'>X</button>
         </div>
