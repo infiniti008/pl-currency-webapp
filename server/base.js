@@ -431,7 +431,7 @@ export async function setRenderSettings(mode, settings) {
 
 export async function updateSubscriptionFromManager(mode, subscriptionId, subscription) {
   try {
-    const baseName = mode === 'dev' ? 'currency_app_test' : 'config_app';
+    const baseName = mode === 'dev' ? 'currency_app_test' : 'currency_app';
     const collectionName = subscription.platform;
 
     const collection = await client.db(baseName).collection(collectionName);
@@ -445,7 +445,7 @@ export async function updateSubscriptionFromManager(mode, subscriptionId, subscr
 
 export async function createSubscriptionFromManager(mode, subscription) {
   try {
-    const baseName = mode === 'dev' ? 'currency_app_test' : 'config_app';
+    const baseName = mode === 'dev' ? 'currency_app_test' : 'currency_app';
     const collectionName = subscription.platform;
 
     const collection = await client.db(baseName).collection(collectionName);
@@ -459,7 +459,7 @@ export async function createSubscriptionFromManager(mode, subscription) {
 
 export async function deleteSubscriptionFromManager(mode, subscriptionId, platform) {
   try {
-    const baseName = mode === 'dev' ? 'currency_app_test' : 'config_app';
+    const baseName = mode === 'dev' ? 'currency_app_test' : 'currency_app';
     const collectionName = platform;
 
     const collection = await client.db(baseName).collection(collectionName);
