@@ -13,15 +13,20 @@ function Subscription({subscription}) {
     currentStore,
     setCurrentStore
   } = useContext(CurrentStoreContext);
+  
+  const isActive = currentStore.lastSelectedSubscription && currentStore.lastSelectedSubscription._id === subscription._id
 
   function handleClickInfo() {
     const clonedStore = {...currentStore}
     clonedStore.subscriptionToOpenInModal = subscription
     clonedStore.isModalSubscriptionOpen = !currentStore.isModalSubscriptionOpen
+    clonedStore.lastSelectedSubscription = subscription
     setCurrentStore(clonedStore)
   }
 
-  return (<div className='subscription' style={{boxShadow: 'inset 0px 0px 10px -6px' + subscription.color}}>
+  const subscriptionClassName = isActive ? 'subscription subscription--active' : 'subscription'
+
+  return (<div className={subscriptionClassName} style={{boxShadow: 'inset 0px 0px 10px -6px' + subscription.color}}>
     {subscription.country === 'by' ? <IconFlagBelarus /> : <IconFlagPoland />}
     <IconStories />
     <IconInfo className="subscription__info" onClick={handleClickInfo} />

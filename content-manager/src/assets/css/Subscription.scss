@@ -6,6 +6,12 @@
   justify-content: space-around;
   align-items: center;
   border-radius: 10px;
+  box-sizing: border-box;
+  border: 3px solid transparent;
+
+  &--active {
+    border: 3px solid #00d0ff;
+  }
 
   &__info {
 

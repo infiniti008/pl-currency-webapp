@@ -21,6 +21,7 @@ function App() {
     generatedPhotoName: null,
     isEmptyRowsCollapsed: false,
     isModalChartsOpened: false,
+    lastSelectedSubscription: null,
     appSettings: {
       appSettings: {}
     }
