@@ -22,6 +22,7 @@ function App() {
     isEmptyRowsCollapsed: false,
     isModalChartsOpened: false,
     lastSelectedSubscription: null,
+    lastSelectedElement: null,
     appSettings: {
       appSettings: {}
     }

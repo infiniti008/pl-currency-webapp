@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useRef } from 'react';
 import CurrentStoreContext from '../contexsts/store';
 
 import IconStories from './icons/Stories';
@@ -13,6 +13,8 @@ function Subscription({subscription}) {
     currentStore,
     setCurrentStore
   } = useContext(CurrentStoreContext);
+
+  const subscriptionRef = useRef(null);
   
   const isActive = currentStore.lastSelectedSubscription && currentStore.lastSelectedSubscription._id === subscription._id
 
@@ -21,12 +23,13 @@ function Subscription({subscription}) {
     clonedStore.subscriptionToOpenInModal = subscription
     clonedStore.isModalSubscriptionOpen = !currentStore.isModalSubscriptionOpen
     clonedStore.lastSelectedSubscription = subscription
+    clonedStore.lastSelectedElement = subscriptionRef.current
     setCurrentStore(clonedStore)
   }
 
   const subscriptionClassName = isActive ? 'subscription subscription--active' : 'subscription'
 
-  return (<div className={subscriptionClassName} style={{boxShadow: 'inset 0px 0px 10px -6px' + subscription.color}}>
+  return (<div className={subscriptionClassName} ref={subscriptionRef} style={{boxShadow: 'inset 0px 0px 10px -6px' + subscription.color}}>
     {subscription.country === 'by' ? <IconFlagBelarus /> : <IconFlagPoland />}
     <IconStories />
     <IconInfo className="subscription__info" onClick={handleClickInfo} />

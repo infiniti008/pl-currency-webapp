@@ -35,6 +35,10 @@ function ModalSubscription() {
     document.body.style.overflow = ''
     document.body.style.marginRight = 'unset'
     emit('FETCH_ALL_SUBSCRIPTIONS', true)
+
+    if (currentStore.lastSelectedElement) {
+      currentStore.lastSelectedElement.scrollIntoView({behavior: "instant", block: "center", inline: "nearest"})
+    }
   }
 
   async function onClickDelete() {
