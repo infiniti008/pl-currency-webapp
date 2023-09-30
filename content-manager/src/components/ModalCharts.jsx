@@ -224,7 +224,7 @@ function ModalStream({ chartsViewNameFromPath }) {
 
   return (
     <div className='stream'>
-      <div className='stream__container'>
+      <div className='stream__container stream__container--full'>
         { isAllHidden &&
           <div className={headerClasses}>
             <Logo />

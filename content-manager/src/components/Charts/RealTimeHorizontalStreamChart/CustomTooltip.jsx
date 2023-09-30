@@ -3,7 +3,7 @@ import $s from './Tooltipe.module.scss'
 const thinChars = ['.', ',', ';', ':']
 
 function CustomTooltip({ currencyKey, dataSet, firstPoint, lastPoint, colorRGB, currentSettedPoint, selectedKey}) {
-  const chartHeight = (document.getElementById(selectedKey)?.getClientRects()?.[0]?.height || 0) + 12
+  const chartHeight = (document.getElementById(selectedKey)?.getClientRects()?.[0]?.height || 0) + 20
 
   let currentIndex = dataSet.indexOf(currentSettedPoint)
   const currentPoint = currentSettedPoint
@@ -53,37 +53,42 @@ function CustomTooltip({ currencyKey, dataSet, firstPoint, lastPoint, colorRGB, 
     <div className={$s['tooltip-wrapper']}>
       <div className={$s['tooltip__real-time--horizontal']}>
         <div className={$s['tooltip__group--left']}>
+        <div className={[$s['tooltip__items'], $s['tooltip__items--left']].join(' ')}>
+              <span 
+                className={[$s['tooltip__item--time'], $s['tooltip__item--start-time']].join(' ')}
+                dangerouslySetInnerHTML={{ __html: getTimeHTML(firstPoint.x) }}
+              />
 
-            <span 
-              className={[$s['tooltip__item--time'], $s['tooltip__item--start-time']].join(' ')}
-              dangerouslySetInnerHTML={{ __html: getTimeHTML(firstPoint.x) }}
-            />
+              <span 
+                className={$s['tooltip__item--start-value']}
+                dangerouslySetInnerHTML={{ __html: getCurrencyHTML(firstPoint.y, false) }}
+              />
+            </div>
 
-            <span 
-              className={$s['tooltip__item--start-value']}
-              dangerouslySetInnerHTML={{ __html: getCurrencyHTML(firstPoint.y, false) }}
-            />
+            <div className={[$s['tooltip__items'], $s['tooltip__items--center']].join(' ')}>
+              <span className={[$s['tooltip__item--arrow'], $s['tooltip__item--' + startEndDiffDirection]].join(' ')}>
+                <em>
+                  {startEndDiffTitle}
+                </em>
+              </span>
 
-            <span className={[$s['tooltip__item--arrow'], $s['tooltip__item--' + startEndDiffDirection]].join(' ')}>
-              <em>
-                {startEndDiffTitle}
-              </em>
-            </span>
+              <span 
+                className={[$s['tooltip__item--start-end-diff'], $s['tooltip__item--' + startEndDiffDirection]].join(' ')}
+                dangerouslySetInnerHTML={{ __html: getCurrencyHTML(startEndDiff, true) }}
+              />
+            </div>
 
-            <span 
-              className={[$s['tooltip__item--start-end-diff'], $s['tooltip__item--' + startEndDiffDirection]].join(' ')}
-              dangerouslySetInnerHTML={{ __html: getCurrencyHTML(startEndDiff, true) }}
-            />
+            <div className={[$s['tooltip__items'], $s['tooltip__items--right']].join(' ')}>
+              <span 
+                className={$s['tooltip__item--end-value']}
+                dangerouslySetInnerHTML={{ __html: getCurrencyHTML(lastPoint.y, false) }}
+              />
 
-            <span 
-              className={$s['tooltip__item--end-value']}
-              dangerouslySetInnerHTML={{ __html: getCurrencyHTML(lastPoint.y, false) }}
-            />
-
-            <span 
-              className={[$s['tooltip__item--time'], $s['tooltip__item--end-time']].join(' ')}
-              dangerouslySetInnerHTML={{ __html: getTimeHTML(lastPoint.x) }}
-            />
+              <span 
+                className={[$s['tooltip__item--time'], $s['tooltip__item--end-time']].join(' ')}
+                dangerouslySetInnerHTML={{ __html: getTimeHTML(lastPoint.x) }}
+              />
+            </div>
 
         </div>
 

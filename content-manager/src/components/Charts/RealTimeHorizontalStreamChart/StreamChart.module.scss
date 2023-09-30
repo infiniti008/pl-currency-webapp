@@ -1,15 +1,24 @@
 
 .chart {
   flex: 1;
-  // box-shadow: 0 0 16px #d9d9d9;
   border-radius: 10px;
   display: grid;
-  grid-template-columns: 230px 1fr;
+  grid-template-columns: 1fr 290px;
   padding: 10px;
   gap: 10px;
   position: relative;
-  filter: drop-shadow(0px 2px 4px lightgrey);
-  background-color: #fffffd;
+
+  &--color-0 {
+    filter: drop-shadow(5px 8px 6px rgba(var(--chart-main-color-0, red), 0.4));
+  }
+
+  &--color-1 {
+    filter: drop-shadow(5px 8px 6px rgba(var(--chart-main-color-1, red), 0.4));
+  }
+
+  &--color-2 {
+    filter: drop-shadow(5px 8px 6px rgba(var(--chart-main-color-2, red), 0.4));
+  }
 
   &--full {
     grid-template-columns: 1fr;

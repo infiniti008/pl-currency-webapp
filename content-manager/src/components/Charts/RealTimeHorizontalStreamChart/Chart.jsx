@@ -14,7 +14,7 @@ function ChartElement({dataSet, labels, colorRGB, datasetMax, datasetMin, select
   useEffect(() => {
     if (chartRef.current) {
       const ctx = chartRef.current.ctx;
-      const gradient = ctx.createLinearGradient(0, 0, 0, 230);
+      const gradient = ctx.createLinearGradient(0, 0, 0, 160);
       gradient.addColorStop(0, `rgba(${colorRGB}, 0.7)`);
       gradient.addColorStop(1, `rgba(${colorRGB}, 0)`);
       setGradient(gradient);
@@ -56,12 +56,6 @@ function ChartElement({dataSet, labels, colorRGB, datasetMax, datasetMin, select
             minute: 'HH:mm'
           }
         }
-      }
-    },
-    layout: {
-      padding: {
-        top: 66,
-        right: 296
       }
     },
     plugins: {

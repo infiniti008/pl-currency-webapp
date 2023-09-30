@@ -339,17 +339,33 @@ function RealTimeHorizontalStreamChart({ chart, handleRemoveChart, isAllHidden, 
     const tz = 'Europe/Warsaw'
       handleSelectTimeZone(tz)
       return tz
-    }
+  }
 
   const actionButtonText = isStarted ? 'Stop' : 'Start'
 
   const chartClasses = [
     $s.chart,
-    isAllHidden ? $s['chart--full'] : ''
+    isAllHidden ? $s['chart--full'] : '',
+    $s['chart--color-' + index]
   ].join(' ')
 
   return (
-    <div className={chartClasses}>
+    <div className={chartClasses} style={{ ['--chart-main-color-' + index]: config.colorRGB }} >
+      <div className={$s['chart__view']} id={chart + config.selectedKey}>
+        {
+          draw.isDataReady && 
+          <ChartElement
+            key={chart + 'chartElement-' + config.selectedKey}
+            dataSet={dataSet}
+            labels={draw.labels}
+            colorRGB={config.colorRGB}
+            datasetMin={draw.datasetMin}
+            datasetMax={draw.datasetMax}
+            selectedKey={chart + config.selectedKey}
+            selectedPointSize={config.selectedPointSize}
+          />
+        }
+      </div>
       {
         !isAllHidden &&
         <div className={$s['chart__config']}>
@@ -396,21 +412,6 @@ function RealTimeHorizontalStreamChart({ chart, handleRemoveChart, isAllHidden, 
           <button onClick={handleRemoveChart}>Remove</button>
         </div>
       }
-      <div className={$s['chart__view']} id={chart + config.selectedKey}>
-        {
-          draw.isDataReady && 
-          <ChartElement
-            key={chart + 'chartElement-' + config.selectedKey}
-            dataSet={dataSet}
-            labels={draw.labels}
-            colorRGB={config.colorRGB}
-            datasetMin={draw.datasetMin}
-            datasetMax={draw.datasetMax}
-            selectedKey={chart + config.selectedKey}
-            selectedPointSize={config.selectedPointSize}
-          />
-        }
-      </div>
       {draw.isDataReady && 
         <CustomTooltip 
           key={chart + 'chartElementTooltip-' + config.selectedKey}
