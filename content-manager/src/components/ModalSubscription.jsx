@@ -1,8 +1,9 @@
 import { useContext, useState, useEffect } from 'react';
 import CurrentStoreContext from '../contexsts/store';
 import { ToastContainer, toast } from 'react-toastify';
-import { saveSubscription, deleteSubscription, createSubscription } from '../api/services';
+import { saveSubscription, deleteSubscription, createSubscription, postSubscription } from '../api/services';
 import { EventBusContext } from './../contexsts/eventBus';
+import displayPostNowPrompt from './ui/ToastPostNow';
 
 import '../assets/css/Modal.scss'
 import '../assets/css/ModalSubscription.scss'
@@ -78,7 +79,32 @@ function ModalSubscription() {
       clonedStore.isModalSubscriptionOpen = true
       setCurrentStore(clonedStore)
     }, 300)
-    
+  }
+
+  async function onClickPost() {
+    try {
+      const promtData = await displayPostNowPrompt(cachedSubscription)
+
+      if (!promtData) {
+        return
+      }
+
+
+      const result = await postSubscription(cachedSubscription, promtData)
+
+      if (result.status) {
+        toast.success("Subscription succesful posted", {
+          position: toast.POSITION.BOTTOM_RIGHT
+        });
+      } else {
+        toast.error("Something went wrong! Please try again later!", {
+          position: toast.POSITION.BOTTOM_RIGHT
+        });
+      }
+    }
+    catch(err) {
+      console.log(err)
+    }
   }
 
   async function handleSaveSubscription(newSubscription) {
@@ -138,6 +164,9 @@ function ModalSubscription() {
           </button>
           <button onClick={onClickClone} className='modal-subscription__btn-delete'>
             Clone
+          </button>
+          <button onClick={onClickPost} className='modal-subscription__btn-delete'>
+            Post Now
           </button>
           <button onClick={onClickClose} className='modal-close'>X</button>
         </div>

@@ -19,7 +19,7 @@ function App() {
     subscriptionToOpenInModal: null,
     country: 'all',
     generatedPhotoName: null,
-    isEmptyRowsCollapsed: false,
+    isEmptyRowsCollapsed: true,
     isModalChartsOpened: false,
     lastSelectedSubscription: null,
     lastSelectedElement: null,

@@ -358,3 +358,14 @@ app.delete('/api/manage-charts-view/:mode/:name', async (req, res) => {
     res.json({ status: false });
   }
 });
+
+app.post('/api/subscription-post-now/:mode', async (req, res) => {
+  try {
+    const mode = req.params.mode;
+    const addedToManagerRequests = await addToContentManager(mode, req.body);
+    res.json({ status: true });
+  } catch (err) {
+    res.json({ status: false });
+    console.log(err);
+  }
+});

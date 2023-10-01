@@ -278,3 +278,23 @@ export async function removeChartsView(name) {
   }
 }
 
+export async function postSubscription(subscription, settings) {
+  try {
+    const mode = IS_DEV_MODE ? 'dev' : 'prod'
+    const selectedDate = settings.date;
+    const time = settings.time;
+    const date = getDateToGenerateImage(time, selectedDate, subscription.country);
+
+    const clonedSubscription = JSON.parse(JSON.stringify(subscription));
+
+    clonedSubscription.DATE_TO_GET_NOW = date;
+    clonedSubscription.MANAGER_POST_NOW = true
+    clonedSubscription.MANAGER_RENDER_SETTINGS = settings.renderSettings
+
+    const response = await axios.post(`${SERVER_URL}/api/subscription-post-now/${mode}`, clonedSubscription);
+    return response.data;
+  } catch (err) {
+    console.log(err)
+  }
+}
+
