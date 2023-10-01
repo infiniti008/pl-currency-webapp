@@ -184,6 +184,13 @@ function addZero(number) {
 
 function prepareSubscriptionsResponse(data) {
   const rows = getRows();
+  data?.postingResults?.forEach(result => {
+    const id = result.content.id
+    const foundSubscription = data.subscriptionsStories.find(subscription => subscription._id === id)
+    if (foundSubscription) {
+      foundSubscription.postingResults = result
+    }
+  })
 
   rows.forEach(row => {
     const rowTime = row.time

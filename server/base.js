@@ -379,9 +379,13 @@ export async function getAllSubscriptions(mode) {
     const subscriptionsVideoCollection = await client.db(baseName).collection('subscriptions-video');
     const subscriptionsVideo = await subscriptionsVideoCollection.find({}).toArray();
 
+    const resultsCollection = await client.db(baseName).collection('posting-results');
+    const postingResults = await resultsCollection.find({}).toArray();
+
     return {
       subscriptionsStories,
-      subscriptionsVideo
+      subscriptionsVideo,
+      postingResults
     };
   } catch(err) {
     console.log(err);

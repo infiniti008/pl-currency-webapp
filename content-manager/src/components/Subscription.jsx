@@ -7,6 +7,8 @@ import IconFlagBelarus from './icons/IconFlagBelarus';
 import IconFlagPoland from './icons/IconFlagPoland';
 
 import '../assets/css/Subscription.scss'
+import IconSuccess from './icons/IconSuccess';
+import IconError from './icons/IconError';
 
 function Subscription({subscription}) {
   const {
@@ -17,6 +19,7 @@ function Subscription({subscription}) {
   const subscriptionRef = useRef(null);
   
   const isActive = currentStore.lastSelectedSubscription && currentStore.lastSelectedSubscription._id === subscription._id
+  const postedStatus = subscription?.postingResults?.completed || false
 
   function handleClickInfo() {
     const clonedStore = {...currentStore}
@@ -27,10 +30,14 @@ function Subscription({subscription}) {
     setCurrentStore(clonedStore)
   }
 
-  const subscriptionClassName = isActive ? 'subscription subscription--active' : 'subscription'
+  const subscriptionClassName = [
+    isActive ? 'subscription subscription--active' : 'subscription',
+    postedStatus ? 'subscription--posted-success' : 'subscription--posted-failed',
+  ].join(' ')
 
   return (<div className={subscriptionClassName} ref={subscriptionRef} style={{boxShadow: 'inset 0px 0px 10px -6px' + subscription.color}}>
     {subscription.country === 'by' ? <IconFlagBelarus /> : <IconFlagPoland />}
+    {postedStatus ? <IconSuccess /> : <IconError />}
     <IconStories />
     <IconInfo className="subscription__info" onClick={handleClickInfo} />
   </div>)
