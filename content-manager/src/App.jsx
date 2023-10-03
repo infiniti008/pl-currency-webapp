@@ -5,6 +5,7 @@ import TopBar from './components/TopBar.jsx';
 import ModalSettings from './components/ModalSettings'
 import ModalSubscription from './components/ModalSubscription'
 import ModalStream from './components/ModalCharts'
+import ModalKeys from './components/modals/ModalKeys'
 import CurrentStoreContext from './contexsts/store';
 
 import { EventBusProvider } from './contexsts/eventBus';
@@ -21,11 +22,13 @@ function App() {
     generatedPhotoName: null,
     isEmptyRowsCollapsed: true,
     isModalChartsOpened: false,
+    isModalKeysOpened: false,
     lastSelectedSubscription: null,
     lastSelectedElement: null,
     appSettings: {
       appSettings: {}
-    }
+    },
+    keys: []
   }
 
   const [currentStore, setCurrentStore] = useState(initialStore)
@@ -38,6 +41,19 @@ function App() {
       const clonedStore = {...currentStore}
       clonedStore.appSettings = appSettings
       Object.assign(clonedStore, extendingToStore)
+      let keys = []
+      for(const key in appSettings) {
+        if (key.startsWith('keys_')) {
+          const country = key.split('keys_')[1]
+          const keysFromCountry = appSettings[key].map(keyItem=> {
+            keyItem.country = country
+            return keyItem
+          })
+          keys = [...keys, ...keysFromCountry]
+        }
+      }
+
+      clonedStore.keys = keys
       setCurrentStore(clonedStore)
     } catch (err) {
       console.log(err)
@@ -83,6 +99,7 @@ function App() {
         {currentStore.isSettingsOpen && <ModalSettings />}
         {currentStore.isModalSubscriptionOpen && <ModalSubscription />}
         {currentStore.isModalChartsOpened && <ModalStream chartsViewNameFromPath={chartsViewNameFromPath} />}
+        {currentStore.isModalKeysOpened && <ModalKeys />}
       </CurrentStoreContext.Provider>
     </EventBusProvider>
   )

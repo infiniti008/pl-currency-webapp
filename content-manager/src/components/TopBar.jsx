@@ -51,6 +51,12 @@ function TopBar() {
     setCurrentStore(clonedStore)
   }
 
+  function onClickOpenKeys() {
+    const clonedStore = {...currentStore}
+    clonedStore.isModalKeysOpened = !clonedStore.isModalKeysOpened
+    setCurrentStore(clonedStore)
+  }
+
   let countryFlag = ''
   if (currentStore?.country == 'pl') {
     countryFlag = <IconFlagPoland />
@@ -79,6 +85,9 @@ function TopBar() {
       </button>
       <button onClick={onClickSwitchCollapse}>
         Switch Collapsed
+      </button>
+      <button onClick={onClickOpenKeys}>
+        Show Keys
       </button>
       <button onClick={onClickOpenStream}>
         Open Stream Window

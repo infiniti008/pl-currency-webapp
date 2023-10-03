@@ -97,20 +97,26 @@ export async function getLastCurrencies(country, userId) {
     });
 
     const lastValues = await Promise.all(requestsArray);
-    const user = await getUserInfo(userId);
+    if (userId && userId !== 'null') {
+      const user = await getUserInfo(userId);
 
-    const lastWithFavorites = lastValues.map(value => {
-      if (user['favorites_' + country]?.includes(value.key)) {
-        value.isFavorite = true;
-      } else {
-        value.isFavorite = false;
-      }
-      return value;
-    });
+      const lastWithFavorites = lastValues.map(value => {
+        if (user['favorites_' + country]?.includes(value.key)) {
+          value.isFavorite = true;
+        } else {
+          value.isFavorite = false;
+        }
+        return value;
+      });
 
-    return { 
-      data: lastWithFavorites
-    };
+      return { 
+        data: lastWithFavorites
+      };
+    } else {
+      return { 
+        data: lastValues
+      };
+    }    
   } catch (err) {
     console.log(err);
   }

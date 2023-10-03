@@ -305,3 +305,12 @@ export async function postSubscription(subscription, settings) {
   }
 }
 
+export async function getLastValues(country) {
+  try {
+    const response = await axios.get(`${SERVER_URL}/api/last/${country}/null`)   
+    return response.data;
+  } catch (err) {
+    console.log(err)
+  }
+}
+
