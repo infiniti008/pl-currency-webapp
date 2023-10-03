@@ -5,7 +5,7 @@ import $s from './style.module.scss';
 
 import CountryFlag from '../../ui/CountryFlag';
 import Status from '../../ui/Status';
-import ItemDetails from './ItemDetails';
+import ItemDetails from './itemDetails';
 
 function KeyItem({ keyObj, selectedTimeLimit }) {
   const diffLimit = 1000 * 60 * selectedTimeLimit
