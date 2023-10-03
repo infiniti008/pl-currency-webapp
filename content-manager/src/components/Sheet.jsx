@@ -5,6 +5,9 @@ import { getRows, getSubscriptions } from '../api/services'
 import Day from './Day'
 import { EventBusContext } from './../contexsts/eventBus';
 
+import IconSuccess from './icons/IconSuccess';
+import IconError from './icons/IconError';
+
 const initialRows = getRows();
 
 function Sheet({store, updateStore}) {
@@ -94,9 +97,43 @@ function Sheet({store, updateStore}) {
     </div>
   });
 
+  const headDays = rows[0]?.days.map(day => {
+    const country = currentStore.country
+    const dayClasses = `day day--head`
+    const subsriptions = []
+    rows.forEach(row => {
+      row.days.forEach(dayItem => {
+        if(dayItem.dayIndex === day.dayIndex && dayItem.subscriptions.length > 0) {
+          dayItem.subscriptions.forEach(subscription => {
+            if(country === 'all' || (country !== 'all' && subscription.country === country)) {
+              subsriptions.push(subscription)
+            }
+          })
+        }
+      })
+    })
+    
+    const subscriptionsCount = subsriptions.length
+    const successSubscriptions = subsriptions.filter(subscription => subscription.postingResults?.completed ? true : false).length
+    const failedSubscriptions = subsriptions.filter(subscription => subscription.postingResults?.completed ? false : true).length 
+
+    return <div className={dayClasses} key={ 'head-day-' + day.index }>
+      <span className='day--head__info'>A: {subscriptionsCount}</span>
+      <span className='day--head__info'><IconSuccess /> : {successSubscriptions}</span>
+      <span className='day--head__info'><IconError /> : {failedSubscriptions}</span>
+    </div>
+  })
+  const headRow = (
+  <div className='time-row time-statistic'>
+    <div className='time'>
+      STAT
+    </div>
+    {headDays}
+  </div>)
   
   return (
     <div className='sheet'>
+      {headRow}
       {timeItems}
     </div>
   )

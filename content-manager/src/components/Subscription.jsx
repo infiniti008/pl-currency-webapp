@@ -5,10 +5,11 @@ import IconStories from './icons/Stories';
 import IconInfo from './icons/Info';
 import IconFlagBelarus from './icons/IconFlagBelarus';
 import IconFlagPoland from './icons/IconFlagPoland';
-
-import '../assets/css/Subscription.scss'
 import IconSuccess from './icons/IconSuccess';
 import IconError from './icons/IconError';
+
+import '../assets/css/Subscription.scss'
+
 
 function Subscription({subscription}) {
   const {

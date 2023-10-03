@@ -13,3 +13,15 @@
     box-shadow: #17ff00 0 0 10px -6px;
   }
 }
+
+.day--head {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+
+  &__info {
+    display: flex;
+    align-items: center;
+  }
+}
