@@ -37,7 +37,9 @@ import {
   getKeyData,
   setChartView,
   getChartView,
-  removeChartView
+  removeChartView,
+  updateKeyFromManager,
+  createKeyFromManager
 } from './server/base.js';
 
 const app = express();
@@ -365,6 +367,26 @@ app.post('/api/subscription-post-now/:mode', async (req, res) => {
     const addedToManagerRequests = await addToContentManager(mode, req.body);
     res.json({ status: true });
   } catch (err) {
+    res.json({ status: false });
+    console.log(err);
+  }
+});
+
+app.patch('/api/manage-key/:country/:keyId', async (req, res) => {
+  try {
+    const status = await updateKeyFromManager(req.params.country, req.params.keyId, req.body);
+    res.json({ status });
+  } catch(err) {
+    res.json({ status: false });
+    console.log(err);
+  }
+});
+
+app.post('/api/manage-key/:country/', async (req, res) => {
+  try {
+    const status = await createKeyFromManager(req.params.country, req.body);
+    res.json({ status });
+  } catch(err) {
     res.json({ status: false });
     console.log(err);
   }

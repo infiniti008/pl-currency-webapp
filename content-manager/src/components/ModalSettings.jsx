@@ -85,7 +85,7 @@ function ModalSettings() {
         </div>
         <div className="modal-body">
           <div className="render-settings">
-            <Inputs descriptorModel={descriptor} handleUpdateOption={handleUpdateOption} object={renderSettings} model={model}/>
+            <Inputs descriptorModel={descriptor} handleUpdateOption={handleUpdateOption} object={renderSettings} model={model} optionsObj={currentStore?.appSettings?.appSettings} />
           </div>
         </div>
         <div className="modal-footer">

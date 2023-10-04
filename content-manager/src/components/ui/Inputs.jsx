@@ -12,7 +12,7 @@ import Keys from './Keys';
 
 import '../../assets/css/Inputs.scss'
 
-function Inputs({object, handleUpdateOption, descriptorModel, model}) {
+function Inputs({object, handleUpdateOption, descriptorModel, model, optionsObj}) {
 
   const {
     currentStore
@@ -58,7 +58,7 @@ function Inputs({object, handleUpdateOption, descriptorModel, model}) {
           itemKey={key}
           handleUpdateOption={handleUpdateOption.bind(null, key)}
           descriptor={descriptorModel[key]}
-          options={appSettings[descriptorModel[key].optionsVariable]}
+          options={optionsObj[descriptorModel[key].optionsVariable]}
           isInline={descriptorModel[key].isInline}
           isRequired={descriptorModel[key].isRequired}
           isDidabled={checkIsDisabled(descriptorModel[key].enabledIf)}

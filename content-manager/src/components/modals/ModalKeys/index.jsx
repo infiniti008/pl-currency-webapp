@@ -1,11 +1,11 @@
 import { useContext, useState, useEffect } from 'react';
 import CurrentStoreContext from '../../../contexsts/store';
 import { EventBusContext } from '../../../contexsts/eventBus';
-
 import { ToastContainer, toast } from 'react-toastify';
 
 import $s from './style.module.scss';
 import { getLastValues } from '../../../api/services';
+import keyModel from '../../../models/keyModel';
 
 import Header from './header';
 import KeyItem from './item';
@@ -15,6 +15,7 @@ const INITIAL_TIME_LIMIT = 10
 const INITIAL_SORT_BY = 'timestamp'
 const INITIAL_CURRENCY = 'all'
 const INITIAL_OPERATION = 'all'
+const { model } = keyModel;
 
 let currenciesSet = new Set()
 let operationsSet = new Set()
@@ -26,8 +27,6 @@ function ModalKeys() {
     setCurrentStore
   } = useContext(CurrentStoreContext)
 
-  
-
   const countries = currentStore?.appSettings?.appSettings?.countries
   const initialKeys = [...currentStore?.keys]
 
@@ -37,7 +36,6 @@ function ModalKeys() {
   const [sortBy, setSortBy] = useState(INITIAL_SORT_BY)
   const [selectedCurrency, setSelectedCurrency] = useState(INITIAL_CURRENCY)
   const [selectedOperation, setSelectedOperation] = useState(INITIAL_OPERATION)
-  // const [selectedChartTemplate, setSelectedChartTemplate] = useState('RealTimeHorizontalStreamChart')
 
   async function fetchLastValues() {
     countries?.forEach(async (country) => {
@@ -85,6 +83,13 @@ function ModalKeys() {
     document.body.style.overflow = ''
     document.body.style.marginRight = 'unset'
     emit('FETCH_ALL_SUBSCRIPTIONS', true)
+  }
+
+  function onClickCreate() {
+    const clonedKeys = [...keys]
+    const newKey = {...model}
+    clonedKeys.unshift(newKey)
+    setKeys(clonedKeys)
   }
 
   function sortKeys(items) {
@@ -138,7 +143,7 @@ function ModalKeys() {
 
   const keyElements = filteredKeys.map(key => {
     return (
-      <KeyItem key={key.key} keyObj={key} selectedTimeLimit={selectedTimeLimit} />
+      <KeyItem key={key.key} keyObj={key} selectedTimeLimit={selectedTimeLimit} operations={operations} appSettings={currentStore?.appSettings?.appSettings || {}} />
     )
   })  
 
@@ -159,6 +164,7 @@ function ModalKeys() {
         selectedOperation={selectedOperation}
         setSelectedOperation={setSelectedOperation}
         operations={operations}
+        onClickCreate={onClickCreate}
       />
       <div className={$s.body}>
         {keyElements}

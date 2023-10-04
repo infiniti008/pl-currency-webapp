@@ -314,3 +314,29 @@ export async function getLastValues(country) {
   }
 }
 
+export async function saveKey(key, country) {
+  try {
+    const keyId = key._id
+    const keyToSend = {...key}
+    delete keyToSend._id
+
+    const response = await axios.patch(`${SERVER_URL}/api/manage-key/${country}/${keyId}`, keyToSend)
+    return response.data;
+  } catch (err) {
+    console.log(err)
+    return {status: false};
+  }
+}
+
+export async function createKey(key, country) {
+  try {
+    const keyToSend = {...key}
+    delete keyToSend._id
+
+    const response = await axios.post(`${SERVER_URL}/api/manage-key/${country}`, keyToSend)
+    return response.data;
+  } catch (err) {
+    console.log(err)
+    return {status: false};
+  }
+}

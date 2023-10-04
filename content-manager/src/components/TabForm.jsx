@@ -72,7 +72,7 @@ function TabForm({ handleSaveSubscription }) {
   return (
     <div className='tab tab-form'>
       <div className='tab-content'>
-        <Inputs descriptorModel={descriptor} handleUpdateOption={handleUpdateOption} object={subscription} model={model}/>
+        <Inputs descriptorModel={descriptor} handleUpdateOption={handleUpdateOption} object={subscription} model={model} optionsObj={currentStore?.appSettings?.appSettings} />
       </div>
       <div className="tab-footer">
         <button onClick={handleReset}>Reset</button>

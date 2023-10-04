@@ -7,7 +7,7 @@ import CountryFlag from '../../ui/CountryFlag';
 import Status from '../../ui/Status';
 import ItemDetails from './itemDetails';
 
-function KeyItem({ keyObj, selectedTimeLimit }) {
+function KeyItem({ keyObj, selectedTimeLimit, operations, appSettings }) {
   const diffLimit = 1000 * 60 * selectedTimeLimit
   const currentTimestamp = new Date().valueOf()
   const isNew = keyObj.lastValue?.timestamp > (currentTimestamp - diffLimit)
@@ -46,7 +46,7 @@ function KeyItem({ keyObj, selectedTimeLimit }) {
       <div className={$s.key_bank}>{keyObj.bank}</div>
       <div className={$s.key_date}>{keyObj.lastValue?.date}</div>
       <button className={$s.key_button} onClick={handleClickDetails}>Details</button>
-      {isDetailsOpen && <ItemDetails keyObj={keyObj} />}
+      {isDetailsOpen && <ItemDetails keyObj={keyObj} operations={operations} appSettings={appSettings} />}
     </div>
   )
 }

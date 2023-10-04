@@ -16,7 +16,8 @@ function Header({
   setSelectedCurrency,
   operations,
   selectedOperation,
-  setSelectedOperation
+  setSelectedOperation,
+  onClickCreate
 }) {
   function handleSetTimeLimit(event) {
     setSelectedTimeLimit(event.target.value)
@@ -81,6 +82,8 @@ function Header({
           <option value="value">Value</option>
         </select>
       </div>
+
+      <button onClick={onClickCreate} className={$s.btn_close}>Create</button>
 
       <button onClick={onClickClose} className={$s.btn_close}>Close</button>
     </div>

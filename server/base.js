@@ -555,4 +555,30 @@ export async function removeChartView(mode, chartsViewName) {
   }
 }
 
-removeChartView
+export async function updateKeyFromManager(country, keyId, key) {
+  try {
+    const baseName = 'config_app';
+    const collectionName = 'keys_' + country;
+
+    const collection = await client.db(baseName).collection(collectionName);
+    collection.updateOne({ _id: new ObjectId(keyId) }, {$set: key });
+    return true;
+  } catch(err) {
+    console.log(err)
+    return false;
+  }
+}
+
+export async function createKeyFromManager(country, key) {
+  try {
+    const baseName = 'config_app';
+    const collectionName = 'keys_' + country;
+
+    const collection = await client.db(baseName).collection(collectionName);
+    collection.insertOne(key);
+    return true;
+  } catch(err) {
+    console.log(err)
+    return false;
+  }
+}

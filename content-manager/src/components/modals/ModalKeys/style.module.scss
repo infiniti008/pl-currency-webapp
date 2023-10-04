@@ -85,6 +85,13 @@
   width: calc(100% + 20px);
   background-color: aliceblue;
   grid-column: 1 / span 8;
+
+  .controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+  }
   
   @keyframes slide-in {
     0% {
@@ -95,7 +102,7 @@
     100% {
       // transform: translateY(0%);
       opacity: 1;
-      height: 300px;
+      height: 440px;
       margin: 10px -10px -10px;
       padding: 10px;
     }
