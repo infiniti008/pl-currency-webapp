@@ -15,10 +15,12 @@ const INITIAL_TIME_LIMIT = 10
 const INITIAL_SORT_BY = 'timestamp'
 const INITIAL_CURRENCY = 'all'
 const INITIAL_OPERATION = 'all'
+const INITIAL_BANK = 'all'
 const { model } = keyModel;
 
 let currenciesSet = new Set()
 let operationsSet = new Set()
+let banksSet = new Set()
 
 function ModalKeys() {
   const { emit } = useContext(EventBusContext)
@@ -36,6 +38,7 @@ function ModalKeys() {
   const [sortBy, setSortBy] = useState(INITIAL_SORT_BY)
   const [selectedCurrency, setSelectedCurrency] = useState(INITIAL_CURRENCY)
   const [selectedOperation, setSelectedOperation] = useState(INITIAL_OPERATION)
+  const [selectedBank, setSelectedBank] = useState(INITIAL_BANK)
 
   async function fetchLastValues() {
     countries?.forEach(async (country) => {
@@ -52,6 +55,7 @@ function ModalKeys() {
 
           currenciesSet.add(keyObj.currency)
           operationsSet.add(keyObj.operation)
+          banksSet.add(keyObj.bank)
 
           const currentKey = clonedKeys.find(keyItem => keyItem.key == keyObj.key)
           if (currentKey) {
@@ -130,6 +134,10 @@ function ModalKeys() {
       filteredKeys = filteredKeys?.filter(key => key.operation == selectedOperation)
     }
 
+    if (selectedBank != 'all') {
+      filteredKeys = filteredKeys?.filter(key => key.bank == selectedBank)
+    }
+
     filteredKeys = filteredKeys.filter(key => (selectedCountry != 'all' && key.country == selectedCountry) || selectedCountry == 'all')
 
     return filteredKeys
@@ -137,6 +145,7 @@ function ModalKeys() {
 
   const currencies = Array.from(currenciesSet)
   const operations = Array.from(operationsSet)
+  const banks = Array.from(banksSet)
   
   const sortedKeys = sortKeys(keys)
   const filteredKeys = filterKeys(sortedKeys)
@@ -165,6 +174,9 @@ function ModalKeys() {
         setSelectedOperation={setSelectedOperation}
         operations={operations}
         onClickCreate={onClickCreate}
+        banks={banks}
+        selectedBank={selectedBank}
+        setSelectedBank={setSelectedBank}
       />
       <div className={$s.body}>
         {keyElements}

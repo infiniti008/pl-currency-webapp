@@ -17,7 +17,10 @@ function Header({
   operations,
   selectedOperation,
   setSelectedOperation,
-  onClickCreate
+  onClickCreate,
+  banks,
+  selectedBank,
+  setSelectedBank,
 }) {
   function handleSetTimeLimit(event) {
     setSelectedTimeLimit(event.target.value)
@@ -39,12 +42,20 @@ function Header({
     setSelectedCountry(event.target.value)
   }
 
+  function handleSetBank(event) {
+    setSelectedBank(event.target.value)
+  }
+
   const currencyOptions = currencies.map(currency => {
     return <option key={'currency_' + currency} value={currency}>{currency.toUpperCase()}</option>
   })
 
   const operationOptions = operations.map(operation => {
     return <option key={'operation_' + operation} value={operation}>{operation.toUpperCase()}</option>
+  })
+
+  const bankOptions = banks.map(bank => {
+    return <option key={'bank_' + bank} value={bank}>{bank.toUpperCase()}</option>
   })
 
   return (
@@ -64,6 +75,14 @@ function Header({
         <select className={$s.currency} value={selectedCurrency} onChange={handleSetCurrency}>
           <option value="all">ALL</option>
           {currencyOptions}
+        </select>
+      </div>
+
+      <div className={$s.header_item}>
+        <span className={$s.item_label}>Filter by Bank</span>
+        <select className={$s.bank} value={selectedBank} onChange={handleSetBank}>
+          <option value="all">ALL</option>
+          {bankOptions}
         </select>
       </div>
 
