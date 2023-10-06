@@ -69,8 +69,7 @@
   padding: 10px;
   border-bottom: 1px solid #e3e9f3;
   display: grid;
-  grid-template-columns: 40px 60px 60px 1fr 100px 1fr 1fr 80px;
-  // grid-template-rows: 48px 100px;
+  grid-template-columns: 40px 60px 60px 1fr 100px 1fr 1fr 100px 100px;
   justify-content: space-between;
   align-items: center;
 
@@ -81,6 +80,14 @@
   &_bank {
     // text-align: ;
   }
+
+  &_button {
+    margin: 0px 10px;
+  }
+
+  &_active {
+    box-shadow: 0px 0px 16px 0px #5f5f5f;
+  }
 }
 
 .details {
@@ -90,7 +97,7 @@
   top: 100%;
   width: calc(100% + 20px);
   background-color: aliceblue;
-  grid-column: 1 / span 8;
+  grid-column: 1 / span 9;
 
   .controls {
     display: flex;
@@ -98,19 +105,52 @@
     align-items: center;
     padding: 10px;
   }
-  
-  @keyframes slide-in {
-    0% {
-      // transform: translateY(-100%);
-      opacity: 0;
-      height: 0px;
+}
+
+.chart {
+  animation : slide-in 0.5s ease-in-out;
+  animation-fill-mode: both;
+  height: 0px;
+  position: relative;
+  width: calc(100% + 20px);
+  background-color: aliceblue;
+  grid-column: 1 / span 9;
+
+  &_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px;
+    width: 100%;
+
+    .input_group {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+
+      .input {
+        border-radius: 4px;
+        padding: 4px;
+      }
     }
-    100% {
-      // transform: translateY(0%);
-      opacity: 1;
-      height: 440px;
-      margin: 10px -10px -10px;
-      padding: 10px;
-    }
+  }
+
+  &_body {
+    height: calc(100% - 40px);
+    width: 100%;
+  }
+}
+
+@keyframes slide-in {
+  0% {
+    opacity: 0;
+    height: 0px;
+  }
+  100% {
+    opacity: 1;
+    height: 440px;
+    margin: 10px -10px -10px;
+    padding: 10px;
   }
 }

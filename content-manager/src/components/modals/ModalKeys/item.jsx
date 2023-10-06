@@ -6,6 +6,7 @@ import $s from './style.module.scss';
 import CountryFlag from '../../ui/CountryFlag';
 import Status from '../../ui/Status';
 import ItemDetails from './itemDetails';
+import ItemChart from './itemChart';
 
 function KeyItem({ keyObj, selectedTimeLimit, operations, appSettings }) {
   const diffLimit = 1000 * 60 * selectedTimeLimit
@@ -13,6 +14,7 @@ function KeyItem({ keyObj, selectedTimeLimit, operations, appSettings }) {
   const isNew = keyObj.lastValue?.timestamp > (currentTimestamp - diffLimit)
 
   const [isDetailsOpen, setIsDetailsOpen] = useState(false)
+  const [isChartOpen, setIsChartOpen] = useState(false)
   const { on, off, emit } = useContext(EventBusContext);
 
   useEffect(() => {
@@ -36,8 +38,32 @@ function KeyItem({ keyObj, selectedTimeLimit, operations, appSettings }) {
     setIsDetailsOpen(!isDetailsOpen)
   }
 
+  function handleClickChart() {
+    if (!isChartOpen) {
+      emit('COLLAPSE_ALL_KEY_CHARTS', keyObj.key);
+    }
+    setIsChartOpen(!isChartOpen)
+  }
+
+  const isActive = isDetailsOpen || isChartOpen
+
+  const classes = {
+    key: [
+      $s.key,
+      isActive ? $s.key_active : ''
+    ].join(' '),
+    btn_chart: [
+      $s.key_button,
+      isChartOpen ? $s.key_active : ''
+    ].join(' '),
+    btn_details: [
+      $s.key_button,
+      isDetailsOpen ? $s.key_active : ''
+    ].join(' ')
+  }
+
   return (
-    <div className={$s.key} key={keyObj.key}>
+    <div className={classes.key} key={keyObj.key}>
       <CountryFlag country={keyObj.country} />
       <div className={$s.key_currency}>{keyObj.currency}</div>
       <Status status={isNew} />
@@ -45,8 +71,10 @@ function KeyItem({ keyObj, selectedTimeLimit, operations, appSettings }) {
       <div className={$s.key_value}>{keyObj.lastValue?.value.toFixed(4)}</div>
       <div className={$s.key_bank}>{keyObj.bank}</div>
       <div className={$s.key_date}>{keyObj.lastValue?.date}</div>
-      <button className={$s.key_button} onClick={handleClickDetails}>Details</button>
+      <button className={classes.btn_chart} onClick={handleClickChart}>Chart</button>
+      <button className={classes.btn_details} onClick={handleClickDetails}>Details</button>
       {isDetailsOpen && <ItemDetails keyObj={keyObj} operations={operations} appSettings={appSettings} />}
+      {isChartOpen && <ItemChart keyObj={keyObj} operations={operations} appSettings={appSettings} />}
     </div>
   )
 }
