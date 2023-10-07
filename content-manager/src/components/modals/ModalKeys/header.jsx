@@ -21,6 +21,7 @@ function Header({
   banks,
   selectedBank,
   setSelectedBank,
+  onClickCompare
 }) {
   function handleSetTimeLimit(event) {
     setSelectedTimeLimit(event.target.value)
@@ -101,6 +102,8 @@ function Header({
           <option value="value">Value</option>
         </select>
       </div>
+
+      <button onClick={onClickCompare} className={$s.btn_close}>Compare</button>
 
       <button onClick={onClickCreate} className={$s.btn_close}>Create</button>
 

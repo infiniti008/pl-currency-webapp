@@ -8,7 +8,7 @@ import Status from '../../ui/Status';
 import ItemDetails from './itemDetails';
 import ItemChart from './itemChart';
 
-function KeyItem({ keyObj, selectedTimeLimit, operations, appSettings }) {
+function KeyItem({ keyObj, selectedTimeLimit, operations, appSettings, selectedKeys, handleToggleSelectKey }) {
   const diffLimit = 1000 * 60 * selectedTimeLimit
   const currentTimestamp = new Date().valueOf()
   const isNew = keyObj.lastValue?.timestamp > (currentTimestamp - diffLimit)
@@ -45,7 +45,12 @@ function KeyItem({ keyObj, selectedTimeLimit, operations, appSettings }) {
     setIsChartOpen(!isChartOpen)
   }
 
+  function handleClickSelect(event) {
+    handleToggleSelectKey(keyObj.key, event.target.checked)
+  }
+
   const isActive = isDetailsOpen || isChartOpen
+  const isSelected = selectedKeys.includes(keyObj.key)
 
   const classes = {
     key: [
@@ -64,6 +69,7 @@ function KeyItem({ keyObj, selectedTimeLimit, operations, appSettings }) {
 
   return (
     <div className={classes.key} key={keyObj.key}>
+      <input type='checkbox' className={$s.key_checkbox} checked={isSelected} onChange={handleClickSelect} />
       <CountryFlag country={keyObj.country} />
       <div className={$s.key_currency}>{keyObj.currency}</div>
       <Status status={isNew} />

@@ -4,21 +4,28 @@ import { format, addMinutes, parse, sub } from 'date-fns'
 import { formatInTimeZone, utcToZonedTime, zonedTimeToUtc } from 'date-fns-tz'
 import { getKeyData } from '../../../api/services';
 import KeyChart from './chart.jsx';
+import ChartConfigurator from './chartConfigurator';
 
 const currentTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-function ItemChart({ keyObj, operations, appSettings }) {
+function ItemChart({ keyObj, isAutoDraw, initialStateProp = {}, shouldHideHeader = false }) {
   const nowDate = new Date()
-  const initialEndTime = format(nowDate, 'HH:mm')
-  const initialStartTime = format(sub(nowDate, { hours: 3 }), 'HH:mm');
-  const initialStartDate = format(nowDate, 'yyyy-MM-dd');
-  const initialEndDate = format(nowDate, 'yyyy-MM-dd');
+  const initialConfigState = {
+    startTime: format(sub(nowDate, { hours: 3 }), 'HH:mm'),
+    startDate: format(nowDate, 'yyyy-MM-dd'),
+    endTime: format(nowDate, 'HH:mm'),
+    endDate: format(nowDate, 'yyyy-MM-dd'),
+  }
 
-  const [startTime, set_startTime] = useState(initialStartTime)
-  const [startDate, set_startDate] = useState(initialStartDate)
-  const [endTime, set_endTime] = useState(initialEndTime)
-  const [endDate, set_endDate] = useState(initialEndDate)
+  if (Object.keys(initialStateProp).length > 0) {
+    Object.keys(initialStateProp).forEach(key => {
+      initialConfigState[key] = initialStateProp[key]
+    })
+  }
+
+  const [chartConfig, set_chartConfig] = useState(initialConfigState)
   const [dataSet, set_dataSet] = useState([])
+  const [isChartDrew, set_isChartDrew] = useState(false)
 
   function getTimeZone(country) {
     if (country === 'by') {
@@ -43,7 +50,7 @@ function ItemChart({ keyObj, operations, appSettings }) {
   }
 
   async function handleClickDraw() {
-    console.log('handleClickDraw')
+    const { startTime, startDate, endTime, endDate } = chartConfig
     const timeZone = getTimeZone(keyObj.country)
 
     const start = parse(`${startDate} ${startTime}`, 'yyyy-MM-dd HH:mm', new Date())
@@ -70,6 +77,7 @@ function ItemChart({ keyObj, operations, appSettings }) {
 
   function drawChart(data) {
     set_dataSet(data)
+    set_isChartDrew(true)
   }
 
   function prepareDataToChart(data) {
@@ -77,6 +85,7 @@ function ItemChart({ keyObj, operations, appSettings }) {
     const newDataSet = []
 
     data.forEach(item => {
+      if (!item.value) return
       let time = new Date(item.timestamp)
       time = formatInTimeZone(time, timeZone, 'yyyy-MM-dd HH:mm')
       newDataSet.push({ x: time, y: item.value })
@@ -98,40 +107,40 @@ function ItemChart({ keyObj, operations, appSettings }) {
 
   const colorRGB = parseHexColor(keyObj.bankColor)
 
+  if (isAutoDraw && !isChartDrew) {
+    handleClickDraw()
+  }
+
+  const data_chartConfigurator = {
+    chartConfig
+  }
+
+  const methods_chartConfigurator = {
+    handleClickClear,
+    handleClickDraw,
+    set_chartConfig
+  }
+
+  const dataSets = [
+    {
+      data: dataSet,
+      borderColor: `rgba(${colorRGB}, 1)`,
+      label: keyObj.name
+    }
+  ]
+
   return (
-    <div className={$s.chart}>
+    <div className={$s.chart} key={keyObj.key}>
       {<div className={$s.chart_body}>
         <KeyChart
-          key={keyObj.key}
-          dataSet={dataSet}
-          selectedKey={keyObj.key}
-          colorRGB={colorRGB}
+          dataSets={dataSets}
         />
       </div>}
-      <div className={$s.chart_header}>
-        <div className={$s.input_group}>
-          <span className={$s.label}>Start Time</span>
-          <input className={$s.input} type="time" value={startTime} onChange={e => set_startTime(e.target.value)} />
+      {!shouldHideHeader &&
+        <div className={$s.chart_header}>
+          <ChartConfigurator data={data_chartConfigurator} methods={methods_chartConfigurator} />
         </div>
-
-        <div className={$s.input_group}>
-          <span className={$s.label}>Start Date</span>
-          <input className={$s.input} type="date" value={startDate} onChange={e => set_startDate(e.target.value)} />
-        </div>
-
-        <div className={$s.input_group}>
-          <span className={$s.label}>End Time</span>
-          <input className={$s.input} type="time" value={endTime} onChange={e => set_endTime(e.target.value)} />
-        </div>
-
-        <div className={$s.input_group}>
-          <span className={$s.label}>End Date</span>
-          <input className={$s.input} type="date" value={endDate} onChange={e => set_endDate(e.target.value)} />
-        </div>
-
-        <button className={$s.button} onClick={handleClickClear} >Clear</button>
-        <button className={$s.button} onClick={handleClickDraw} >Draw</button>
-      </div>
+      }
     </div>
   )
 }

@@ -6,34 +6,43 @@ import 'chartjs-adapter-date-fns';
 
 Chart.register(...registerables);
 
-function KeyChart({ dataSet, colorRGB }) {
+function KeyChart({ dataSets }) {
   const chartRef = useRef(null);
   const [gradient, setGradient] = useState(null);
 
-  useEffect(() => {
-    if (chartRef.current) {
-      const ctx = chartRef.current.ctx;
-      const gradient = ctx.createLinearGradient(0, 0, 0, 160);
-      gradient.addColorStop(0, `rgba(${colorRGB}, 0.7)`);
-      gradient.addColorStop(1, `rgba(${colorRGB}, 0)`);
-      setGradient(gradient);
-    }
-  }, [chartRef]);
+  // useEffect(() => {
+  //   if (chartRef.current) {
+  //     const ctx = chartRef.current.ctx;
+  //     const gradient = ctx.createLinearGradient(0, 0, 0, 160);
+  //     gradient.addColorStop(0, `rgba(${colorRGB}, 0.7)`);
+  //     gradient.addColorStop(1, `rgba(${colorRGB}, 0)`);
+  //     setGradient(gradient);
+  //   }
+  // }, [chartRef]);
+
+  const datasetModel = {
+    data: [],
+    borderWidth: 2,
+    tension: 0.2,
+    // stepped: true,
+    pointRadius: 0,
+    borderColor: `red`,
+    // backgroundColor: gradient,
+    showTooltip: true,
+    fill: true,
+    label: 'title'
+  }
+
+  const dataSet = dataSets.map(dataSet => {
+    const clonedDataSet = { ...datasetModel }
+    clonedDataSet.data = dataSet.data
+    clonedDataSet.borderColor = dataSet.borderColor //`rgba(${colorRGB}, 1)`
+    clonedDataSet.label = dataSet.label
+    return clonedDataSet
+  })
 
   const data = {
-    datasets: [
-      {
-        data: dataSet,
-        borderWidth: 2,
-        tension: 0.2,
-        // stepped: true,
-        pointRadius: 0,
-        borderColor: `rgba(${colorRGB}, 1)`,
-        backgroundColor: gradient,
-        showTooltip: true,
-        fill: true
-      }
-    ],
+    datasets: dataSet
   };
 
   const options = {
@@ -49,7 +58,8 @@ function KeyChart({ dataSet, colorRGB }) {
           parser: 'yyyy-MM-dd HH:mm',
           unit: 'hour',
           displayFormats: {
-            minute: 'HH:mm'
+            minute: 'HH:mm',
+            hour: 'MM.dd-HH:mm',
           }
         }
       }
@@ -59,7 +69,13 @@ function KeyChart({ dataSet, colorRGB }) {
         display: false
       },
       legend: {
-        display: false
+        display: true,
+        labels: {
+          font: {
+            size: 14,
+            weight: 'bold'
+          }
+        }
       },
       tooltip: {
         enabled: true

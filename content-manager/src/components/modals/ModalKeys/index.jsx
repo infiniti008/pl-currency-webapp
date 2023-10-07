@@ -9,6 +9,7 @@ import keyModel from '../../../models/keyModel';
 
 import Header from './header';
 import KeyItem from './item';
+import MainDropdown from './dropdown';
 
 const INITIAL_COUNTRY = 'all'
 const INITIAL_TIME_LIMIT = 10
@@ -39,6 +40,8 @@ function ModalKeys() {
   const [selectedCurrency, setSelectedCurrency] = useState(INITIAL_CURRENCY)
   const [selectedOperation, setSelectedOperation] = useState(INITIAL_OPERATION)
   const [selectedBank, setSelectedBank] = useState(INITIAL_BANK)
+  const [isMainDropdownOpened, setIsMainDropdownOpened] = useState(false)
+  const [selectedKeys, setSelectedKeys] = useState([])
 
   async function fetchLastValues() {
     countries?.forEach(async (country) => {
@@ -96,6 +99,13 @@ function ModalKeys() {
     setKeys(clonedKeys)
   }
 
+  function onClickCompare() {
+    setIsMainDropdownOpened(!isMainDropdownOpened)
+    if (isMainDropdownOpened) {
+      setSelectedKeys([])
+    }
+  }
+
   function sortKeys(items) {
     let sortedKeys = [...items]
     if (sortBy == 'timestamp') {
@@ -122,6 +132,17 @@ function ModalKeys() {
     }
 
     return sortedKeys
+  }
+
+  function handleToggleSelectKey(key, status) {
+    let clonedKeys = [...selectedKeys]
+    if (status) {
+      clonedKeys.push(key)
+    } else {
+      clonedKeys = clonedKeys.filter(keyItem => keyItem !== key)
+    }
+
+    setSelectedKeys(clonedKeys)
   }
 
   function filterKeys(items) {
@@ -152,7 +173,15 @@ function ModalKeys() {
 
   const keyElements = filteredKeys.map(key => {
     return (
-      <KeyItem key={key.key} keyObj={key} selectedTimeLimit={selectedTimeLimit} operations={operations} appSettings={currentStore?.appSettings?.appSettings || {}} />
+      <KeyItem
+        key={key.key}
+        keyObj={key}
+        selectedTimeLimit={selectedTimeLimit}
+        operations={operations}
+        appSettings={currentStore?.appSettings?.appSettings || {}}
+        selectedKeys={selectedKeys}
+        handleToggleSelectKey={handleToggleSelectKey}
+      />
     )
   })  
 
@@ -177,8 +206,12 @@ function ModalKeys() {
         banks={banks}
         selectedBank={selectedBank}
         setSelectedBank={setSelectedBank}
+        onClickCompare={onClickCompare}
       />
       <div className={$s.body}>
+        {isMainDropdownOpened && (
+          <MainDropdown keys={keys} selectedKeys={selectedKeys} />
+        )}
         {keyElements}
       </div>
       <ToastContainer />
