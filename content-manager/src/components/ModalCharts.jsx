@@ -11,12 +11,13 @@ import { saveChartsView, getChartsView, removeChartsView } from '../api/services
 import displaySaveChartViewsPrompt from './ui/ToastSaveChartsView';
 import Copyright from './ui/Copyright';
 import Logo from './ui/Logo';
+import AudioPlayer from './ui/AudioPlayer';
 
 const initialChartsView = {
   charts: [],
   chartsViewName:'',
   isAllHidden: false,
-  isAutoRun: true,
+  isAutoRun: false,
   url: '',
   selectedChartTemplate: ''
 }
@@ -230,6 +231,7 @@ function ModalStream({ chartsViewNameFromPath }) {
             <Logo />
             <Clock timeZone={timeZone} setIsAllHidden={setIsAllHidden.bind(null, false)} />
             <Copyright isInline={isCopyrightInline}/>
+            <AudioPlayer isAutoRun={loadedChartsView.isAutoRun} hidden={true} />
           </div>
         }
         {!isAllHidden && 
