@@ -121,19 +121,21 @@ function ItemChart({ keyObj, isAutoDraw, initialStateProp = {}, shouldHideHeader
     set_chartConfig
   }
 
-  const dataSets = [
-    {
-      data: dataSet,
-      borderColor: `rgba(${colorRGB}, 1)`,
-      label: keyObj.name
-    }
-  ]
+  const preparedDataSet = {
+    data: dataSet,
+    borderColor: `rgba(${colorRGB}, 1)`,
+    label: keyObj.name
+  }
+
+  const dataSets = [ preparedDataSet ]
 
   return (
     <div className={$s.chart} key={keyObj.key}>
       {<div className={$s.chart_body}>
         <KeyChart
+          key={'item-chart-' + keyObj.key}
           dataSets={dataSets}
+          name={'item-chart-' + keyObj.key}
         />
       </div>}
       {!shouldHideHeader &&

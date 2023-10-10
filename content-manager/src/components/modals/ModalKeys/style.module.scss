@@ -176,6 +176,10 @@
     height: 100%;
     width: 100%;
   }
+
+  &__chart {
+    height: 400px;
+  }
 }
 
 @keyframes slide-in-chart {

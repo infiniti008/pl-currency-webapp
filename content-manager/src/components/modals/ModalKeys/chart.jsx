@@ -6,7 +6,7 @@ import 'chartjs-adapter-date-fns';
 
 Chart.register(...registerables);
 
-function KeyChart({ dataSets }) {
+function KeyChart({ dataSets, name }) {
   const chartRef = useRef(null);
   const [gradient, setGradient] = useState(null);
 
@@ -27,17 +27,22 @@ function KeyChart({ dataSets }) {
     // stepped: true,
     pointRadius: 0,
     borderColor: `red`,
+    backgroundColor: `transparent`,
     // backgroundColor: gradient,
     showTooltip: true,
     fill: true,
-    label: 'title'
+    label: 'title',
+    yAxisID: ''
   }
 
-  const dataSet = dataSets.map(dataSet => {
+  console.log(name, dataSets)
+
+  const dataSet = dataSets.map((dataSet) => {
     const clonedDataSet = { ...datasetModel }
     clonedDataSet.data = dataSet.data
     clonedDataSet.borderColor = dataSet.borderColor //`rgba(${colorRGB}, 1)`
     clonedDataSet.label = dataSet.label
+    clonedDataSet.yAxisID = dataSet.yAxisID ? dataSet.yAxisID : 'y'
     return clonedDataSet
   })
 
@@ -59,7 +64,7 @@ function KeyChart({ dataSets }) {
           unit: 'hour',
           displayFormats: {
             minute: 'HH:mm',
-            hour: 'MM.dd-HH:mm',
+            hour: 'dd.MM-HH:mm',
           }
         }
       }
