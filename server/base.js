@@ -582,3 +582,65 @@ export async function createKeyFromManager(country, key) {
     return false;
   }
 }
+
+export async function findSubscriptionById(id, mode) {
+  const baseName = mode === 'dev' ? 'currency_app_test' : 'currency_app';
+  const collections = [
+    'subscriptions-stories',
+    'subscriptions-video',
+    'subscriptions-telegram',
+    'subscriptions-users'
+  ];
+
+  try {
+    for (let i = 0; i < collections.length; i++) {
+      const collection = await client.db(baseName).collection(collections[i]);
+      const subscription = await collection.findOne({ _id: new ObjectId(id) });
+
+      if (subscription) {
+        return subscription;
+      }
+    }
+
+    return null;
+  } catch(err) {
+    console.log(err);
+    return null;
+  }
+}
+
+export async function getDiffCurrencies(country, keys, timestamp) {
+  try {
+    const currencyBaseName = `currency_${country}`;
+
+    const requestsArray = [];
+
+    keys.forEach(key => {
+      requestsArray.push(getValueByTime(currencyBaseName, key, timestamp));
+    });
+
+    const diffCurrencies = await Promise.all(requestsArray);
+ 
+    return diffCurrencies;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+}
+
+export async function getValueByTime(baseName, key, timestamp) {
+  try {
+    const collection = await client.db(baseName).collection(key);
+    const val = await collection
+      .findOne({
+        timestamp: {$gte: timestamp}
+      })
+
+    return {
+      ...val,
+      key
+    };
+  } catch (err) {
+    console.log(err);
+  }
+}

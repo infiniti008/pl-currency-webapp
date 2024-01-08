@@ -2,7 +2,7 @@ import axios from 'axios';
 
 import CONFIG from '../models/config.js';
 
-const { SERVER_URL, TELEGRAM_USER } = CONFIG;
+const { SERVER_URL, TELEGRAM_USER, IS_DEV_MODE } = CONFIG;
 
 export async function getConfig() {
   try {
@@ -132,6 +132,49 @@ export async function getStatistic() {
     
     return response?.data || {};
   } catch(err) {
+    console.log(err);
+  }
+}
+
+export async function getSubscriptionById(id) {
+  try {
+    const response = await axios.get(`${SERVER_URL}/api/render/subscription/${id}`, {
+      headers: {
+        'X-MODE': IS_DEV_MODE ? 'dev' : 'prod'
+      }
+    });
+    
+    return response?.data || {};
+  } catch(err) {
+    console.log(err);
+  }
+}
+
+export async function getRenderSettings() {
+  try {
+    const mode = IS_DEV_MODE ? 'dev' : 'prod';
+    const response = await axios.get(`${SERVER_URL}/api/render-settings/${mode}`, {
+      headers: {
+        'x-mode': mode
+      }
+    });
+    
+    return response?.data.data || {};
+  } catch(err) {
+    console.log(err);
+  }
+}
+
+export async function getDiffCurrencies(country, keys, timestamp) {
+  try {
+    const response = await axios.post(`${SERVER_URL}/api/render/currencies/diff`, {
+      country,
+      keys,
+      timestamp
+    });
+
+    return response?.data || {};
+  } catch (err) {
     console.log(err);
   }
 }

@@ -1,4 +1,3 @@
-БеуьздфеуЮ
 <template>
   <div class="hello-page">
     <h3>Service Page</h3>

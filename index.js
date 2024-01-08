@@ -7,9 +7,10 @@ const env = process.env.environment || 'prod';
 const mediaFolderPath = process.env['mediaFolderPath_' + env];
 
 import express from 'express';
-// import cors from 'cors';
+import cors from 'cors';
 import fs from 'fs';
 import bodyParser from 'body-parser';
+import routeRender from './server/routeRender.js';
 
 import { 
   getLastCurrencies,
@@ -58,7 +59,7 @@ const port = 3000;
 //   optionsSuccessStatus: 200
 // }
 
-// app.use(cors(corsOptions));
+app.use(cors());
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -72,6 +73,8 @@ app.use(bodyParser.json());
 app.use(express.static('./dist'));
 app.use('/manager', express.static('./content-manager/dist'));
 app.use('/files', express.static(mediaFolderPath));
+
+app.use('/api/render', routeRender);
 
 // Start the server
 app.listen(port, () => {
