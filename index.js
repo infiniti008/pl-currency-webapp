@@ -71,6 +71,7 @@ app.use(bodyParser.json());
 
 // Serve static files from the 'public' directory
 app.use(express.static('./dist'));
+app.use('/render', express.static('./dist'));
 app.use('/manager', express.static('./content-manager/dist'));
 app.use('/files', express.static(mediaFolderPath));
 
