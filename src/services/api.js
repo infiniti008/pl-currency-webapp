@@ -25,6 +25,18 @@ export async function getLastCurrencies(country) {
   }
 }
 
+export async function getLastCurrenciesForRender(country) {
+  try {
+    const response = await axios.get(`${SERVER_URL}/api/last/${country}`);
+    const lastCurrencies = response.data.data;
+    const settings = response.data.settings;
+
+    return { lastCurrencies, settings };
+  } catch (err) {
+    console.log(err);
+  }
+}
+
 export async function saveFavorites(favorites, country) {
   try {
     const response = await axios.post(`${SERVER_URL}/api/favorites/${country}/${TELEGRAM_USER}`, {

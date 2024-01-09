@@ -109,6 +109,15 @@ app.get('/api/last/:country/:userId', async (req, res) => {
   }
 });
 
+app.get('/api/last/:country', async (req, res) => {
+  try {
+    const { data, settings } = await getLastCurrencies(req.params.country);
+    res.json({ data, settings });
+  } catch (err) {
+    console.log(err);
+  }
+});
+
 app.get('/api/settings/:userId', async (req, res) => {
   try {
     const data = await getUserSettings(req.params.userId);

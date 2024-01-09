@@ -1,5 +1,5 @@
 import { toDateFormat, getTimestampToGetDiff, getTimeZone, prepareContentToRender } from "../../services/templateHelper";
-import { getSubscriptionById, getRenderSettings, getLastCurrencies, getDiffCurrencies } from "../../services/api";
+import { getSubscriptionById, getRenderSettings, getLastCurrenciesForRender, getDiffCurrencies } from "../../services/api";
 
 import { DateTime } from 'luxon';
 
@@ -20,7 +20,7 @@ export const templateMixin = {
     async getData() {
       this.data = await getSubscriptionById(this.id);
       this.renderSettings = await getRenderSettings();
-      this.lastCurrencies = (await getLastCurrencies(this.data.country))?.lastCurrencies || [];
+      this.lastCurrencies = (await getLastCurrenciesForRender(this.data.country))?.lastCurrencies || [];
       console.log('data', this.data);
       console.log('renderSettings', this.renderSettings);
       console.log('lastCurrencies', this.lastCurrencies);
