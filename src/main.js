@@ -20,6 +20,7 @@ new Vue({
   },
   computed: {
     ViewComponent () {
+      console.log('this.currentRoute', this.currentRoute);
       return routes[this.currentRoute] || App
     }
   },

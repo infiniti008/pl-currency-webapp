@@ -97,7 +97,6 @@ body {
 </style>
 
 <style lang="scss" scoped>
-
 .container {
   height: 100%;
 }
