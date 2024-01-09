@@ -64,6 +64,10 @@ export default {
       required: true
     }
   },
+  created() {
+    const body = document.querySelector('body');
+    body.classList.add('render');
+  },
   data: () => {
     return {
       screenWidth: window.innerWidth,
@@ -232,5 +236,13 @@ export default {
     color: #D8D8D8;
     text-shadow: 0 0 16px rgb(177 180 122 / 56%);
   }
+}
+</style>
+
+<style lang="scss">
+body.render {
+  width: 1080px;
+  height: 1920px;
+  box-shadow: 0px 0px 10px 0px #000;
 }
 </style>

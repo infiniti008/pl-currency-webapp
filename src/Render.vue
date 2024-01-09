@@ -87,15 +87,6 @@ export default {
   }
 }
 </script>
-
-<style lang="scss">
-body {
-  width: 1080px;
-  height: 1920px;
-  box-shadow: 0px 0px 10px 0px #000;
-}
-</style>
-
 <style lang="scss" scoped>
 .container {
   height: 100%;

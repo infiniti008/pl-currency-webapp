@@ -11,6 +11,7 @@ import cors from 'cors';
 import fs from 'fs';
 import bodyParser from 'body-parser';
 import routeRender from './server/routeRender.js';
+import path from 'path';
 
 import { 
   getLastCurrencies,
@@ -395,3 +396,12 @@ app.post('/api/manage-key/:country/', async (req, res) => {
     console.log(err);
   }
 });
+
+
+// Serve Vue.js as SPA in production
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static('dist'))
+  app.get('*', (req, res, next) => {
+    res.sendFile('index.html', {'root': path.join('./dist')})
+  })
+}
