@@ -445,7 +445,7 @@ export async function updateSubscriptionFromManager(mode, subscriptionId, subscr
     const collectionName = subscription.platform;
 
     const collection = await client.db(baseName).collection(collectionName);
-    collection.updateOne({ _id: new ObjectId(subscriptionId) }, {$set: subscription });
+    collection.updateOne({ _id: subscriptionId }, {$set: subscription });
     return true;
   } catch(err) {
     console.log(err)
