@@ -9,7 +9,7 @@ import ModalKeys from './components/modals/ModalKeys'
 import CurrentStoreContext from './contexsts/store';
 
 import { EventBusProvider } from './contexsts/eventBus';
-import { getAppSettings } from './api/services';
+import { getAppSettings, getRenderSettings } from './api/services';
 
 const keysToDisableDisplayingSheet = ['chartsViewName']
 
@@ -38,8 +38,10 @@ function App() {
   async function fetchAppSettings(extendingToStore) {
     try {
       const appSettings = await getAppSettings()
+      const renderSettings = await getRenderSettings()
       const clonedStore = {...currentStore}
       clonedStore.appSettings = appSettings
+      clonedStore.renderSettings = renderSettings
       Object.assign(clonedStore, extendingToStore)
       let keys = []
       for(const key in appSettings) {

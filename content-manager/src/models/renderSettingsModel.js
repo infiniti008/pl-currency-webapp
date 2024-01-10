@@ -78,6 +78,12 @@ export default {
       valueType: "boolean",
       editable: true,
     },
+    "templates": {
+      name: "Темплейты (separeted by ',')",
+      inputType: "text",
+      valueType: "string[]",
+      editable: true,
+    },
     "cookies_tiktok_pl": {
       name: "",
       inputType: "checkbox",
@@ -104,6 +110,7 @@ export default {
     "image_shouldSend_telegram": false,
     "image_shouldSend_stories": false,
     "skipFilterByDay": false,
+    "templates": [],
     "cookies_tiktok_pl": [],
     "cookies_tiktok_by": []
   }

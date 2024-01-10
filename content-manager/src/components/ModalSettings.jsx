@@ -26,9 +26,10 @@ function ModalSettings() {
 
     async function getSettings() {
       const settings = await getRenderSettings()
-      cachedSettings = settings
+      const preparedSettings = Object.assign({}, model, settings)
+      cachedSettings = preparedSettings
 
-      setRenderSettings(settings)
+      setRenderSettings(preparedSettings)
     }
 
     getSettings()
@@ -54,6 +55,8 @@ function ModalSettings() {
         newSettings[key] = parseFloat(newSettings[key])
       } else if (descriptor[key]?.valueType === 'string') {
         newSettings[key] = newSettings[key].trim()
+      } else if (descriptor[key]?.valueType === 'string[]') {
+        newSettings[key] = newSettings[key].split(',').map(item => item.trim())
       }
     }
     const response = await saveRenderSettings(newSettings)

@@ -50,6 +50,16 @@ export default {
       editable: true,
       isRequired: true
     },
+    "template": {
+      name: "Темплейт",
+      inputType: "select",
+      valueType: "string",
+      optionsVariable: 'templates',
+      editable: true,
+      isRequired: true,
+      isInline: true,
+      enabledIf: 'object.shouldUseRenderV2 === true'
+    },
     "color": {
       name: "Основной цвет: {COLOR}",
       inputType: "color",
@@ -94,6 +104,21 @@ export default {
       valueType: "boolean",
       editable: true,
       isInline: true
+    },
+    "shouldUseRenderV2": {
+      name: "Нужно ли использовать новый рендер?",
+      inputType: "checkbox",
+      valueType: "boolean",
+      editable: true,
+      isInline: true
+    },
+    "dayToGetDiff": {
+      name: "Сколько дней назад брать разницу",
+      inputType: "text",
+      valueType: "number",
+      editable: true,
+      isRequired: false,
+      isInline: true
     }
   },
   model: {
@@ -105,11 +130,14 @@ export default {
     "userId": "",
     "times": [],
     "name": "",
+    "template": "",
     "color": "#000000",
     "platform": "",
     "chanel": "",
     "timeToGetDiff": "",
     "weekAvailability": "*******",
-    "doNotPostIfNoChanges": false
+    "doNotPostIfNoChanges": false,
+    "shouldUseRenderV2": false,
+    "dayToGetDiff": ""
   }
 }

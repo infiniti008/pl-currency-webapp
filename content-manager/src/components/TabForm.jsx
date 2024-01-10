@@ -16,7 +16,7 @@ function TabForm({ handleSaveSubscription }) {
     setCurrentStore
   } = useContext(CurrentStoreContext);
 
-  const defaultValue = currentStore.subscriptionToOpenInModal
+  const defaultValue = Object.assign({}, model, currentStore.subscriptionToOpenInModal)
   cachedSubscription = defaultValue
 
   const [subscription, setSubscription] = useState(defaultValue)
@@ -68,11 +68,13 @@ function TabForm({ handleSaveSubscription }) {
   }
 
   const confirmButtonText = isNewSubscription ? 'Create' : 'Save'
+  const optionsObj = currentStore?.appSettings?.appSettings || {}
+  optionsObj.templates = currentStore?.renderSettings.templates
 
   return (
     <div className='tab tab-form'>
       <div className='tab-content'>
-        <Inputs descriptorModel={descriptor} handleUpdateOption={handleUpdateOption} object={subscription} model={model} optionsObj={currentStore?.appSettings?.appSettings} />
+        <Inputs descriptorModel={descriptor} handleUpdateOption={handleUpdateOption} object={subscription} model={model} optionsObj={optionsObj} />
       </div>
       <div className="tab-footer">
         <button onClick={handleReset}>Reset</button>
