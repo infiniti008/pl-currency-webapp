@@ -12,6 +12,7 @@ import SubscriptionsStoriesV1 from './components/render/SubscriptionsStoriesV1.v
 import AskDonateV1 from './components/render/AskDonateV1.vue';
 import SubscriptionsUsersV1 from './components/render/SubscriptionsUsersV1.vue';
 import SubscriptionsVideoV1 from './components/render/SubscriptionsVideoV1.vue';
+import SubscriptionsVideoTitleV1 from './components/render/SubscriptionsVideoTitleV1.vue';
 
 const { IS_DEV_MODE } = CONFIG;
 
@@ -23,6 +24,7 @@ export default {
     SubscriptionsStoriesV1,
     SubscriptionsUsersV1,
     SubscriptionsVideoV1,
+    SubscriptionsVideoTitleV1,
     AskDonateV1
   },
   data() {
