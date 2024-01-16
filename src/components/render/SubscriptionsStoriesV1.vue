@@ -116,14 +116,14 @@ export default {
   font-family: 'Roboto Slab', serif;
 }
 
-header {
+.page header {
   text-align: center;
   font-size: 46px;
   margin-bottom: 28px;
   font-family: 'Roboto Slab', serif;
 }
 
-header p {
+.page header p {
   padding: 0;
   margin: 0;
 }
