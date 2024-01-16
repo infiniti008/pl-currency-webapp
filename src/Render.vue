@@ -8,7 +8,7 @@
 <script>
 import CONFIG from './models/config.js';
 import VerticalBitcoinV1 from './components/render/VerticalBitcoinV1.vue';
-
+import SubscriptionsStoriesV1 from './components/render/SubscriptionsStoriesV1.vue';
 
 const { IS_DEV_MODE } = CONFIG;
 
@@ -16,7 +16,8 @@ export default {
   name: 'Rneder',
 
   components: {
-    VerticalBitcoinV1
+    VerticalBitcoinV1,
+    SubscriptionsStoriesV1
   },
   data() {
     return {

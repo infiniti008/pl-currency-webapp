@@ -595,7 +595,13 @@ export async function findSubscriptionById(id, mode) {
   try {
     for (let i = 0; i < collections.length; i++) {
       const collection = await client.db(baseName).collection(collections[i]);
-      const subscription = await collection.findOne({ _id: new ObjectId(id) });
+      const query = { 
+        $or: [
+          { _id: new ObjectId(id) },
+          { _id: id }
+        ]
+      };
+      const subscription = await collection.findOne(query);
 
       if (subscription) {
         return subscription;
