@@ -11,19 +11,23 @@ export const templateMixin = {
       renderSettings: null
     }
   },
-  async created() {
-    console.log('this.id', this.id);
-    await this.getData();
-    await this.prepareData();
-  },
   methods: {
-    async getData() {
+    async loadData() {
       this.data = await getSubscriptionById(this.id);
-      this.renderSettings = await getRenderSettings();
-      this.lastCurrencies = (await getLastCurrenciesForRender(this.data.country))?.lastCurrencies || [];
       console.log('data', this.data);
+    },
+    async loadRenderSettings() {
+      this.renderSettings = await getRenderSettings();
       console.log('renderSettings', this.renderSettings);
+    },
+    async loadLastCurrencies() {
+      this.lastCurrencies = (await getLastCurrenciesForRender(this.data.country))?.lastCurrencies || [];
       console.log('lastCurrencies', this.lastCurrencies);
+    },
+    async getData() {
+      await this.loadData();
+      await this.loadRenderSettings();
+      await this.loadLastCurrencies();
     },
 
     async prepareData() {

@@ -64,16 +64,11 @@ export default {
       required: true
     }
   },
-  created() {
+  async created() {
     const body = document.querySelector('body');
     body.classList.add('render');
-  },
-  data: () => {
-    return {
-      screenWidth: window.innerWidth,
-      screenHeight: window.innerHeight,
-
-    };
+    await this.getData();
+    await this.prepareData();
   },
   computed: {
     cssVars() {

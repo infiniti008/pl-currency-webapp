@@ -9,6 +9,7 @@
 import CONFIG from './models/config.js';
 import VerticalBitcoinV1 from './components/render/VerticalBitcoinV1.vue';
 import SubscriptionsStoriesV1 from './components/render/SubscriptionsStoriesV1.vue';
+import AskDonateV1 from './components/render/AskDonateV1.vue';
 
 const { IS_DEV_MODE } = CONFIG;
 
@@ -17,7 +18,8 @@ export default {
 
   components: {
     VerticalBitcoinV1,
-    SubscriptionsStoriesV1
+    SubscriptionsStoriesV1,
+    AskDonateV1
   },
   data() {
     return {
