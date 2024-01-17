@@ -29,7 +29,6 @@ export default {
   },
   async created() {
     const body = document.querySelector('body');
-    body.classList.add('render');
     body.classList.add('render-subscriptions-video-title');
     await this.loadData();
     await this.loadRenderSettings();

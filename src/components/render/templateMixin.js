@@ -76,7 +76,7 @@ export const templateMixin = {
           console.log("READY")
           this.$emit('setReady');
         });
-      }, 3000);
+      }, 100);
     }
   }
 }

@@ -2,6 +2,7 @@
 <div :class="containerClasses">
   <component :is="templateName" v-if="templateName" :id="id" @setReady="setReady"/>
   <h1 v-else>Template not found</h1>
+  <Tools />
 </div>
 </template>
 
@@ -13,6 +14,7 @@ import AskDonateV1 from './components/render/AskDonateV1.vue';
 import SubscriptionsUsersV1 from './components/render/SubscriptionsUsersV1.vue';
 import SubscriptionsVideoV1 from './components/render/SubscriptionsVideoV1.vue';
 import SubscriptionsVideoTitleV1 from './components/render/SubscriptionsVideoTitleV1.vue';
+import Tools from './components/render/Tools.vue';
 
 const { IS_DEV_MODE } = CONFIG;
 
@@ -25,7 +27,8 @@ export default {
     SubscriptionsUsersV1,
     SubscriptionsVideoV1,
     SubscriptionsVideoTitleV1,
-    AskDonateV1
+    AskDonateV1,
+    Tools
   },
   data() {
     return {
@@ -38,24 +41,9 @@ export default {
     }
   },
   created() {
-    this.setDevelopmentMode();
     this.prepareData();
   },
   methods: {
-    setDevelopmentMode() {
-      if (IS_DEV_MODE) {
-        this.$nextTick(() => {
-          const html = document.querySelector('html');
-          html.style.width = '100%';
-          html.style.height = '100%';
-
-          const body = document.querySelector('body');
-          body.style.transform = 'scale(0.47)';
-          body.style.position = 'absolute';
-          body.style.top = '-53%';
-        });
-      }
-    },
     async prepareData() {
       const templateName = this.getTemplateName();
       const subscriptionID = this.getSubscribtioId();

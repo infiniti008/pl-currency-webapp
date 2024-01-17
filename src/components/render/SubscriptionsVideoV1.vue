@@ -80,7 +80,6 @@ export default {
   },
   async created() {
     const body = document.querySelector('body');
-    body.classList.add('render');
     body.classList.add('render-subscriptions-video');
     await this.getData();
     await this.prepareData();

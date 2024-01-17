@@ -84,7 +84,6 @@ export default {
   },
   async created() {
     const body = document.querySelector('body');
-    body.classList.add('render');
     await this.getData();
     await this.prepareData();
   },
