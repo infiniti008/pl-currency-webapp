@@ -1,11 +1,13 @@
 import { useContext } from 'react';
 import CurrentStoreContext from '../contexsts/store';
 import storiesModel from '../models/storiesModel';
+import videoModel from '../models/videoModel';
 
 import IconFlagBelarus from './icons/IconFlagBelarus';
 import IconFlagPoland from './icons/IconFlagPoland';
 import IconStories from './icons/Stories';
 import IconTelegram from './icons/Telegram';
+import IconVideo from './icons/Video';
 
 import '../assets/css/TopBar.scss'
 
@@ -123,6 +125,9 @@ function TopBar() {
         </div>
         <div className={ getIconWrapperClasses('subscriptions-stories', selectedPlatform) } onClick={onClickFilterSubscription.bind(null, 'subscriptions-stories')}>
           <IconStories />
+        </div>
+        <div className={ getIconWrapperClasses('subscriptions-video', selectedPlatform) } onClick={onClickFilterSubscription.bind(null, 'subscriptions-video')}>
+          <IconVideo />
         </div>
         <div className={ getIconWrapperClasses('all', selectedPlatform) } onClick={onClickFilterSubscription.bind(null, 'all')}>
           ALL

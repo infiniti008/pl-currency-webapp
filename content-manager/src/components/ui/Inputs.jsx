@@ -9,6 +9,7 @@ import Times from './Times';
 import Color from './Color';
 import Week from './Week';
 import Keys from './Keys';
+import TextArea from './TextArea';
 
 import '../../assets/css/Inputs.scss'
 
@@ -33,6 +34,16 @@ function Inputs({object, handleUpdateOption, descriptorModel, model, optionsObj}
     switch (inputType) {
       case 'text':
         return (<Input 
+          key={key}
+          value={objectPropperty}
+          itemKey={key}
+          handleUpdateOption={handleUpdateOption.bind(null, key)}
+          descriptor={descriptorModel[key]}
+          isInline={descriptorModel[key].isInline}
+          isRequired={descriptorModel[key].isRequired}
+        />)
+      case 'textArea':
+        return (<TextArea 
           key={key}
           value={objectPropperty}
           itemKey={key}

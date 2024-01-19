@@ -222,6 +222,23 @@ function prepareSubscriptionsResponse(data) {
           day.subscriptions.push(telegram);
         })
       }
+
+      const videos = data.subscriptionsVideo.filter(subscription => {
+        const fitByTime = subscription.time == rowTime
+
+        let fitByDay = false
+        if (fitByTime) {
+          fitByDay = subscription.weekAvailability[day.dayIndex] === '*'
+        }
+        
+        return fitByTime && fitByDay
+      })
+
+      if (videos.length > 0) {
+        videos.forEach(telegram => {
+          day.subscriptions.push(telegram);
+        })
+      }
     })
   })
 

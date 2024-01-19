@@ -92,7 +92,7 @@ export default {
       valueType: "boolean",
       editable: true,
       isInline: true
-    },
+    }
   },
   model: {
     "_id": "",
@@ -108,6 +108,6 @@ export default {
     "weekAvailability": "*******",
     "doNotPostIfNoChanges": false,
     "dayToGetDiff": "",
-    "shouldPostToFeed": false,
+    "shouldPostToFeed": true,
   }
 }

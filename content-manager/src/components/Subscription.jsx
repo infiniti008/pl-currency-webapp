@@ -2,6 +2,7 @@ import { useContext, useRef } from 'react';
 import CurrentStoreContext from '../contexsts/store';
 
 import IconStories from './icons/Stories';
+import IconVideo from './icons/Video';
 import IconTelegram from './icons/Telegram';
 import IconInfo from './icons/Info';
 import IconFlagBelarus from './icons/IconFlagBelarus';
@@ -40,6 +41,10 @@ function Subscription({subscription}) {
 
     if (subscription.platform === 'subscriptions-stories') {
       return <IconStories />
+    }
+
+    if (subscription.platform === 'subscriptions-video') {
+      return <IconVideo />
     }
   }
 

@@ -6,6 +6,8 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import storiesModel from '../models/storiesModel';
 import telegramModel from '../models/telegramModel';
+import videoModel from '../models/videoModel';
+
 import Inputs from './ui/Inputs';
 
 let cachedSubscription = storiesModel.model
@@ -29,6 +31,8 @@ function TabForm({ handleSaveSubscription }) {
       return storiesModel
     } else if (platform === 'subscriptions-telegram') {
       return telegramModel
+    } else if (platform === 'subscriptions-video') {
+      return videoModel
     }
   }
 
