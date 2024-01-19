@@ -32,7 +32,7 @@ export const templateMixin = {
 
     async prepareData() {
       const item = this.data;
-      const time = item.times[0] || item.time;
+      const time = item.time;
       const targetTimeZone = getTimeZone(item.country);
       const timeString = `${time}:00`;
       const nowTimeInTargetZone = DateTime.fromFormat(timeString, 'HH:mm:ss', { zone: targetTimeZone });

@@ -84,6 +84,7 @@ export default {
   },
   async created() {
     const body = document.querySelector('body');
+    body.classList.add('subscriptions-stories-v1');
     await this.getData();
     await this.prepareData();
   },
@@ -96,6 +97,12 @@ export default {
   }
 };
 </script>
+<style lang="scss">
+body.subscriptions-stories-v1 {
+  width: 1080px;
+  height: 1920px;
+}
+</style>
 
 <style lang="scss" scoped>
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;600;900&display=swap');

@@ -5,22 +5,32 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import storiesModel from '../models/storiesModel';
+import telegramModel from '../models/telegramModel';
 import Inputs from './ui/Inputs';
 
-const { descriptor, model } = storiesModel;
-let cachedSubscription = model
+let cachedSubscription = storiesModel.model
 
 function TabForm({ handleSaveSubscription }) {
   const {
     currentStore,
     setCurrentStore
   } = useContext(CurrentStoreContext);
+  const defaultPlatform = currentStore.subscriptionToOpenInModal.platform
+  const { descriptor, model } = getModel(defaultPlatform);
 
   const defaultValue = Object.assign({}, model, currentStore.subscriptionToOpenInModal)
   cachedSubscription = defaultValue
 
   const [subscription, setSubscription] = useState(defaultValue)
   const isNewSubscription = subscription._id == false
+
+  function getModel(platform) {
+    if (platform === 'subscriptions-stories') {
+      return storiesModel
+    } else if (platform === 'subscriptions-telegram') {
+      return telegramModel
+    }
+  }
 
   function handleReset() {
     setSubscription(cachedSubscription)
@@ -62,6 +72,19 @@ function TabForm({ handleSaveSubscription }) {
   }
 
   function handleUpdateOption(key, value) {
+    if (key === 'platform') {
+      const clonedStore = {...currentStore}
+      const newModel = getModel(value).model
+      clonedStore.subscriptionToOpenInModal = { ...newModel }
+      cachedSubscription = { ...newModel }
+      setCurrentStore(clonedStore)
+      
+      const clonedSubscription = { ...newModel }
+      setSubscription(clonedSubscription)
+
+      return
+    }
+
     const clonedSubscription = {...subscription}
     clonedSubscription[key] = value
     setSubscription(clonedSubscription)

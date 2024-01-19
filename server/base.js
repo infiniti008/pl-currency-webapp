@@ -385,13 +385,13 @@ export async function getAllSubscriptions(mode) {
     const subscriptionsVideoCollection = await client.db(baseName).collection('subscriptions-video');
     const subscriptionsVideo = await subscriptionsVideoCollection.find({}).toArray();
 
-    const resultsCollection = await client.db(baseName).collection('posting-results');
-    const postingResults = await resultsCollection.find({}).toArray();
+    const subscriptionsTelegramCollection = await client.db(baseName).collection('subscriptions-telegram');
+    const subscriptionsTelegram = await subscriptionsTelegramCollection.find({}).toArray();
 
     return {
       subscriptionsStories,
       subscriptionsVideo,
-      postingResults
+      subscriptionsTelegram
     };
   } catch(err) {
     console.log(err);
@@ -444,8 +444,15 @@ export async function updateSubscriptionFromManager(mode, subscriptionId, subscr
     const baseName = mode === 'dev' ? 'currency_app_test' : 'currency_app';
     const collectionName = subscription.platform;
 
+    const query = { 
+      $or: [
+        { _id: new ObjectId(subscriptionId) },
+        { _id: subscriptionId }
+      ]
+    }
+
     const collection = await client.db(baseName).collection(collectionName);
-    collection.updateOne({ _id: subscriptionId }, {$set: subscription });
+    collection.updateOne(query, {$set: subscription });
     return true;
   } catch(err) {
     console.log(err)

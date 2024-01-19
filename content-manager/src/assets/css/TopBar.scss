@@ -16,4 +16,24 @@
       margin-right: 6px;
     }
   }
+
+  & .frame {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 4px 4px;
+    border: 1px solid gainsboro;
+    border-radius: 4px;
+    background-color: white;
+    gap: 8px;
+
+    & .icon-wrapper {
+      display: flex;
+      cursor: pointer;
+
+      &.selected {
+        filter: drop-shadow(0 0 6px #007eff);
+      }
+    }
+  }
 }

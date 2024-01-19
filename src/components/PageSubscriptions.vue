@@ -15,14 +15,6 @@
             {{ item.name }}
           </div>
         </div>
-        <div class="item__group item__group--row">
-          <div class="item__title">
-            Interval:
-          </div>
-          <div class="item__text">
-            {{ getIntervalName(item.interval) }}
-          </div>
-        </div>
         <div class="item__group">
           <div class="item__title">
             Keys:
@@ -33,12 +25,10 @@
         </div>
         <div class="item__group">
           <div class="item__title">
-            Times:
+            Time:
           </div>
           <div class="item__list item__list--row">
-            <span  v-for="time in item.times" :key="time">
-              {{ time }}
-            </span>
+            {{ item.time }}
           </div>
         </div>
       </label>
@@ -153,9 +143,6 @@ export default {
     },
     isKeyDeprecated(keyToDefine) {
       return !this.settings.keys.find(key => key.key === keyToDefine);
-    },
-    getIntervalName(intervalToDefine) {
-      return this.intervals.find(interval => interval.key === intervalToDefine)?.name || intervalToDefine;
     }
   }
 };

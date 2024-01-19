@@ -36,6 +36,10 @@ export default {
     const body = document.querySelector('body');
     body.classList.add('ask-donate-v1');
     await this.loadData();
+
+    this.$nextTick(() => {
+      this.setReady();
+    });
   },
 };
 </script>

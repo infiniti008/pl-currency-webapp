@@ -38,18 +38,6 @@
       </template>
     </div>
     <div class="item">
-      <label for="intervalSelect">
-        Interval:
-      </label>
-      <select class="item__select" id="intervalSelect" v-model="selectedInterval" :disabled="!isKeysSelected">
-        <option disabled value="0">Select</option>
-        <option v-for="interval in intervals" :value="interval.key" :disabled="isIntervalDisabled(interval.isPremium)">
-          <span v-html="interval.isPremium ? '&#128303;' : '&#9989;'" />
-          {{ interval.name }}
-        </option>
-      </select>
-    </div>
-    <div class="item">
       <label for="subscriptionName">
         Subscription Name (30 symbols max):
       </label>
@@ -80,32 +68,11 @@
         <option v-for="minute in mintutesIntervals" :value="minute">{{ minute }}</option>
       </select>
     </div>
-    <div class="item" v-if="hasChangesToSave">
-      <span class="time" v-for="time in getCalculatedTimes()" :key="time">{{ time }}</span>
-    </div>
     <div class="item" v-if="isPremium">
       <label for="color">
         Color:
       </label>
       <input v-model="selectedColor" class="item__input" type="text" id="color" maxlength="10">
-    </div> 
-    <div v-if="isAdmin" class="item item--column">
-      <label for="platform">
-        Platform:
-      </label>
-      <select id="platform" class="item__select" v-model="selectedPlatform" :disabled="isTimeDisabled">
-        <option disabled value="0">Select Platform</option>
-        <option v-for="platform in platforms" :value="platform">{{ platform }}</option>
-      </select>
-    </div>
-    <div v-if="isAdmin" class="item item--column">
-      <label for="chanel">
-        Chanel:
-      </label>
-      <select id="chanel" class="item__select" v-model="selectedChanel" :disabled="isChanedDisabled">
-        <option disabled value="0">Select Chanel</option>
-        <option v-for="chanel in chanelsByPlatform" :value="chanel">{{ chanel }}</option>
-      </select>
     </div> 
   </div>
 </template>
@@ -138,20 +105,13 @@ export default {
       keys: [],
       selectedCountry: null,
       selectedKey: null,
-      selectedInterval: null,
       selectedHour: null,
       selectedMinute: null,
       selectedName: '',
       selectedPlatform: 'subscriptions-users',
-      selectedChanel: null,
       selectedColor: null,
       selectedTimeToGetDiff: null,
       addedKeys: [],
-      platforms: [
-        'subscriptions-users',
-        'subscriptions-telegram',
-        'subscriptions-video'
-      ],
       chanels: {
         'subscriptions-telegram': [
           '@by_currency_notifications',
@@ -192,13 +152,6 @@ export default {
     hasChangesToSave(newValue) {
       updateButtonsByKey('PageManageSubscription', this.$store, 'hasChangesToSave', !newValue);
     },
-    selectedInterval(newValue) {
-      if (newValue === '0') {
-        this.selectedName = '';
-        return;
-      }
-      this.selectedName = this.selectedSubscriptionToManage?.name ? this.selectedSubscriptionToManage?.name : this.intervals.find(interval => interval.key === newValue)?.name || newValue;
-    }
   },
   computed: {
     keysFiltredByCountry() {
@@ -221,7 +174,7 @@ export default {
       return this.addedKeys.length > 0;
     },
     isIntervalSelected() {
-      return this.isKeysSelected && this.selectedInterval && this.selectedInterval !== '0';
+      return this.isKeysSelected;
     },
     isTimeDisabled() {
       return !this.isIntervalSelected;
@@ -230,7 +183,7 @@ export default {
       return this.selectedHour && this.selectedMinute;
     },
     hasChangesToSave() {
-      return this.isCountrySelected && this.isKeysSelected && this.isIntervalSelected && this.isTimeSelected;
+      return this.isCountrySelected && this.isKeysSelected && this.isTimeSelected;
     },
     hoursIntervals() {
       const intervals = [];
@@ -258,19 +211,6 @@ export default {
     countryFlags() {
       return this.$store.state.config.countryFlags;
     },
-    intervals() {
-      return this.$store.state.config.intervals;
-    },
-    isChanedDisabled() {
-      return !this.selectedPlatform || this.selectedPlatform === '0' || this.selectedPlatform === 'subscriptions-users';
-    },
-    chanelsByPlatform() {
-      if (this.selectedPlatform) {
-        return this.chanels[this.selectedPlatform];
-      }
-
-      return [];
-    },
     isPremium() {
       return this.$store.state.config.isPremium;
     }
@@ -281,10 +221,8 @@ export default {
         const request = {
           country: this.selectedCountry,
           keys: this.addedKeys,
-          interval: this.selectedInterval,
           time: this.selectedTime,
           userId: config.TELEGRAM_USER,
-          times: this.getCalculatedTimes(),
           name: this.selectedName,
           platform: this.selectedPlatform
         };
@@ -345,7 +283,6 @@ export default {
         this.selectedCountry = this.selectedSubscriptionToManage.country,
         this.selectedKey = '0',
         this.$nextTick(() => {
-          this.selectedInterval = this.selectedSubscriptionToManage.interval,
           this.selectedHour = this.selectedSubscriptionToManage.time?.split(':')?.[0],
           this.selectedMinute = this.selectedSubscriptionToManage.time?.split(':')?.[1],
           this.addedKeys = this.selectedSubscriptionToManage.keys;
@@ -357,7 +294,6 @@ export default {
 
       this.selectedCountry = '0', 
       this.selectedKey = '0',
-      this.selectedInterval = '0',
       this.selectedHour = '08',
       this.selectedMinute = '00',
       this.addedKeys = [];
@@ -394,51 +330,6 @@ export default {
     },
     handleRemoveKey(keyToRemove) {
       this.addedKeys = this.addedKeys.filter(key => key !== keyToRemove);
-    },
-    getCalculatedTimes() {
-      const times = [];
-      const hour = parseInt(this.selectedHour);
-      let start = 0;
-      let interval = 4;
-      switch (this.selectedInterval) {
-        case 'every-1-hours':
-          interval = 1;
-          start = hour % interval;
-          break;
-        case 'every-2-hours':
-          interval = 2;
-          start = hour % interval;
-          break;
-        case 'every-3-hours':
-          interval = 3;
-          start = hour % interval;
-          break;
-        case 'every-4-hours':
-          interval = 4;
-          start = hour % interval;
-          break;
-        case 'every-6-hours':
-          interval = 6;
-          start = hour % interval;
-          break;
-        case 'every-12-hours':
-          interval = 12;
-          start = hour % interval;
-          break;
-        case 'every-24-hours':
-          interval = 24;
-          start = hour;
-          break;
-      }
-
-      for (let index = start; index < 24; index += interval) {
-        const cHour = index < 10 ? '0' + index : index.toString();
-        times.push(cHour + ':' + this.selectedMinute);
-      }
-      return times;
-    },
-    isIntervalDisabled(isPremiumInterval) {
-      return isPremiumInterval && !this.$store.state.config.isPremium;
     }
   }
 };

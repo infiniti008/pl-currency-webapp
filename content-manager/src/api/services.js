@@ -184,20 +184,13 @@ function addZero(number) {
 
 function prepareSubscriptionsResponse(data) {
   const rows = getRows();
-  data?.postingResults?.forEach(result => {
-    const id = result.content.id
-    const foundSubscription = data.subscriptionsStories.find(subscription => subscription._id === id)
-    if (foundSubscription) {
-      foundSubscription.postingResults = result
-    }
-  })
 
   rows.forEach(row => {
     const rowTime = row.time
 
     row.days.forEach(day => {
       const stories = data.subscriptionsStories.filter(subscription => {
-        const fitByTime = subscription.times.includes(rowTime)
+        const fitByTime = subscription.time == rowTime
 
         let fitByDay = false
         if (fitByTime) {
@@ -210,6 +203,23 @@ function prepareSubscriptionsResponse(data) {
       if (stories.length > 0) {
         stories.forEach(story => {
           day.subscriptions.push(story);
+        })
+      }
+
+      const telegrams = data.subscriptionsTelegram.filter(subscription => {
+        const fitByTime = subscription.time == rowTime
+
+        let fitByDay = false
+        if (fitByTime) {
+          fitByDay = subscription.weekAvailability[day.dayIndex] === '*'
+        }
+        
+        return fitByTime && fitByDay
+      })
+
+      if (telegrams.length > 0) {
+        telegrams.forEach(telegram => {
+          day.subscriptions.push(telegram);
         })
       }
     })

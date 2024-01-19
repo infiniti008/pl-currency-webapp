@@ -13,11 +13,14 @@ function Day({day, isSameDay}) {
   } = useContext(CurrentStoreContext);
 
   const filteredByCountrySubscriptions = day.subscriptions?.filter(item => currentStore.country === 'all' || item.country === currentStore.country)
+  const filteredByPlatformSubscriptions = filteredByCountrySubscriptions?.filter(item => currentStore.platform === 'all' || item.platform === currentStore.platform)
+  const filteredSubscriptions = filteredByPlatformSubscriptions
+
   const sameDayClass = isSameDay ? 'day--current' : ''
   const dayClasses = `day ${sameDayClass}`
   
   return <div className={dayClasses} key={ day.index }>
-    { filteredByCountrySubscriptions.map(subscription => <Subscription subscription={subscription} key={subscription._id} />) }
+    { filteredSubscriptions.map(subscription => <Subscription subscription={subscription} key={subscription._id} />) }
   </div>
 }
 

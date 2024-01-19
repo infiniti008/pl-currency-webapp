@@ -24,6 +24,12 @@ export default {
       valueType: "string",
       editable: true,
     },
+    "telegram_user_render_template": {
+      name: "Темплейт для рендеринга для юзеров в ТГ",
+      inputType: "text",
+      valueType: "string",
+      editable: true,
+    },
     "video_shouldRender": {
       name: "Видео: Нужно генерировать?",
       inputType: "checkbox",
@@ -101,6 +107,7 @@ export default {
     "by_daily_changes_videoTitleFilePath": "",
     "pl_weekly_changes_videoTitleFilePath": "",
     "by_weekly_changes_videoTitleFilePath": "",
+    "telegram_user_render_template": "",
     "video_shouldRender": false,
     "video_shouldSend_instagram": false,
     "video_shouldSend_tiktok": false,

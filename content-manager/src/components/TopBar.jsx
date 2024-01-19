@@ -4,7 +4,8 @@ import storiesModel from '../models/storiesModel';
 
 import IconFlagBelarus from './icons/IconFlagBelarus';
 import IconFlagPoland from './icons/IconFlagPoland';
-import IconFlagAll from './icons/IconFlagAll';
+import IconStories from './icons/Stories';
+import IconTelegram from './icons/Telegram';
 
 import '../assets/css/TopBar.scss'
 
@@ -16,11 +17,11 @@ function TopBar() {
     setCurrentStore
   } = useContext(CurrentStoreContext);
 
-  let selectedCountry = currentStore?.country;
+  const selectedCountry = currentStore?.country;
+  const selectedPlatform = currentStore?.platform;
   const countries = currentStore?.appSettings?.appSettings?.countries
 
-  function onSelectCountry(event) {
-    selectedCountry = event.target.value
+  function onSelectCountry(selectedCountry) {
     const clonedStore = {...currentStore}
     clonedStore.country = selectedCountry
     setCurrentStore(clonedStore)
@@ -34,7 +35,7 @@ function TopBar() {
 
   function onClickCreate() {
     const clonedStore = {...currentStore}
-    clonedStore.subscriptionToOpenInModal = model
+    clonedStore.subscriptionToOpenInModal = {...model}
     clonedStore.isModalSubscriptionOpen = !currentStore.isModalSubscriptionOpen
     setCurrentStore(clonedStore)
   }
@@ -57,19 +58,43 @@ function TopBar() {
     setCurrentStore(clonedStore)
   }
 
-  let countryFlag = ''
-  if (currentStore?.country == 'pl') {
-    countryFlag = <IconFlagPoland />
-  } else if (currentStore?.country == 'by') {
-    countryFlag = <IconFlagBelarus />
-  } else if (currentStore?.country == 'all') {
-    countryFlag = <IconFlagAll />
+  function onClickFilterSubscription(platform) {
+    const clonedStore = {...currentStore}
+    clonedStore.platform = platform
+    setCurrentStore(clonedStore)
   }
 
-  const countriesOptions = [<option value="all">ALL</option>]
+  function getCountryFlag(country) {
+    if (country == 'pl') {
+      return <IconFlagPoland />
+    } else if (country == 'by') {
+      return <IconFlagBelarus />
+    } else if (country == 'all') {
+      return 'ALL'
+    }
+  }
+
+  function getIconWrapperClasses(country, itemToCompare) {
+    const classes = ['icon-wrapper']
+    if (country == itemToCompare) {
+      classes.push('selected')
+    }
+
+    return classes.join(' ')
+  }
+
+  const countriesOptions = [
+    <div className={ getIconWrapperClasses('all', selectedCountry) } onClick={ onSelectCountry.bind(null, 'all') } key='all'>
+      { getCountryFlag('all') }
+    </div>
+  ]
   
   countries?.forEach(country => {
-    countriesOptions.push(<option value={country}>{country.toUpperCase()}</option>)
+    countriesOptions.push(
+      <div className={ getIconWrapperClasses(country, selectedCountry) } onClick={ onSelectCountry.bind(null, country) } key={ country }>
+        { getCountryFlag(country) }
+      </div>
+    )
   })
 
   return (
@@ -92,13 +117,19 @@ function TopBar() {
       <button onClick={onClickOpenStream}>
         Open Stream Window
       </button>
-      <div className='top-bar__country'>
-        <select className='top-bar__country-select' value={selectedCountry} onChange={onSelectCountry}>
-          <option value="all">ALL</option>
-          <option value="pl">PL</option>
-          <option value="by">BY</option>
-        </select>
-        {countryFlag}
+      <div className="frame">
+        <div className={ getIconWrapperClasses('subscriptions-telegram', selectedPlatform) } onClick={onClickFilterSubscription.bind(null, 'subscriptions-telegram')}>
+          <IconTelegram />
+        </div>
+        <div className={ getIconWrapperClasses('subscriptions-stories', selectedPlatform) } onClick={onClickFilterSubscription.bind(null, 'subscriptions-stories')}>
+          <IconStories />
+        </div>
+        <div className={ getIconWrapperClasses('all', selectedPlatform) } onClick={onClickFilterSubscription.bind(null, 'all')}>
+          ALL
+        </div>
+      </div>
+      <div className="frame">
+        { countriesOptions }
       </div>
     </div>
   )

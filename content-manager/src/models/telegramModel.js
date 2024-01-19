@@ -17,13 +17,18 @@ export default {
       isRequired: true,
       enabledIf: 'object.country'
     },
+    "interval": {
+      name: "Интервал паблишенга (для создания времен паблишенга в WebApp)",
+      inputType: "text",
+      valueType: "string",
+      editable: false,
+    },
     "time": {
       name: "Время публикации (кратно 5 минутам)",
       inputType: "time",
       valueType: "string",
       editable: true,
-      isInline: true,
-      isRequired: true
+      isInline: true
     },
     "name": {
       name: "Название (Заголовок)",
@@ -31,7 +36,7 @@ export default {
       valueType: "string",
       editable: true,
       isRequired: true,
-      isInline: true,
+      isInline: true
     },
     "template": {
       name: "Темплейт",
@@ -57,6 +62,15 @@ export default {
       optionsVariable: 'platforms',
       isInline: true,
       isRequired: true
+    },
+    "chanel": {
+      name: "Канал для публикации",
+      inputType: "select",
+      valueType: "string",
+      editable: true,
+      optionsVariable: 'chanels',
+      isInline: true,
+      enabledIf: 'object.platform === "subscriptions-telegram"'
     },
     "timeToGetDiff": {
       name: "Время для получения предыдущих курсов",
@@ -93,21 +107,29 @@ export default {
       editable: true,
       isInline: true
     },
+    "caption": {
+      name: "Подпись",
+      inputType: "text",
+      valueType: "string",
+      editable: true,
+      isRequired: true
+    },
   },
   model: {
     "_id": "",
-    "platform": "subscriptions-stories",
+    "platform": "subscriptions-telegram",
     "country": "",
     "keys": [],
-    "time": "09:00",
-    "userId": "",
+    "time": "",
     "name": "",
     "template": "",
     "color": "#000000",
+    "chanel": "",
     "timeToGetDiff": "",
     "weekAvailability": "*******",
     "doNotPostIfNoChanges": false,
     "dayToGetDiff": "",
     "shouldPostToFeed": false,
+    "caption": ""
   }
 }

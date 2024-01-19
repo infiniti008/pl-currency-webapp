@@ -4,6 +4,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import '../assets/css/Modal.scss'
+import '../assets/css/ModalSettings.scss'
 import { getRenderSettings, saveRenderSettings } from '../api/services';
 import renderSettingsModel from '../models/renderSettingsModel';
 import Inputs from './ui/Inputs';
@@ -56,7 +57,9 @@ function ModalSettings() {
       } else if (descriptor[key]?.valueType === 'string') {
         newSettings[key] = newSettings[key].trim()
       } else if (descriptor[key]?.valueType === 'string[]') {
-        newSettings[key] = newSettings[key].split(',').map(item => item.trim())
+        if (typeof newSettings[key] === 'string') {
+          newSettings[key] = newSettings[key]?.split(',').map(item => item.trim())
+        }
       }
     }
     const response = await saveRenderSettings(newSettings)
