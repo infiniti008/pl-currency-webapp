@@ -11,7 +11,7 @@ import IconVideo from './icons/Video';
 
 import '../assets/css/TopBar.scss'
 
-const { model } = storiesModel;
+const { model } = videoModel;
 
 function TopBar() {
   const {

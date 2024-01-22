@@ -8,7 +8,7 @@ function Select({itemKey, value, handleUpdateOption, descriptor, options, isInli
 
   const optionElements = options?.map(option => {
     return (
-      <option key={option} value={option}>{option.toUpperCase()}</option>
+      <option key={option} value={option}>{option}</option>
     )
   })
 

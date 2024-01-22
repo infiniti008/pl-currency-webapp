@@ -9,6 +9,8 @@ import '../assets/css/Modal.scss'
 import '../assets/css/ModalSubscription.scss'
 import SubscriptionTabs from './SubscriptionTabs';
 
+let cachedSubscription = {}
+
 function ModalSubscription() {
   const { emit } = useContext(EventBusContext)
 
@@ -17,11 +19,10 @@ function ModalSubscription() {
     setCurrentStore
   } = useContext(CurrentStoreContext)
 
-  let cachedSubscription = currentStore.subscriptionToOpenInModal
-
   const [inProgrees, setInProgrees] = useState(false)
 
   useEffect(() => {
+    cachedSubscription = JSON.parse(JSON.stringify(currentStore.subscriptionToOpenInModal))
     window.scrollTo({ top: 0 });
     document.body.style.overflow = 'hidden'
     document.body.style.marginRight = '15px';
@@ -136,7 +137,7 @@ function ModalSubscription() {
         clonedStore.subscriptionToOpenInModal = newSubscription
         setCurrentStore(clonedStore)
 
-        cachedSubscription = newSubscription
+        cachedSubscription = JSON.parse(JSON.stringify(newSubscription))
 
         onClickClose()
       } else {
