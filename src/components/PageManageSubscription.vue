@@ -226,14 +226,9 @@ export default {
           platform: this.selectedPlatform
         };
 
-        if (this.isAdmin) {
-          request.color = this.selectedColor;
-          request.chanel = this.selectedChanel;
-          request.timeToGetDiff = this.selectedTimeToGetDiff;
-        }
-
-        // console.log('request', request);
-        // return;
+        request.color = this.selectedColor;
+        request.chanel = this.selectedChanel;
+        request.timeToGetDiff = this.selectedTimeToGetDiff;
 
         try {
           this.isLoading = true;
