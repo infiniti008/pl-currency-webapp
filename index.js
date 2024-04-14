@@ -163,9 +163,9 @@ app.get('/api/subscription/settings', async (req, res) => {
   }
 });
 
-app.post('/api/subscription/:userId', async (req, res) => {
+app.post('/api/subscription/:mode', async (req, res) => {
   try {
-    const  response = await saveSubscription(req.body.subscription);
+    const  response = await saveSubscription(req.body.subscription, req.params.mode);
     
     res.json(response);
   } catch (err) {
@@ -173,9 +173,9 @@ app.post('/api/subscription/:userId', async (req, res) => {
   }
 });
 
-app.put('/api/subscription/:userId/:subscriptionId', async (req, res) => {
+app.put('/api/subscription/:userId/:subscriptionId/:mode', async (req, res) => {
   try {
-    const response = await updateSubscription(req.body.subscription, req.params.subscriptionId, req.params.userId);
+    const response = await updateSubscription(req.body.subscription, req.params.subscriptionId, req.params.userId, req.params.mode);
 
     res.json(response);
   } catch (err) {
@@ -183,9 +183,9 @@ app.put('/api/subscription/:userId/:subscriptionId', async (req, res) => {
   }
 });
 
-app.get('/api/subscription/:userId', async (req, res) => {
+app.get('/api/subscription/:userId/:mode', async (req, res) => {
   try {
-    const data = await getSubscriptions(req.params.userId);
+    const data = await getSubscriptions(req.params.userId, req.params.mode);
     res.json({ data: data });
   } catch (err) {
     console.log(err);
@@ -269,9 +269,9 @@ app.delete('/api/manage-subscription/:mode/:subscriptionId/:platform', async (re
   }
 });
 
-app.delete('/api/subscription/:userId/:subscriptionId', async (req, res) => {
+app.delete('/api/subscription/:userId/:subscriptionId/:mode', async (req, res) => {
   try {
-    const data = await deleteSubscriptions(req.params.userId, req.params.subscriptionId);
+    const data = await deleteSubscriptions(req.params.userId, req.params.subscriptionId, req.params.mode);
     res.json({ data: data });
   } catch (err) {
     console.log(err);

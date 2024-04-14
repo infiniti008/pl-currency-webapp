@@ -21,8 +21,7 @@
         <label class="keys__lable">Keys to Subscribe:
           <br>
           <span class="tips">
-            <dt>&#9989; - 4 Items Limit</dt>
-            <dt>&#128303; - Unlimited</dt>
+            <dt>&#9989; - {{ keysLimit }} Items Limit</dt>
           </span>
         </label>
         <div class="item__list">
@@ -43,16 +42,9 @@
       </label>
       <input v-model="selectedName" class="item__input" type="text" id="subscriptionName" :disabled="isTimeDisabled" maxlength="30">
     </div>
-    <div class="item" v-if="isPremium">
-      <label for="selectedTimeToGetDiff">
-        Time to get Diff:
-      </label>
-      <span class="time">{{ selectedTimeToGetDiff }}</span>
-      <input v-model="selectedTimeToGetDiff" type="time" id="selectedTimeToGetDiff">
-    </div>
     <div class="item">
       <label>
-        Start Time:
+        Time to Run:
       </label>
       <span class="time">{{ selectedTime }}</span>
       <label for="hourSelect">
@@ -68,7 +60,14 @@
         <option v-for="minute in mintutesIntervals" :value="minute">{{ minute }}</option>
       </select>
     </div>
-    <div class="item" v-if="isPremium">
+    <div class="item">
+      <label for="selectedTimeToGetDiff">
+        Time to get Diff:
+      </label>
+      <span class="time">{{ selectedTimeToGetDiff }}</span>
+      <input v-model="selectedTimeToGetDiff" type="time" id="selectedTimeToGetDiff">
+    </div>
+    <div class="item">
       <label for="color">
         Color:
       </label>
@@ -159,7 +158,7 @@ export default {
       return this.keys.filter(key => currenciesFromCountry?.includes(key.currencyBase));
     },
     keysFilteredBySelectedItems() {
-      if (!this.$store.state.config.isPremium && this.addedKeys.length >= this.$store.state.config.limitFreeKeysInOneSubscription) {
+      if (this.addedKeys.length >= this.keysLimit) {
         return [];
       }
       return this.keysFiltredByCountry.filter(item => !this.addedKeys.includes(item.key));
@@ -211,9 +210,9 @@ export default {
     countryFlags() {
       return this.$store.state.config.countryFlags;
     },
-    isPremium() {
-      return this.$store.state.config.isPremium;
-    }
+    keysLimit() {
+      return this.$store.state.config.limitFreeKeysInOneSubscription;
+    },
   },
   methods: {
     async saveSubscriptionChanges() {

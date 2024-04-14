@@ -236,26 +236,17 @@ export async function getSubscriptionSettings() {
   }
 }
 
-export async function saveSubscription(subscription) {
+export async function saveSubscription(subscription, mode) {
+  const baseName = mode === 'dev' ? 'currency_app_test' : 'currency_app';
   try {
     if (subscription.userId.includes('@')) {
       return { message: 'Wrong Chat ID. Please try again later', status: false };
     }
-    const subscriptions = await client.db('currency_app').collection('subscriptions-users');
+    const subscriptions = await client.db(baseName).collection('subscriptions-users');
     const appSettings = await getAppSettings();
     const userInfo = await getUserInfo(subscription.userId);
 
     const isFreeUser = !userInfo.isPremium ?? true;
-    const isInervalPremium = !appSettings.freeIntervals.includes(subscription.interval);
-    const isTimesLimitGot = subscription.times.length > 6;
-
-    if (isFreeUser && isInervalPremium) {
-      return { message: 'Wrong intervals. Please try again later', status: false };
-    }
-
-    if (isFreeUser && isTimesLimitGot) {
-      return { message: 'Wrong times. Please try again later', status: false };
-    }
 
     const query = { userId: subscription.userId };
     const options = {
@@ -292,9 +283,10 @@ export async function saveSubscription(subscription) {
   }
 }
 
-export async function getSubscriptions(userId) {
+export async function getSubscriptions(userId, mode) {
+  const baseName = mode === 'dev' ? 'currency_app_test' : 'currency_app';
   try {
-    const subscriptions = await client.db('currency_app').collection('subscriptions-users');
+    const subscriptions = await client.db(baseName).collection('subscriptions-users');
     const subscriptionsByUser = await subscriptions.find({ userId }, {}).toArray();
     const subscriptionSettings = await getSubscriptionSettings();
     return {
@@ -307,9 +299,10 @@ export async function getSubscriptions(userId) {
   }
 }
 
-export async function deleteSubscriptions(userId, subscriptionId) {
+export async function deleteSubscriptions(userId, subscriptionId, mode) {
+  const baseName = mode === 'dev' ? 'currency_app_test' : 'currency_app';
   try {
-    const subscriptions = await client.db('currency_app').collection('subscriptions-users');
+    const subscriptions = await client.db(baseName).collection('subscriptions-users');
     const thisSubscription = await subscriptions.findOne({ _id: new ObjectId(subscriptionId) });
     let result = {};
 
@@ -328,9 +321,10 @@ export async function deleteSubscriptions(userId, subscriptionId) {
   }
 }
 
-export async function updateSubscription(subscription, subscriptionId, userId) {
+export async function updateSubscription(subscription, subscriptionId, userId, mode) {
+  const baseName = mode === 'dev' ? 'currency_app_test' : 'currency_app';
   try {
-    const subscriptions = await client.db('currency_app').collection('subscriptions-users');
+    const subscriptions = await client.db(baseName).collection('subscriptions-users');
     const thisSubscription = await subscriptions.findOne({ _id: new ObjectId(subscriptionId) });
     let result = {};
 

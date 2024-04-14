@@ -95,8 +95,9 @@ export async function getSubscriptionSettings() {
 }
 
 export async function setSubscription(subscription) {
+  const mode = IS_DEV_MODE ? 'dev' : 'prod';
   try {
-    const response = await axios.post(`${SERVER_URL}/api/subscription/${TELEGRAM_USER}`, {
+    const response = await axios.post(`${SERVER_URL}/api/subscription/${mode}`, {
       subscription
     });
     
@@ -107,8 +108,9 @@ export async function setSubscription(subscription) {
 }
 
 export async function putSubscription(subscription, subscriptionId) {
+  const mode = IS_DEV_MODE ? 'dev' : 'prod';
   try {
-    const response = await axios.put(`${SERVER_URL}/api/subscription/${TELEGRAM_USER}/${subscriptionId}`, {
+    const response = await axios.put(`${SERVER_URL}/api/subscription/${TELEGRAM_USER}/${subscriptionId}/${mode}`, {
       subscription
     });
     
@@ -119,8 +121,9 @@ export async function putSubscription(subscription, subscriptionId) {
 }
 
 export async function getSubscriptions () {
+  const mode = IS_DEV_MODE ? 'dev' : 'prod';
   try {
-    const response = await axios.get(`${SERVER_URL}/api/subscription/${TELEGRAM_USER}`);
+    const response = await axios.get(`${SERVER_URL}/api/subscription/${TELEGRAM_USER}/${mode}`);
     
     return response?.data?.data || {};
   } catch(err) {
@@ -129,8 +132,9 @@ export async function getSubscriptions () {
 }
 
 export async function deleteSubscription(subscriptionId) {
+  const mode = IS_DEV_MODE ? 'dev' : 'prod';
   try {
-    const response = await axios.delete(`${SERVER_URL}/api/subscription/${TELEGRAM_USER}/${subscriptionId}`);
+    const response = await axios.delete(`${SERVER_URL}/api/subscription/${TELEGRAM_USER}/${subscriptionId}/${mode}`);
     
     return response?.data?.data || {};
   } catch(err) {
