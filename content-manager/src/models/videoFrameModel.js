@@ -79,6 +79,22 @@ export default {
       isRequired: false,
       isInline: true
     },
+    "backgroundImagePath": {
+      name: "Картинка для фона",
+      inputType: "text",
+      valueType: "string",
+      editable: true,
+      isRequired: false,
+      isInline: true
+    },
+    "duration": {
+      name: "Продолжительность фрейма",
+      inputType: "text",
+      valueType: "string",
+      editable: true,
+      isRequired: false,
+      isInline: true
+    },
   },
   model: {
     "index": "",
@@ -91,5 +107,7 @@ export default {
     "timeToGetDiff": "",
     "tags": "",
     "dayToGetDiff": "",
+    "backgroundImagePath": "",
+    "duration": 1000
   }
 }

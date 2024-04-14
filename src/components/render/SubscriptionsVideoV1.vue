@@ -1,5 +1,5 @@
 <template>
-  <div v-if="data && data.records?.[0]" class="page" :style="cssVars">
+  <div v-if="data && data.records?.[0]" class="page" :style="cssVars" :id="data.frameId" :class="data.frameClasses">
     <header>
       <p class="title color-base" v-html="data.name"></p>
       <p style="color: #A4D0A4;">{{ data.previousDateTime }} - {{ data.dateTime }}</p>
@@ -75,13 +75,46 @@ export default {
   props: {
     id: {
       type: String,
-      required: true
+      required: false
+    },
+    dataProp: {
+      type: Object,
+      required: false,
+      default: null
+    },
+    renderSettingsProp: {
+      type: Object,
+      required: false,
+      default: null
+    },
+    lastCurrenciesProp: {
+      type: Array,
+      required: false,
+      default: null
     }
   },
   async created() {
     const body = document.querySelector('body');
     body.classList.add('render-subscriptions-video');
-    await this.getData();
+
+    if (this.dataProp) {
+      this.data = this.dataProp;
+    } else {
+      await this.loadData();
+    }
+
+    if (this.renderSettingsProp) {
+      this.renderSettings = this.renderSettingsProp;
+    } else {
+      await this.loadRenderSettings();
+    }
+
+    if (this.lastCurrenciesProp) {
+      this.lastCurrencies = this.lastCurrenciesProp;
+    } else {
+      await this.loadLastCurrencies();
+    }
+    
     await this.prepareData();
   },
   computed: {

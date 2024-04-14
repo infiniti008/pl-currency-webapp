@@ -108,10 +108,12 @@ function TabFrames() {
   const optionsObj = currentStore?.appSettings?.appSettings || {}
   optionsObj.templates = currentStore?.renderSettings.templates
 
+  const selectedFrameObj = Object.assign(JSON.parse(JSON.stringify(model)), subscription.frames[selectedFrame])
+
   return (
     <div className='tab tab-frames'>
       <div className='tab-content'>
-        { selectedFrame !== null && <Inputs descriptorModel={descriptor} handleUpdateOption={handleUpdateOption} object={subscription.frames[selectedFrame]} model={model} optionsObj={optionsObj} /> }        
+        { selectedFrame !== null && <Inputs descriptorModel={descriptor} handleUpdateOption={handleUpdateOption} object={selectedFrameObj} model={model} optionsObj={optionsObj} /> }        
       </div>
       <div className="tab-footer">
         <IconPlus onClick={handleAddFrame}/>

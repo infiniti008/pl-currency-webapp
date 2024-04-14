@@ -49,20 +49,14 @@ export const currentTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
 export function prepareContentToRender(subscription, now, time) {
   const date = now.toFormat('dd.MM.yyyy');
-  let fileName = now.toFormat('dd.MM.yyyy-HH:mm:ss') + '-' + subscription._id.toString();
-  if (subscription.MANAGER_FILE_NAME) {
-    fileName = subscription.MANAGER_FILE_NAME;
-  }
 
   const connect = {
     records: [],
-    id: subscription._id.toString(),
     name: subscription.name || getSubscriptionName(subscription.interval),
     color: subscription.color || getSubscriptionColor(subscription.interval),
     time: subscription.now || time,
     date,
     dateTime: now.toFormat('dd.MM.yyyy, HH:mm'),
-    fileName,
     chatId: subscription.userId,
     platform: subscription.platform,
     chanel: subscription.chanel,

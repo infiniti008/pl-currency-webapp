@@ -62,9 +62,12 @@ export const templateMixin = {
       });
 
       const content = prepareContentToRender(item, now, time);
-      
-      console.log('content', content);
-      this.data = content;
+
+      for (const key in content) {
+        if (content.hasOwnProperty(key)) {
+          this.$set(this.data, key, content[key]);
+        }
+      }
 
       this.$nextTick(() => {
         this.setReady();
@@ -74,7 +77,8 @@ export const templateMixin = {
       setTimeout(() => {
         this.$nextTick(() => {
           console.log("READY")
-          this.$emit('setReady');
+          const frameId = this.data.frameId ? this.data.frameId : 'frame';
+          this.$emit('setReady', frameId);
         });
       }, 100);
     }

@@ -115,7 +115,40 @@ export default {
       valueType: "boolean",
       editable: true,
       isInline: true
-    }
+    },
+    "template": {
+      name: "Темплейт",
+      inputType: "select",
+      valueType: "string",
+      optionsVariable: 'templates',
+      editable: true,
+      isRequired: true,
+      isInline: true
+    },
+    "width": {
+      name: "Ширина Фрейма",
+      inputType: "text",
+      valueType: "string",
+      editable: true,
+      isRequired: true,
+      isInline: true
+    },
+    "height": {
+      name: "Высота Фрейма",
+      inputType: "text",
+      valueType: "string",
+      editable: true,
+      isRequired: true,
+      isInline: true
+    },
+    "pathToAudio": {
+      name: "Путь к аудио файлу",
+      inputType: "text",
+      valueType: "string",
+      editable: true,
+      isRequired: false,
+      isInline: true
+    },
   },
   model: {
     "_id": "",
@@ -123,6 +156,7 @@ export default {
     "country": "",
     "titleTextTemplate": "",
     "time": "09:00",
+    "template": "SubscriptionsVideoGeneralV1",
     "weekAvailability": "*******",
     "shouldPostToFeed": true,
     "shouldPostYoutube": true,
@@ -133,6 +167,9 @@ export default {
     "titleTags_instagram": "#reels",
     "titleTags_tiktok": "#tiktok",
     "tags": "",
-    "description": []
+    "description": [],
+    "width": "1080",
+    "height": "1920",
+    "pathToAudio": "",
   }
 }

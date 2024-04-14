@@ -14,12 +14,13 @@ import AskDonateV1 from './components/render/AskDonateV1.vue';
 import SubscriptionsUsersV1 from './components/render/SubscriptionsUsersV1.vue';
 import SubscriptionsVideoV1 from './components/render/SubscriptionsVideoV1.vue';
 import SubscriptionsVideoTitleV1 from './components/render/SubscriptionsVideoTitleV1.vue';
+import SubscriptionsVideoGeneralV1 from './components/render/SubscriptionsVideoGeneralV1.vue';
 import Tools from './components/render/Tools.vue';
 
 const { IS_DEV_MODE } = CONFIG;
 
 export default {
-  name: 'Rneder',
+  name: 'Render',
 
   components: {
     VerticalBitcoinV1,
@@ -27,6 +28,7 @@ export default {
     SubscriptionsUsersV1,
     SubscriptionsVideoV1,
     SubscriptionsVideoTitleV1,
+    SubscriptionsVideoGeneralV1,
     AskDonateV1,
     Tools
   },

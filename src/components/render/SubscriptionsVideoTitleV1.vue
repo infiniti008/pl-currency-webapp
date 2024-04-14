@@ -1,5 +1,5 @@
 <template>
-  <div v-if="data" class="page" :style="pageStyles">
+  <div v-if="data" class="page" :style="pageStyles" :id="data.frameId" :class="data.frameClasses">
     <div class="date-container">{{ titleDate }}</div>
   </div>
   <H2 v-else>LOADING DATA</H2>
@@ -24,18 +24,46 @@ export default {
   props: {
     id: {
       type: String,
-      required: true
+      required: false
+    },
+    dataProp: {
+      type: Object,
+      required: false,
+      default: null
+    },
+    renderSettingsProp: {
+      type: Object,
+      required: false,
+      default: null
+    },
+    lastCurrenciesProp: {
+      type: Array,
+      required: false,
+      default: null
     }
   },
   async created() {
     const body = document.querySelector('body');
-    body.classList.add('render-subscriptions-video-title');
-    await this.loadData();
-    await this.loadRenderSettings();
+
+    if (this.dataProp) {
+      this.data = this.dataProp;
+    } else {
+      await this.loadData();
+    }
+
+    if (this.renderSettingsProp) {
+      this.renderSettings = this.renderSettingsProp;
+    } else {
+      await this.loadRenderSettings();
+    }
+
+    this.$nextTick(() => {
+      this.$emit('setReady', this.data.frameId);
+    });
   },
   computed: {
     pageStyles() {
-      const titleFileName = this.renderSettings?.[this.data.titleImagePathVariable] || '';
+      const titleFileName = this.renderSettings?.[this.data.titleImagePathVariable] || this.data.backgroundImagePath;
       const titleImageTemplatePath = SERVER_URL + '/files' + titleFileName;
       if (titleFileName) {
         return {
@@ -57,14 +85,6 @@ export default {
 <style lang="scss">
 @import url('https://fonts.cdnfonts.com/css/lumberjack');
 
-body.render-subscriptions-video-title {
-  width: 1080px;
-  height: 1920px;
-  padding: 0;
-  margin: 0;
-  font-family: 'Lumberjack', sans-serif;
-}
-
 .page {
   width: 100%;
   height: 100%;
@@ -85,5 +105,6 @@ body.render-subscriptions-video-title {
   position: relative;
   top: 892px;
   left: 567px;
+  font-family: 'Lumberjack', sans-serif;
 }
 </style>
