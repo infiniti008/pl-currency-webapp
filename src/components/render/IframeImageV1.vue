@@ -22,11 +22,22 @@ export default {
     const body = document.querySelector('body');
     body.classList.add('render-subscriptions-users');
     
-    await this.getData();
-    await this.prepareData();
+    if (this.dataProp) {
+      this.data = this.dataProp;
+    } else {
+      await this.loadData();
+    }
+
+    if (this.renderSettingsProp) {
+      this.renderSettings = this.renderSettingsProp;
+    } else {
+      await this.loadRenderSettings();
+    }
 
     body.style.width = this.data?.imageWidth;
     body.style.height = this.data?.imageHeight;
+
+    this.setReady();
   },
   computed: {
     url() {
