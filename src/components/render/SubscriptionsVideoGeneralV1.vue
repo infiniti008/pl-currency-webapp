@@ -17,13 +17,15 @@
 import { templateMixin } from './templateMixin.js';
 import SubscriptionsVideoTitleV1 from './SubscriptionsVideoTitleV1.vue';
 import SubscriptionsVideoV1 from './SubscriptionsVideoV1.vue';
+import IframeImageV1 from './IframeImageV1.vue';
 
 export default {
   name: "SubscriptionsVideoGeneralV1",
   mixins: [templateMixin],
   components: {
     SubscriptionsVideoTitleV1,
-    SubscriptionsVideoV1
+    SubscriptionsVideoV1,
+    IframeImageV1
   },
   data() {
     return {
