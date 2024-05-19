@@ -79,6 +79,7 @@ export const templateMixin = {
         this.$nextTick(() => {
           console.log("READY")
           const frameId = this.data?.frameId ? this.data.frameId : 'frame';
+          console.log('frameId', frameId);
           this.$emit('setReady', frameId);
         });
       }, timeout);
