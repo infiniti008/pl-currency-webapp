@@ -16,6 +16,21 @@ export default {
     id: {
       type: String,
       required: true
+    },
+    dataProp: {
+      type: Object,
+      required: false,
+      default: null
+    },
+    renderSettingsProp: {
+      type: Object,
+      required: false,
+      default: null
+    },
+    lastCurrenciesProp: {
+      type: Array,
+      required: false,
+      default: null
     }
   },
   async created() {
