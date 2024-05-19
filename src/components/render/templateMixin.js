@@ -3,7 +3,6 @@ import { getSubscriptionById, getRenderSettings, getLastCurrenciesForRender, get
 
 import { DateTime } from 'luxon';
 
-
 export const templateMixin = {
   data: function () {
     return {
@@ -77,7 +76,7 @@ export const templateMixin = {
       setTimeout(() => {
         this.$nextTick(() => {
           console.log("READY")
-          const frameId = this.data.frameId ? this.data.frameId : 'frame';
+          const frameId = this.data?.frameId ? this.data.frameId : 'frame';
           this.$emit('setReady', frameId);
         });
       }, 100);

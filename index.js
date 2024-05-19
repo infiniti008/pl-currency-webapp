@@ -11,6 +11,7 @@ import cors from 'cors';
 import fs from 'fs';
 import bodyParser from 'body-parser';
 import routeRender from './server/routeRender.js';
+import routeFeed from './server/routeFeed.js';
 import path from 'path';
 
 import { 
@@ -77,6 +78,7 @@ app.use('/manager', express.static('./content-manager/dist'));
 app.use('/files', express.static(mediaFolderPath));
 
 app.use('/api/render', routeRender);
+app.use('/api/feed', routeFeed);
 
 // Start the server
 app.listen(port, () => {

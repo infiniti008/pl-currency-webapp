@@ -2,6 +2,7 @@ import Vue from 'vue';
 import './style.scss';
 import App from './App.vue';
 import Render from './Render.vue';
+import Feed from './Feed.vue';
 
 import store from './models/store';
 
@@ -10,7 +11,8 @@ import './plugins/toast';
 
 const routes = {
   '/': App,
-  '/render': Render
+  '/render': Render,
+  '/feed': Feed
 }
 
 new Vue({
@@ -20,7 +22,6 @@ new Vue({
   },
   computed: {
     ViewComponent () {
-      console.log('this.currentRoute', this.currentRoute);
       return routes[this.currentRoute] || App
     }
   },

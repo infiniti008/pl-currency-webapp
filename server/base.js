@@ -651,3 +651,16 @@ export async function getValueByTime(baseName, key, timestamp) {
     console.log(err);
   }
 }
+
+export async function getFeed(limit, offset, mode) {
+  try {
+    const baseName = mode === 'dev' ? 'currency_app_test' : 'currency_app';
+    const collection = await client.db(baseName).collection('subscriptions-feed');
+
+    return {
+      data: await collection.find().sort({ timestamp: -1 }).skip(offset).limit(limit).toArray()
+    };
+  } catch (err) {
+    console.log(err);
+  }
+}

@@ -194,3 +194,18 @@ export async function getDiffCurrencies(country, keys, timestamp) {
     console.log(err);
   }
 }
+
+export async function getFeedItems(offset, limit) {
+  try {
+    const mode = IS_DEV_MODE ? 'dev' : 'prod';
+    const response = await axios.get(`${SERVER_URL}/api/feed/${offset}/${limit}`, {
+      headers: {
+        'x-mode': mode,
+      }
+    });
+
+    return response?.data || {};
+  } catch (err) {
+    console.log(err);
+  }
+}

@@ -144,8 +144,8 @@ function ModalStream({ chartsViewNameFromPath }) {
 
   async function handleOnclickUrl() {
     try {
-      await navigator.clipboard.writeText(loadedChartsView.url);
       toast.info('URL copied to clipboard: ' + loadedChartsView.url)
+      await navigator.clipboard.writeText(loadedChartsView.url);
     } catch (err) {
       console.error('Error in copying URL: ', err);
     }
