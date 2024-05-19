@@ -115,7 +115,7 @@ export default {
       isRequired: true
     },
     "delay": {
-      name: "Delay to take snapshot",
+      name: "Delay to take snapshot (min 4000)",
       inputType: "text",
       valueType: "string",
       editable: true,

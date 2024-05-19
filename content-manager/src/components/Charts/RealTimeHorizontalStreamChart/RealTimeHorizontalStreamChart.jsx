@@ -85,7 +85,7 @@ function RealTimeHorizontalStreamChart({ chart, handleRemoveChart, isAllHidden, 
     } else {
       setTimeout(() => {
         drawFullChart()
-      }, 1000);
+      }, 3000);
     }
   }, [])
 
