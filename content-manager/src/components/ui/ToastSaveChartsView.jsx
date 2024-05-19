@@ -5,6 +5,7 @@ import '../../assets/css/Toasts.scss'
 function PromptToast({ onConfirm, onCancel, loadedChartsView }) {
   const [isAllHidden, setIsAllHidden] = useState(loadedChartsView.isAllHidden)
   const [isAutoRun, setAutoRun] = useState(loadedChartsView.isAutoRun)
+  const [isStaticImage, setStaticImage] = useState(loadedChartsView.isStaticImage)
   const [chartsViewName, setChartsViewName] = useState(loadedChartsView.chartsViewName)
 
   function handleOnChangeCheckbox(setter, event) {
@@ -25,11 +26,15 @@ function PromptToast({ onConfirm, onCancel, loadedChartsView }) {
         Auto Run?
         <input type="checkbox" checked={isAutoRun} onChange={handleOnChangeCheckbox.bind(null, setAutoRun)} />
       </label>
+      <label className='label label--inline'>
+        Static Image?
+        <input type="checkbox" checked={isStaticImage} onChange={handleOnChangeCheckbox.bind(null, setStaticImage)} />
+      </label>
       <label className='label'>
         Name (Without Spaces)
         <input type="text" value={chartsViewName} onChange={handleOnChangeText.bind(null, setChartsViewName)} />
       </label>
-      <button onClick={onConfirm?.bind(null, { isAllHidden, chartsViewName, isAutoRun })}>Confirm</button>
+      <button onClick={onConfirm?.bind(null, { isAllHidden, chartsViewName, isAutoRun, isStaticImage })}>Confirm</button>
       <button onClick={onCancel}>Cancel</button>
     </div>
   );

@@ -73,13 +73,15 @@ export const templateMixin = {
       });
     },
     setReady() {
+      const delay = Number(this.data?.delay);
+      const timeout = delay || 100;
       setTimeout(() => {
         this.$nextTick(() => {
           console.log("READY")
           const frameId = this.data?.frameId ? this.data.frameId : 'frame';
           this.$emit('setReady', frameId);
         });
-      }, 100);
+      }, timeout);
     }
   }
 }

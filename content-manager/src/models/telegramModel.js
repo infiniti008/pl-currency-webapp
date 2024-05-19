@@ -114,6 +114,34 @@ export default {
       editable: true,
       isRequired: true
     },
+    "delay": {
+      name: "Delay to take snapshot",
+      inputType: "text",
+      valueType: "string",
+      editable: true,
+      isRequired: false
+    },
+    "url": {
+      name: "URL to iFrame",
+      inputType: "text",
+      valueType: "string",
+      editable: true,
+      isRequired: false
+    },
+    "imageWidth": {
+      name: "Image Width",
+      inputType: "text",
+      valueType: "string",
+      editable: true,
+      isRequired: false
+    },
+    "imageHeight": {
+      name: "Image Height",
+      inputType: "text",
+      valueType: "string",
+      editable: true,
+      isRequired: false
+    },
   },
   model: {
     "_id": "",
@@ -130,6 +158,10 @@ export default {
     "doNotPostIfNoChanges": false,
     "dayToGetDiff": "",
     "shouldPostToFeed": false,
-    "caption": ""
+    "caption": "",
+    "delay": "0",
+    "url": "",
+    "imageWidth": "0",
+    "imageHeight": "0",
   }
 }

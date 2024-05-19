@@ -18,6 +18,7 @@ const initialChartsView = {
   chartsViewName:'',
   isAllHidden: false,
   isAutoRun: false,
+  isStaticImage: false,
   url: '',
   selectedChartTemplate: ''
 }
@@ -59,6 +60,7 @@ function ModalStream({ chartsViewNameFromPath }) {
     if (loadedChartsView.chartsViewName) {
       const newCharts = loadedChartsView.charts.map((item, i) => {
         item.isAutoRun = loadedChartsView.isAutoRun
+        item.isStaticImage = loadedChartsView.isStaticImage
         return {name: i + '-chart-' + new Date().valueOf(), model: item}
       })
       setSelectedChartsView(loadedChartsView.chartsViewName)

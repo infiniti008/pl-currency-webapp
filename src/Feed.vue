@@ -1,5 +1,5 @@
 <template>
-<div class="container">
+<div class="feed-container">
   <Left
     @setFilterByPlatform="setFilterByPlatform"
   />
@@ -36,7 +36,7 @@ export default {
 }
 </script>
 <style lang="scss">
-.container {
+.feed-container {
   height: 100vh;
   display: grid;
   grid-template-columns: 2fr 5fr;

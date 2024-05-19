@@ -61,7 +61,7 @@ function RealTimeHorizontalStreamChart({ chart, handleRemoveChart, isAllHidden, 
   const ref_currentPointIndex = useRef(currentPointIndex);
 
   useEffect(() => {
-    const interval = setInterval(drawNextPoint, 1000);
+    let interval = null;
 
     if (model.selectedKey) {
       console.log('Select data from Model', model)
@@ -75,10 +75,18 @@ function RealTimeHorizontalStreamChart({ chart, handleRemoveChart, isAllHidden, 
         set_isAutoRun(true)
       }
     }
-      
-    return () => {
-      clearInterval(interval);
-    };
+
+    if(!model.isStaticImage) {
+      interval = setInterval(drawNextPoint, 1000);
+
+      return () => {
+        clearInterval(interval);
+      };
+    } else {
+      setTimeout(() => {
+        drawFullChart()
+      }, 1000);
+    }
   }, [])
 
   useEffect(() => {
@@ -234,6 +242,18 @@ function RealTimeHorizontalStreamChart({ chart, handleRemoveChart, isAllHidden, 
     set_draw(newDraw)
 
     set_currentPointIndex(0)
+  }
+
+  function drawFullChart() {
+    console.log('Draw Full Chart')
+    const _draw = ref_draw.current
+    
+    if (_draw.isDataReady) {      
+      setCurrentSettedPoint(_draw.preparedDataFromBase[_draw.preparedDataFromBase.length - 1])
+
+      set_currentPointIndex(_draw.preparedDataFromBase.length - 1)
+      set_dataSet(_draw.preparedDataFromBase)
+    }
   }
 
   function drawNextPoint() {
