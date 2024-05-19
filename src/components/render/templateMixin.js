@@ -52,7 +52,7 @@ export const templateMixin = {
         return this.lastCurrencies.some(lastCurrency => lastCurrency.key === key);
       });
 
-      item.keys.forEach(key => {
+      item.keys?.forEach(key => {
         // -- Add last values to subscription data
         item.lastCurrencies[key] = this.lastCurrencies.find(lastCurrencie => lastCurrencie.key === key);
 
