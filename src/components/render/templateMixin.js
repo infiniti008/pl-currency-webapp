@@ -48,7 +48,7 @@ export const templateMixin = {
 
       const diffCurrencies = await getDiffCurrencies(item.country, item.keys, targetTimestampToGetDiff);
 
-      item.keys = item.keys.filter(key => {
+      item.keys = item.keys?.filter(key => {
         return this.lastCurrencies.some(lastCurrency => lastCurrency.key === key);
       });
 
