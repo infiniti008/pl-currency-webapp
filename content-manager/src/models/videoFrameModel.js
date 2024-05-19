@@ -95,6 +95,34 @@ export default {
       isRequired: false,
       isInline: true
     },
+    "delay": {
+      name: "Delay to take snapshot (min 4000)",
+      inputType: "text",
+      valueType: "string",
+      editable: true,
+      isRequired: false
+    },
+    "url": {
+      name: "URL to iFrame",
+      inputType: "text",
+      valueType: "string",
+      editable: true,
+      isRequired: false
+    },
+    "imageWidth": {
+      name: "Image Width",
+      inputType: "text",
+      valueType: "string",
+      editable: true,
+      isRequired: false
+    },
+    "imageHeight": {
+      name: "Image Height",
+      inputType: "text",
+      valueType: "string",
+      editable: true,
+      isRequired: false
+    },
   },
   model: {
     "index": "",
@@ -108,6 +136,10 @@ export default {
     "tags": "",
     "dayToGetDiff": "",
     "backgroundImagePath": "",
-    "duration": 1000
+    "duration": 1000,
+    "delay": "0",
+    "url": "",
+    "imageWidth": "0",
+    "imageHeight": "0",
   }
 }
