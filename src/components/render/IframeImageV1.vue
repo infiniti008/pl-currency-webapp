@@ -33,9 +33,9 @@ export default {
       default: null
     }
   },
-  async created() {
+  async mounted() {
     const body = document.querySelector('body');
-    body.classList.add('render-subscriptions-users');
+    body.classList.add('render-iframes');
     
     if (this.dataProp) {
       this.data = this.dataProp;
@@ -68,7 +68,7 @@ export default {
 </script>
 
 <style lang="scss">
-body.render-subscriptions-users {
+body.render-iframes {
   width: 100%;
   height: 100vh;
   padding: 0;
