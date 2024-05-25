@@ -39,9 +39,8 @@ export default {
       required: true
     },
   },
-  async created() {
+  async mounted() {
     const body = document.querySelector('body');
-    body.classList.add('render-subscriptions-video');
 
     await this.getData();
 
@@ -51,6 +50,11 @@ export default {
     body.style.height = `${this.data.height}px`;
     
     this.isReady = true;
+  },
+  beforeDestroy() {
+    const body = document.querySelector('body');
+    body.style.width = 'auto';
+    body.style.height = 'auto';
   },
   watch: {
     isAllFramesReady(value) {

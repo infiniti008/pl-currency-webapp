@@ -47,6 +47,12 @@ export default {
   created() {
     this.prepareData();
   },
+  mounted() {
+    this.setHtmlClasses();
+  },
+  beforeDestroy() {
+    this.removeHtmlClasses();
+  },
   methods: {
     async prepareData() {
       const templateName = this.getTemplateName();
@@ -80,6 +86,14 @@ export default {
         this.containerClasses.ready = true;
       });
     },
+    setHtmlClasses() {
+      const html = document.querySelector('html');
+      html.classList.add('render-html');
+    },
+    removeHtmlClasses() {
+      const html = document.querySelector('html');
+      html.classList.remove('render-html');
+    }
   },
   computed: {
     devModeClass() {
@@ -88,6 +102,13 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+.render-html {
+  background-color: #f9f9f9;
+}
+</style>
+
 <style lang="scss" scoped>
 .container {
   height: 100%;

@@ -54,6 +54,12 @@ export default {
 
     this.setReady();
   },
+  beforeDestroy() {
+    const body = document.querySelector('body');
+    body.classList.remove('render-iframes');
+    body.style.width = 'auto';
+    body.style.height = 'auto';
+  },
   computed: {
     url() {
       return this.data.url;
@@ -73,12 +79,8 @@ body.render-iframes {
   height: 100vh;
   padding: 0;
 }
-
-.container {
-  height: 100%;
-  width: 100%;
-} 
-
+</style>
+<style lang="scss" scoped>
 .IframeImageV1 {
   display: flex;
   justify-content: center;

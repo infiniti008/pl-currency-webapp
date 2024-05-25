@@ -43,8 +43,6 @@ export default {
     }
   },
   async created() {
-    const body = document.querySelector('body');
-
     if (this.dataProp) {
       this.data = this.dataProp;
     } else {
@@ -82,7 +80,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @import url('https://fonts.cdnfonts.com/css/lumberjack');
 
 .page {

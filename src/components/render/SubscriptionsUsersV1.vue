@@ -22,6 +22,7 @@
         </div>
         <div
         v-for="record in data.records"
+          :key="record.id"
           class="row"
         >
           <div class="row-top" :style="{ color: record.COLOR }">
@@ -64,14 +65,10 @@
 
 <script>
 import { templateMixin } from './templateMixin.js';
-import CardV1 from './ui/CardV1.vue';
 
 export default {
   name: "SubscriptionsUsersV1",
   mixins: [templateMixin],
-  components: {
-    CardV1
-  },
   props: {
     id: {
       type: String,
@@ -79,10 +76,16 @@ export default {
     }
   },
   async created() {
-    const body = document.querySelector('body');
-    body.classList.add('render-subscriptions-users');
     await this.getData();
     await this.prepareData();
+  },
+  mounted() {
+    const body = document.querySelector('body');
+    body.classList.add('render-subscriptions-users');
+  },
+  beforeDestroy() {
+    const body = document.querySelector('body');
+    body.classList.remove('render-subscriptions-users');
   },
   computed: {
     cssVars() {
@@ -108,171 +111,172 @@ body.render-subscriptions-users {
   position: relative;
   margin: 0 auto;
   font-family: 'Roboto Slab', serif;
-}
 
-.render-subscriptions-users header {
-  text-align: center;
-  font-size: 20px;
-  margin-bottom: 16px;
-}
 
-.render-subscriptions-users header p {
-  padding: 0;
-  margin: 0;
-}
+  header {
+    text-align: center;
+    font-size: 20px;
+    margin-bottom: 16px;
+  }
 
-.table {
-  margin: 0 15px;
-}
+  header p {
+    padding: 0;
+    margin: 0;
+  }
 
-.head {
-  font-size: 22px;
-  padding: 10px 0;
-  display: grid;
-  grid-auto-flow: row;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
+  .table {
+    margin: 0 15px;
+  }
 
-  border-bottom: 1px solid var(--main-color);
-  color: #643A6B;
-}
+  .head {
+    font-size: 22px;
+    padding: 10px 0;
+    display: grid;
+    grid-auto-flow: row;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
 
-.head-item {
-  text-align: center;
-  line-height: 18px;
-  margin-left: 24px;
-}
+    border-bottom: 1px solid var(--main-color);
+    color: #643A6B;
+  }
 
-.head-item.last {
-  text-align: end;
-  padding-right: 20px;
-}
+  .head-item {
+    text-align: center;
+    line-height: 18px;
+    margin-left: 24px;
+  }
 
-.head-item.first {
-  text-align: start;
-  margin-left: 8px;
-}
+  .head-item.last {
+    text-align: end;
+    padding-right: 20px;
+  }
 
-.head-item:last-child {
-  border-right: none;
-}
+  .head-item.first {
+    text-align: start;
+    margin-left: 8px;
+  }
 
-.head-item-text {
-  display: inline-block;
-  min-width: 60%;
-}
+  .head-item:last-child {
+    border-right: none;
+  }
 
-.row {
-  border-bottom: 1px solid var(--main-color);
-}
+  .head-item-text {
+    display: inline-block;
+    min-width: 60%;
+  }
 
-.row-top {
-  padding-top: 4px;
-  margin-left: 8px;
-  font-size: 16px;
-}
+  .row {
+    border-bottom: 1px solid var(--main-color);
+  }
 
-.row-bottom {
-  padding: 2px 0;
-  display: grid;
-  grid-auto-flow: row;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  font-size: 22px;
-}
+  .row-top {
+    padding-top: 4px;
+    margin-left: 8px;
+    font-size: 16px;
+  }
 
-.row-item {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+  .row-bottom {
+    padding: 2px 0;
+    display: grid;
+    grid-auto-flow: row;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    font-size: 22px;
+  }
 
-.row-item.last {
-  margin-right: 6px;
-  justify-content: end;
-}
+  .row-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 
-.row-item.rate {
-  font-size: 26px;
-}
+  .row-item.last {
+    margin-right: 6px;
+    justify-content: end;
+  }
 
-.row-item.currency {
-  color: var(--main-color);
-  font-weight: 900;
-  margin-left: 6px
-}
+  .row-item.rate {
+    font-size: 26px;
+  }
 
-.diff-up {
-  color: #1B9C85;
-}
+  .row-item.currency {
+    color: var(--main-color);
+    font-weight: 900;
+    margin-left: 6px
+  }
 
-.diff-down {
-  color: #B04759;
-}
+  .diff-up {
+    color: #1B9C85;
+  }
 
-.currency-s {
-  font-weight: 900;
-  color: rgb(255, 186, 0);
-}
+  .diff-down {
+    color: #B04759;
+  }
 
-.currency-e {
-  color: #D8D8D8;
-}
+  .currency-s {
+    font-weight: 900;
+    color: rgb(255, 186, 0);
+  }
 
-.currency-s-diff {
-  color: #D8D8D8;
-}
+  .currency-e {
+    color: #D8D8D8;
+  }
 
-.currency-e-diff {
-  font-weight: 900;
-}
+  .currency-s-diff {
+    color: #D8D8D8;
+  }
 
-.currency-s-last {
-  color: var(--main-color);
-}
+  .currency-e-diff {
+    font-weight: 900;
+  }
 
-.arrow-left {
-  height: 28px;
-  margin: 0px 4px 0 10px;
-  transform: rotate(-90deg);
-  fill: #47A992;
-  stroke: #47A992;
-}
+  .currency-s-last {
+    color: var(--main-color);
+  }
 
-.arrow-right {
-  height: 28px;
-  margin: 2px 10px 0 4px;
-  transform: rotate(90deg);
-  fill: #A459D1;
-  stroke: #A459D1;
-}
+  .arrow-left {
+    height: 28px;
+    margin: 0px 4px 0 10px;
+    transform: rotate(-90deg);
+    fill: #47A992;
+    stroke: #47A992;
+  }
 
-.arrow-center {
-  height: 28px;
-  margin: 0px 8px 0 10px;
-  transform: rotate(-90deg);
-}
+  .arrow-right {
+    height: 28px;
+    margin: 2px 10px 0 4px;
+    transform: rotate(90deg);
+    fill: #A459D1;
+    stroke: #A459D1;
+  }
 
-.arrow-center .arrow-d-second {
-  transform: rotate(180deg) translate(-10px, -27px);
-}
+  .arrow-center {
+    height: 28px;
+    margin: 0px 8px 0 10px;
+    transform: rotate(-90deg);
+  }
 
-.bot-image {
-  display: flex;
-  justify-content: center;
-}
+  .arrow-center .arrow-d-second {
+    transform: rotate(180deg) translate(-10px, -27px);
+  }
 
-.bot-image img {
-  width: 100%;
-}
+  .bot-image {
+    display: flex;
+    justify-content: center;
+  }
 
-.color-base {
-  color: var(--main-color);
-}
+  .bot-image img {
+    width: 100%;
+  }
 
-.copyright {
-  text-align: center;
-  margin: 0;
-  font-size: 12px;
-  font-weight: 400;
-  margin-top: 6px;
+  .color-base {
+    color: var(--main-color);
+  }
+
+  .copyright {
+    text-align: center;
+    margin: 0;
+    font-size: 12px;
+    font-weight: 400;
+    margin-top: 6px;
+  }
 }
 </style>

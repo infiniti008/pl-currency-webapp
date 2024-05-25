@@ -22,6 +22,7 @@
         </div>
         <div
           v-for="record in data.records"
+          :key="record.id"
           class="row"
         >
           <div class="row-top" :style="{ color: record.COLOR }">
@@ -64,14 +65,10 @@
 
 <script>
 import { templateMixin } from './templateMixin.js';
-import CardV1 from './ui/CardV1.vue';
 
 export default {
   name: "SubscriptionsVideoV1",
   mixins: [templateMixin],
-  components: {
-    CardV1
-  },
   props: {
     id: {
       type: String,
@@ -94,9 +91,6 @@ export default {
     }
   },
   async created() {
-    const body = document.querySelector('body');
-    body.classList.add('render-subscriptions-video');
-
     if (this.dataProp) {
       this.data = this.dataProp;
     } else {
@@ -323,4 +317,5 @@ export default {
 
 .image-qr img {
   width: 420px;
-}</style>
+}
+</style>
