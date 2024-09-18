@@ -12,7 +12,7 @@
     &--horizontal {
       display: grid;
       height: 100%;
-      grid-template-columns: 1fr 766px;
+      grid-template-columns: 1fr 700px;
       gap: 10px;
 
       .tooltip {
@@ -41,7 +41,7 @@
           }
 
           &--center {
-            margin-right: 340px;
+            // margin-right: 340px;
             padding: 0 6px;
             font-weight: bold;
             font-size: 22px;
@@ -126,8 +126,9 @@
           }
 
           &--arrow  {
-            font-size: 50px;
-            line-height: 50px;
+            display: inline-block;
+            height: 40px;
+            line-height: 24px;
             font-weight: bold;
             text-align: center;
           }

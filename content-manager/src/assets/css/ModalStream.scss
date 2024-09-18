@@ -41,6 +41,10 @@
     padding: 4px;
     display: flex;
     justify-content: space-around;
+
+    &--hidden {
+      display: none;
+    }
   }
 
   &__close {
@@ -53,6 +57,10 @@
     display: flex;
     flex-direction: column;
     padding: 10px;
+
+    &--hidden-header {
+      height: 100%;
+    }
   }
 
   &__select {
@@ -60,7 +68,7 @@
   }
 
   .chart-element {
-    width: calc(100% - 340px);
+    width: 100%;
     height: calc(100% - 70px);
     position: absolute;
     bottom: 0;

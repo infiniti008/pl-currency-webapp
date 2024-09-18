@@ -101,7 +101,7 @@ function CustomTooltip({ currencyKey, dataSet, firstPoint, lastPoint, colorRGB, 
           </span>
         </div>
 
-        <div className={$s['tooltip__group--right']} style={{height: chartHeight}}>
+        {/* <div className={$s['tooltip__group--right']} style={{height: chartHeight}}>
           <span 
             className={[$s['tooltip__item--time'], $s['tooltip__item--current-time']].join(' ')}
             dangerouslySetInnerHTML={{ __html: getTimeHTML(currentPoint.x) }}
@@ -124,7 +124,7 @@ function CustomTooltip({ currencyKey, dataSet, firstPoint, lastPoint, colorRGB, 
             />
           </div>
           
-        </div>
+        </div> */}
         
       </div>
     </div>

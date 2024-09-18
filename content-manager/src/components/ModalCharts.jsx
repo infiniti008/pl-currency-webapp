@@ -11,7 +11,7 @@ import { saveChartsView, getChartsView, removeChartsView } from '../api/services
 import displaySaveChartViewsPrompt from './ui/ToastSaveChartsView';
 import Copyright from './ui/Copyright';
 import Logo from './ui/Logo';
-import AudioPlayer from './ui/AudioPlayer';
+// import AudioPlayer from './ui/AudioPlayer';
 
 const initialChartsView = {
   charts: [],
@@ -22,6 +22,8 @@ const initialChartsView = {
   url: '',
   selectedChartTemplate: ''
 }
+
+const isHeaderHidden = window.location.search.indexOf('isHeaderHidden=true') !== -1;
 
 function ModalStream({ chartsViewNameFromPath }) {
   const { emit } = useContext(EventBusContext)
@@ -222,7 +224,13 @@ function ModalStream({ chartsViewNameFromPath }) {
 
   const headerClasses = [
     'stream__header',
-    selectedChartTemplate === 'RealTimeVerticalStreamChart' ? 'stream__header--expanded' : ''
+    selectedChartTemplate === 'RealTimeVerticalStreamChart' ? 'stream__header--expanded' : '',
+    isHeaderHidden ? 'stream__header--hidden' : ''
+  ].join(' ')
+
+  const bodyClasses = [
+    'stream__body',
+    isHeaderHidden ? 'stream__body--hidden-header' : ''
   ].join(' ')
 
   return (
@@ -233,7 +241,7 @@ function ModalStream({ chartsViewNameFromPath }) {
             <Logo />
             <Clock timeZone={timeZone} setIsAllHidden={setIsAllHidden.bind(null, false)} />
             <Copyright isInline={isCopyrightInline}/>
-            <AudioPlayer isAutoRun={loadedChartsView.isAutoRun} hidden={true} />
+            {/* <AudioPlayer isAutoRun={loadedChartsView.isAutoRun} hidden={true} /> */}
           </div>
         }
         {!isAllHidden && 
@@ -261,7 +269,7 @@ function ModalStream({ chartsViewNameFromPath }) {
             <button onClick={onClickClose} className='stream__close'>Close</button>
           </div>
         }
-        <div className='stream__body'>
+        <div className={bodyClasses}>
           {chartItems}
         </div>
       </div>
