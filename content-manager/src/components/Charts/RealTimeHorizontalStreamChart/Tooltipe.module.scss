@@ -12,7 +12,7 @@
     &--horizontal {
       display: grid;
       height: 100%;
-      grid-template-columns: 1fr 700px;
+      grid-template-columns: 3fr 1fr;
       gap: 10px;
 
       .tooltip {
