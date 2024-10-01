@@ -3,6 +3,7 @@ import CurrentStoreContext from '../contexsts/store';
 import { EventBusContext } from '../contexsts/eventBus';
 import RealTimeHorizontalStreamChart from './Charts/RealTimeHorizontalStreamChart/RealTimeHorizontalStreamChart';
 import RealTimeVerticalStreamChart from './Charts/RealTimeVerticalStreamChart/RealTimeVerticalStreamChart';
+import StaticHorizontalPanelChart from './Charts/StaticHorizontalPanelChart/StaticHorizontalPanelChart';
 import { ToastContainer, toast } from 'react-toastify';
 
 import '../assets/css/ModalStream.scss'
@@ -195,6 +196,20 @@ function ModalStream({ chartsViewNameFromPath }) {
             index={index}
           />
         )
+
+      case 'StaticHorizontalPanelChart':
+        return (
+          <StaticHorizontalPanelChart
+            chart={chart.name}
+            key={chart.name}
+            model={chart.model}
+            handleRemoveChart={handleRemoveChart.bind(null, index)}
+            isAllHidden={isAllHidden}
+            handleSelectTimeZone={handleSelectTimeZone}
+            handleStartChart={handleStartChart}
+            index={index}
+          />
+        )
       case 'RealTimeVerticalStreamChart':
         return (
           <RealTimeVerticalStreamChart
@@ -233,9 +248,11 @@ function ModalStream({ chartsViewNameFromPath }) {
     isHeaderHidden ? 'stream__body--hidden-header' : ''
   ].join(' ')
 
+  const bgColor = window.location.search.indexOf('bg=') !== -1 ? window.location.search.split('bg=')[1].split('&')[0] : ''
+
   return (
     <div className='stream'>
-      <div className='stream__container stream__container--full'>
+      <div className='stream__container stream__container--full' style={{background: bgColor}}>
         { isAllHidden &&
           <div className={headerClasses}>
             <Logo />
@@ -259,6 +276,7 @@ function ModalStream({ chartsViewNameFromPath }) {
               <option disabled value="">Select Charts Template</option>
               <option value="RealTimeHorizontalStreamChart">Real Time Horizontal Stream Chart</option>
               <option value="RealTimeVerticalStreamChart">Real Time Vertical Stream Chart</option>
+              <option value="StaticHorizontalPanelChart">Static Horizontal Panel Chart</option>
             </select>
             <select className='stream__select' value={selectedChartsView} onChange={handleSelectChartsView}>
               <option disabled value="">Select Charts View</option>

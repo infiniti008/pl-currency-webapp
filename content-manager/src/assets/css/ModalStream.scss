@@ -76,7 +76,13 @@
     background-color: #fffffd;
     border-radius: 10px;
     padding: 2px;
+
+    &--full {
+      height: calc(100% - 50px);
+    }
   }
+
+  
 
   .clock {
     display: flex;
