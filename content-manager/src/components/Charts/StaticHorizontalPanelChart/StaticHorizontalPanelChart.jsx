@@ -364,6 +364,7 @@ function StaticHorizontalPanelChart({ chart, handleRemoveChart, isAllHidden, han
   const actionButtonText = isStarted ? 'Stop' : 'Start'
 
   const chartClasses = [
+    $s.StaticHorizontalPanelChart,
     $s.chart,
     isAllHidden ? $s['chart--full'] : '',
     $s['chart--color-' + index]
