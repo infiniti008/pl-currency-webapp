@@ -487,9 +487,48 @@ export async function getKeyData(data) {
   try {
     const baseName = 'currency_' + data.country;
     const collectionName = data.key;
+    const groupByMins = data.groupByMins || 1;
 
     const collection = await client.db(baseName).collection(collectionName);
-    const values = await collection.find({ timestamp: { $gt: data.startTimeStamp, $lt: data.endTimeStamp} }).toArray()
+    const values = await collection.aggregate([
+      {
+        $match: {
+          timestamp: { $gt: data.startTimeStamp, $lt: data.endTimeStamp }
+        }
+      },
+      {
+        // Convert timestamp to date and extract the hour
+        $addFields: {
+          dateObj: {
+            $toDate: "$timestamp"
+          },
+          interval: {
+            $dateTrunc: {
+              date: { $toDate: "$timestamp" },
+              unit: "minute",
+              binSize: groupByMins
+            }
+          }
+        }
+      },
+      {
+        // Group by year, month, day, and hour to calculate the hourly average (or sum)
+        $group: {
+          _id: "$interval",
+          averageValue: { $avg: "$value" }, // Use $avg, $sum, etc., based on the operation you need
+          count: { $sum: 1 },
+          timestamp: { $first: "$timestamp" },
+          date: { $first: "$date" },
+          value: { $first: "$value" }
+        }
+      },
+      {
+        // Optionally sort by time
+        $sort: {
+          "timestamp": 1,
+        }
+      }
+    ]).toArray();
 
     return values;
   } catch(err) {

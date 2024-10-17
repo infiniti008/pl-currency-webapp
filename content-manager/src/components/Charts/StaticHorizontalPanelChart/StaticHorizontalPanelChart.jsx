@@ -4,12 +4,22 @@ import ChartElement from './Chart';
 import CustomTooltip from './CustomTooltip';
 import { getKeyData } from '../../../api/services';
 import { toast } from 'react-toastify';
-import { format, addMinutes, parse, sub } from 'date-fns'
+import { format, addMinutes, parse, sub, addDays } from 'date-fns'
 import { formatInTimeZone, utcToZonedTime, zonedTimeToUtc } from 'date-fns-tz'
 import $s from './StreamChart.module.scss';
 
 const currentTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 const LABELS_DIFF_IN_MINUTES = 5
+
+const getLocationParams = () => {
+  const search = window.location.search;
+  const params = new URLSearchParams(search);
+  return params;
+};
+
+const params = getLocationParams();
+const startDaysAgoParam = parseInt(params.get('startDaysAgo')) || 0;
+const groupByMinsParam =  parseInt(params.get('groupByMins')) || 1;
 
 function StaticHorizontalPanelChart({ chart, handleRemoveChart, isAllHidden, handleSelectTimeZone, handleStartChart, model, index }) {
   const { currentStore } = useContext(CurrentStoreContext)
@@ -30,6 +40,8 @@ function StaticHorizontalPanelChart({ chart, handleRemoveChart, isAllHidden, han
     selectedCountry: '',
     selectedKey: '',
     selectedPointSize: 0,
+    startDaysAgo: startDaysAgoParam,
+    groupByMins: groupByMinsParam,
     startTime: '',
     endTime: '',
     timeZone: '',
@@ -43,6 +55,8 @@ function StaticHorizontalPanelChart({ chart, handleRemoveChart, isAllHidden, han
   const [selectedCountry, set_selectedCountry] = useState('')
   const [selectedKey, set_selectedKey] = useState('')
   const [startTime, set_startTime] = useState(initialStartTime)
+  const [startDaysAgo, set_startDaysAgo] = useState(startDaysAgoParam)
+  const [groupByMins, set_groupByMins] = useState(groupByMinsParam)
   const [endTime, set_endTime] = useState(initialEndTime)
   const [color, set_color] = useState('#84c8ff')
   const [selectedPointSize, set_selectedPointSize] = useState(1)
@@ -73,6 +87,12 @@ function StaticHorizontalPanelChart({ chart, handleRemoveChart, isAllHidden, han
       set_selectedPointSize(model.selectedPointSize)
       if (model.isAutoRun) {
         set_isAutoRun(true)
+      }
+      if (model.startDaysAgo) {
+        set_startDaysAgo(model.startDaysAgo)
+      }
+      if (model.groupByMins) {
+        set_groupByMins(model.groupByMins)
       }
     }
 
@@ -159,6 +179,8 @@ function StaticHorizontalPanelChart({ chart, handleRemoveChart, isAllHidden, han
       newConfig.selectedKey = selectedKey
       newConfig.selectedPointSize = selectedPointSize
       newConfig.startTime = startTime
+      newConfig.startDaysAgo = startDaysAgo
+      newConfig.groupByMins = groupByMins
       newConfig.endTime = endTime
       newConfig.timeZone = newTimeZone
       newConfig.color = color
@@ -192,7 +214,7 @@ function StaticHorizontalPanelChart({ chart, handleRemoveChart, isAllHidden, han
     console.log('fetchData')
     const _config = ref_config.current
     try {
-      const startTimeStamp = getTimeStamp(_config.startTime)
+      const startTimeStamp = getTimeStamp(_config.startTime, _config.startDaysAgo)
       const endTimeStamp = getTimeStamp(_config.endTime) + 10000
 
       const request = {
@@ -201,7 +223,8 @@ function StaticHorizontalPanelChart({ chart, handleRemoveChart, isAllHidden, han
         startTime: _config.startTime,
         endTime: _config.endTime,
         startTimeStamp,
-        endTimeStamp
+        endTimeStamp,
+        groupByMins: _config.groupByMins
       }
 
       const data = await getKeyData(request)
@@ -317,16 +340,20 @@ function StaticHorizontalPanelChart({ chart, handleRemoveChart, isAllHidden, han
     data.forEach(item => {
       const newTimeZone = ref_config.current.timeZone
       let time = new Date(item.timestamp)
-      time = formatInTimeZone(time, newTimeZone, 'HH:mm')
+      const format = ref_config.current.startDaysAgo > 0 ? 'yyyy-MM-dd HH:mm' : 'HH:mm'
+      time = formatInTimeZone(time, newTimeZone, format)
       newDataSet.push({ x: time, y: item.value })
     })
 
     return newDataSet
   }
 
-  function getTimeStamp(time) {
+  function getTimeStamp(time, daysAgo = 0) {
     const newTimeZone = ref_config.current.timeZone
     let timeStamp = parse(`${time}`, "HH:mm", new Date())
+    if (daysAgo > 0) {
+      timeStamp = addDays(timeStamp, -(daysAgo))
+    }
     timeStamp = zonedTimeToUtc(timeStamp, newTimeZone);
     timeStamp = utcToZonedTime(timeStamp, currentTimeZone);
     timeStamp = timeStamp.valueOf()
@@ -368,6 +395,13 @@ function StaticHorizontalPanelChart({ chart, handleRemoveChart, isAllHidden, han
     isAllHidden ? $s['chart--full'] : '',
     $s['chart--color-' + index]
   ].join(' ')
+  
+  const formatToLastPointTime = startDaysAgo > 0 ? 'yyyy-MM-dd HH:mm' : 'HH:mm'
+  const lastPointTime = {...draw.lastPoint}
+  if (lastPointTime.x) {
+    const lastPointTimeParsed = parse(lastPointTime.x, formatToLastPointTime, new Date())
+    lastPointTime.x = format(lastPointTimeParsed,  'HH:mm')
+  }
 
   return (
     <div className={chartClasses} style={{ ['--chart-main-color-' + index]: config.colorRGB }} >
@@ -383,6 +417,7 @@ function StaticHorizontalPanelChart({ chart, handleRemoveChart, isAllHidden, han
             datasetMax={draw.datasetMax}
             selectedKey={chart + config.selectedKey}
             selectedPointSize={config.selectedPointSize}
+            startDaysAgo={startDaysAgo}
           />
         }
       </div>
@@ -440,7 +475,7 @@ function StaticHorizontalPanelChart({ chart, handleRemoveChart, isAllHidden, han
           dataSet={dataSet}
           firstPoint={draw.firstPoint}
           labels={draw.labels}
-          lastPoint={draw.lastPoint}
+          lastPoint={lastPointTime}
           prevLastPoint={draw.prevLastPoint}
           colorRGB={config.colorRGB}
           datasetMin={draw.datasetMin}

@@ -6,7 +6,35 @@ import 'chartjs-adapter-date-fns';
 
 Chart.register(...registerables);
 
-function ChartElement({dataSet, labels, colorRGB, datasetMax, datasetMin, selectedKey, selectedPointSize}) {
+const highlightWeekendsPlugin = {
+  id: 'highlightWeekends',
+  afterDraw: (chart) => {
+    const ctx = chart.ctx;
+    const chartArea = chart.chartArea;
+    const xAxis = chart.scales['x'];
+    const yAxis = chart.scales['y'];
+    
+    xAxis.ticks.forEach((tick, index) => {
+      const label = tick.value;
+      const date = new Date(label);
+      const dayOfWeek = date.getDay(); // Sunday = 0, Saturday = 6
+
+      if (dayOfWeek === 6 || dayOfWeek === 0) {
+        const startX = xAxis.getPixelForTick(index);
+        const endX = xAxis.getPixelForTick(index + 1);
+
+        ctx.save();
+        ctx.fillStyle = 'rgba(255, 165, 0, 0.1)';
+        ctx.fillRect(startX, chartArea.top, endX - startX, chartArea.bottom - chartArea.top);
+        ctx.restore();
+      }
+    });
+  }
+};
+
+Chart.register(highlightWeekendsPlugin);
+
+function ChartElement({dataSet, labels, colorRGB, datasetMax, datasetMin, selectedKey, selectedPointSize, startDaysAgo}) {
   let lastSettetPointToTooltip = null;
   const chartRef = useRef(null);
   const [gradient, setGradient] = useState(null);
@@ -22,14 +50,14 @@ function ChartElement({dataSet, labels, colorRGB, datasetMax, datasetMin, select
   }, [chartRef]);
 
   const data = {
-    labels,
+    labels: startDaysAgo > 0 ? undefined : labels,
     datasets: [
       {
         data: dataSet,
         borderWidth: 3,
         tension: 0.2,
         // stepped: true,
-        pointRadius: parseInt(selectedPointSize),
+        pointRadius: 0,
         borderColor: `rgba(${colorRGB}, 1)`,
         backgroundColor: gradient,
         showTooltip: true,
@@ -37,6 +65,9 @@ function ChartElement({dataSet, labels, colorRGB, datasetMax, datasetMin, select
       }
     ],
   };
+
+  const parseFormat = startDaysAgo > 0 ? 'yyyy-MM-dd HH:mm' : 'HH:mm';
+  const displayUnit = startDaysAgo > 0 ? 'day' : 'minute';
 
   const options = {
     responsive: true,
@@ -50,8 +81,8 @@ function ChartElement({dataSet, labels, colorRGB, datasetMax, datasetMin, select
       x: {
         type: 'time',
         time: {
-          parser: 'HH:mm',
-          unit: 'minute',
+          parser: parseFormat,
+          unit: displayUnit,
           displayFormats: {
             minute: 'HH:mm'
           }
@@ -67,7 +98,8 @@ function ChartElement({dataSet, labels, colorRGB, datasetMax, datasetMin, select
       },
       tooltip: {
         enabled: false
-      }
+      },
+      highlightWeekends: startDaysAgo > 0 ? true : false
     }
   };
 
