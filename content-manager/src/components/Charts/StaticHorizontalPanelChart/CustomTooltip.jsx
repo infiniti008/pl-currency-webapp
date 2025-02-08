@@ -6,6 +6,7 @@ function CustomTooltip({ currencyKey, firstPoint, lastPoint, colorRGB}) {
   const startEndDiff = (lastPoint?.y - firstPoint?.y)
   const startEndDiffDirection = startEndDiff >= 0 ? 'up' : startEndDiff < 0 ? 'down' : 'plate'
   const startEndDiffTitle = startEndDiff >= 0 ? '⬆' : startEndDiff < 0 ? '⬇' : ' '
+  const bgColor = window.location.search.indexOf('bg=') !== -1 ? window.location.search.split('bg=')[1].split('&')[0] : 'white'
 
   function getCurrencyHTML(value, addDirection) {
     if (typeof value === 'number') {
@@ -43,7 +44,7 @@ function CustomTooltip({ currencyKey, firstPoint, lastPoint, colorRGB}) {
     <div className={$s['tooltip-wrapper']}>
       <div className={$s['tooltip__real-time--horizontal']}>
         <div className={$s['tooltip__group--left']}>
-          <div className={$s['tooltip__group--center']}>
+          <div className={$s['tooltip__group--center']} style={{backgroundColor: bgColor}}>
             <span className={$s['tooltip__title--label']} style={{color: currencyKey.bankColor}}>
               {currencyKey.name}
             </span>
@@ -52,7 +53,7 @@ function CustomTooltip({ currencyKey, firstPoint, lastPoint, colorRGB}) {
             </span>
           </div>
 
-          <div className={[$s['tooltip__items'], $s['tooltip__items--right']].join(' ')}>
+          <div className={[$s['tooltip__items'], $s['tooltip__items--right']].join(' ')} style={{backgroundColor: bgColor}}>
             <span 
               className={$s['tooltip__item--end-value']}
               dangerouslySetInnerHTML={{ __html: getCurrencyHTML(lastPoint.y, false) }}

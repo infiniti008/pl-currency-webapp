@@ -6,6 +6,8 @@ import 'chartjs-adapter-date-fns';
 
 Chart.register(...registerables);
 
+const bgColor = window.location.search.indexOf('bg=') !== -1 ? window.location.search.split('bg=')[1].split('&')[0] : 'white'
+
 const highlightWeekendsPlugin = {
   id: 'highlightWeekends',
   afterDraw: (chart) => {
@@ -76,9 +78,25 @@ function ChartElement({dataSet, labels, colorRGB, datasetMax, datasetMin, select
       y: {
         beginAtZero: false,
         suggestedMin: datasetMin,
-        suggestedMax: datasetMax, 
+        suggestedMax: datasetMax,
+        ticks: {
+          color: 'white',
+          font: {
+            size: 13,
+            weight: 'bold',
+            family: 'Kufam'
+          }
+        },
       },
       x: {
+        ticks: {
+          color: 'white',
+          font: {
+            size: 14,
+            weight: 'bold',
+            family: 'Kufam'
+          }
+        },
         type: 'time',
         time: {
           parser: parseFormat,
@@ -104,7 +122,7 @@ function ChartElement({dataSet, labels, colorRGB, datasetMax, datasetMin, select
   };
 
   return (
-    <div className='chart-element chart-element--full'>
+    <div className='chart-element chart-element--full' style={{backgroundColor: bgColor}} >
       <Line key={'chartLine-' + selectedKey} ref={chartRef} data={data} options={options} />
     </div>
   )
