@@ -42,11 +42,6 @@ function ChartConfigurator({ data, methods }) {
         <input className={$s.input} type="date" value={chartConfig.endDate} onChange={handleSetValue.bind(null, 'endDate')} />
       </div>
 
-      <div className={$s.input_group}>
-        <span className={$s.label}>End Date</span>
-        <input className={$s.input} type="date" value={chartConfig.endDate} onChange={handleSetValue.bind(null, 'endDate')} />
-      </div>
-
       { useOneChartCheckbox }
 
       <button className={$s.button} onClick={handleClickClear} >Clear</button>
