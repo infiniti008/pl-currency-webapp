@@ -74,7 +74,7 @@ function KeyItem({ keyObj, selectedTimeLimit, operations, appSettings, selectedK
       <div className={$s.key_currency}>{keyObj.currency}</div>
       <Status status={isNew} />
       <div className={$s.key_name}>{keyObj.name}</div>
-      <div className={$s.key_value}>{keyObj.lastValue?.value.toFixed(4)}</div>
+      <div className={$s.key_value}>{keyObj.lastValue?.value?.toFixed(4)}</div>
       <div className={$s.key_bank}>{keyObj.bank}</div>
       <div className={$s.key_date}>{keyObj.lastValue?.date}</div>
       <button className={classes.btn_chart} onClick={handleClickChart}>Chart</button>
